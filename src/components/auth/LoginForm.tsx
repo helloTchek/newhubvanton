@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Car, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { SignupForm } from './SignupForm';
 import toast from 'react-hot-toast';
@@ -53,10 +53,11 @@ export const LoginForm: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
         <div className="flex flex-col items-center justify-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-            <Car className="w-10 h-10 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tchek.ai</h1>
+          <img
+            src="/logo_tchek-web.png"
+            alt="Tchek.ai Logo"
+            className="h-16 mb-6 object-contain"
+          />
           <p className="text-lg font-medium text-gray-700 text-center">New generation car inspections</p>
           <p className="text-base text-gray-600 text-center">Get ready for mobility</p>
         </div>
