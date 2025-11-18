@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2 } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -21,6 +21,13 @@ interface VehicleCardProps {
     mileage: boolean;
     repairCost: boolean;
     value: boolean;
+    carBody: boolean;
+    rim: boolean;
+    glass: boolean;
+    interior: boolean;
+    tires: boolean;
+    dashboard: boolean;
+    declarations: boolean;
   };
 }
 
@@ -52,7 +59,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     inspectionDate: true,
     mileage: true,
     repairCost: true,
-    value: true
+    value: true,
+    carBody: true,
+    rim: true,
+    glass: true,
+    interior: true,
+    tires: true,
+    dashboard: true,
+    declarations: true
   }
 }) => {
   const { t } = useTranslation('vehicles');
@@ -221,8 +235,100 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
           </div>
 
+          {/* Damage Results Grid */}
+          {(visibleFields.carBody || visibleFields.rim || visibleFields.glass || visibleFields.interior || visibleFields.tires || visibleFields.dashboard || visibleFields.declarations) && vehicle.status === 'inspected' && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="grid grid-cols-3 gap-2">
+                {visibleFields.carBody && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Car Body</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.carBody ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.rim && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Rim</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.rim ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.glass && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Glass</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.glass ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.interior && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Interior</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.interior ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.tires && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Tires</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.tires ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.dashboard && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Dashboard</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.dashboard ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+                {visibleFields.declarations && (
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <div className="text-xs text-gray-500 mb-1">Declarations</div>
+                    <div className="flex items-center justify-center gap-1">
+                      {vehicle.damageResults?.declarations ? (
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Value or Chase Up Button */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="pt-4 border-t border-gray-100">
             {shouldShowChaseUp ? (
               <button
                 onClick={handleChaseUpClick}
