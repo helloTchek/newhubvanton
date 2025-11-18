@@ -419,19 +419,19 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         )}
 
         {isExpanded && !isConfiguring && activeFilters.length > 0 && (
-          <div className="pt-4 border-t border-gray-200">
-            {/* Compact row for Inspection Type and Status */}
-            <div className="flex flex-wrap gap-4 mb-4">
+          <div className="pt-3 border-t border-gray-200">
+            {/* Compact row for Inspection Type and Status - Now on single line */}
+            <div className="flex gap-3 mb-3 bg-gray-50 p-3 rounded-lg">
               {activeFilters.includes('inspectionType') && (
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <FileCheck className="w-3.5 h-3.5 text-gray-400" />
+                <div className="flex-1 min-w-[180px]">
+                  <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
+                    <FileCheck className="w-3 h-3 text-gray-500" />
                     Inspection Type
                   </label>
                   <select
                     value={filters.inspectionType || 'all'}
                     onChange={(e) => onFiltersChange({ inspectionType: e.target.value as InspectionType | 'all' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
+                    className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
                   >
                     {inspectionTypeOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -442,15 +442,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 </div>
               )}
               {activeFilters.includes('status') && (
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Filter className="w-3.5 h-3.5 text-gray-400" />
+                <div className="flex-1 min-w-[180px]">
+                  <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
+                    <Filter className="w-3 h-3 text-gray-500" />
                     Status
                   </label>
                   <select
                     value={filters.status}
                     onChange={(e) => onFiltersChange({ status: e.target.value as VehicleStatus | 'all' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
+                    className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
                   >
                     {statusOptions.map((option) => (
                       <option key={option.value} value={option.value}>
