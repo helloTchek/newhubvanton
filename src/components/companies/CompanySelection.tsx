@@ -71,7 +71,7 @@ export const CompanySelection: React.FC = () => {
 
   if (loading.isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
         <LoadingSpinner size="lg" text="Loading companies..." />
       </div>
     );
@@ -79,12 +79,12 @@ export const CompanySelection: React.FC = () => {
 
   if (loading.error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <p className="text-red-600 mb-4">{loading.error}</p>
           <button
             onClick={loadCompanies}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors"
           >
             Try Again
           </button>
@@ -94,18 +94,20 @@ export const CompanySelection: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-4">
       <div className="max-w-6xl mx-auto py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-            <Building2 className="w-8 h-8 text-white" />
-          </div>
+          <img
+            src="/logo_tchek-web.png"
+            alt="Tchek.ai Logo"
+            className="h-16 mx-auto mb-6 object-contain"
+          />
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Select Your Company
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose the company you want to manage vehicle inspections for. 
+            Choose the company you want to manage vehicle inspections for.
             You can change this selection later in your profile settings.
           </p>
         </div>
@@ -119,7 +121,7 @@ export const CompanySelection: React.FC = () => {
               placeholder="Search companies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white shadow-sm"
             />
           </div>
         </div>
@@ -141,7 +143,7 @@ export const CompanySelection: React.FC = () => {
             <div className="max-w-md mx-auto">
               <div
                 className={clsx(
-                  'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
+                  'bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
                   selectedCompany === 'all'
                     ? 'border-white bg-opacity-90'
                     : 'border-transparent hover:border-white hover:border-opacity-50'
@@ -155,7 +157,7 @@ export const CompanySelection: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">All Companies</h3>
-                      <p className="text-blue-100 text-sm">
+                      <p className="text-teal-100 text-sm">
                         Access all companies and vehicles
                       </p>
                     </div>
@@ -186,8 +188,8 @@ export const CompanySelection: React.FC = () => {
                 className={clsx(
                   'bg-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
                   selectedCompany === company.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
+                    ? 'border-teal-500 bg-teal-50'
+                    : 'border-gray-200 hover:border-teal-300'
                 )}
                 onClick={() => handleCompanySelect(company.id)}
               >
@@ -201,8 +203,8 @@ export const CompanySelection: React.FC = () => {
                         className="w-12 h-12 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-blue-600" />
+                      <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-6 h-6 text-teal-600" />
                       </div>
                     )}
                   </div>
@@ -222,7 +224,7 @@ export const CompanySelection: React.FC = () => {
                       </div>
                       <ArrowRight className={clsx(
                         'w-5 h-5 transition-colors',
-                        selectedCompany === company.id ? 'text-blue-600' : 'text-gray-400'
+                        selectedCompany === company.id ? 'text-teal-600' : 'text-gray-400'
                       )} />
                     </div>
 
@@ -232,7 +234,7 @@ export const CompanySelection: React.FC = () => {
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">{company.email}</span>
-                      <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                      <div className="bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
                         {company.vehicleCount} vehicles
                       </div>
                     </div>
@@ -240,8 +242,8 @@ export const CompanySelection: React.FC = () => {
                 </div>
 
                 {selectedCompany === company.id && (
-                  <div className="mt-4 pt-4 border-t border-blue-200">
-                    <div className="flex items-center justify-center gap-2 text-blue-600">
+                  <div className="mt-4 pt-4 border-t border-teal-200">
+                    <div className="flex items-center justify-center gap-2 text-teal-600">
                       <LoadingSpinner size="sm" />
                       <span className="text-sm font-medium">Selecting company...</span>
                     </div>
