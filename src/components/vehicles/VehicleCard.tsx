@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, Car, Armchair, Waves, FileText, Disc } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+
+const WindshieldIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 8 L4 10 C4 12 5 14 7 15 L17 15 C19 14 20 12 20 10 L20 8 Z" />
+    <path d="M4 8 L6 6 L18 6 L20 8" />
+    <path d="M12 6 L12 15" />
+  </svg>
+);
+
+const CarSeatIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 19 L7 14 C7 12 8 10 10 10 L14 10 C16 10 17 12 17 14 L17 19" />
+    <path d="M7 19 L4 19 L4 14 L7 14" />
+    <path d="M17 19 L20 19 L20 14 L17 14" />
+    <path d="M10 10 L10 6 C10 5 11 4 12 4 C13 4 14 5 14 6 L14 10" />
+  </svg>
+);
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -228,7 +245,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="grid grid-cols-4 gap-x-3 gap-y-2">
                 <div className="flex items-center gap-1.5" title="Car Body">
-                  <Car className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <CarFront className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.carBody}
                   </span>
@@ -240,13 +257,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Glass">
-                  <Waves className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <WindshieldIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.glazing}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Interior">
-                  <Armchair className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <CarSeatIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.interior}
                   </span>
