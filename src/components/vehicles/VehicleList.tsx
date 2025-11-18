@@ -46,8 +46,15 @@ export const VehicleList: React.FC = () => {
     company: true,
     status: true,
     inspectionDate: true,
+    mileage: true,
     value: true,
-    damagedParts: false
+    carBody: true,
+    rim: true,
+    glass: true,
+    interior: true,
+    tires: true,
+    dashboard: true,
+    declarations: true
   });
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -454,8 +461,15 @@ export const VehicleList: React.FC = () => {
                           company: 'Company',
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
+                          mileage: 'Mileage',
                           value: 'Value',
-                          damagedParts: 'Damaged Parts'
+                          carBody: 'Car Body',
+                          rim: 'Rim',
+                          glass: 'Glass',
+                          interior: 'Interior',
+                          tires: 'Tires',
+                          dashboard: 'Dashboard',
+                          declarations: 'Declarations'
                         }).map(([key, label]) => (
                           <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                             <input
@@ -511,14 +525,49 @@ export const VehicleList: React.FC = () => {
                       Inspection Date
                     </th>
                   )}
+                  {visibleColumns.mileage && (
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Mileage
+                    </th>
+                  )}
                   {visibleColumns.value && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Value
                     </th>
                   )}
-                  {visibleColumns.damagedParts && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Damaged Parts
+                  {visibleColumns.carBody && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Car Body
+                    </th>
+                  )}
+                  {visibleColumns.rim && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Rim
+                    </th>
+                  )}
+                  {visibleColumns.glass && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Glass
+                    </th>
+                  )}
+                  {visibleColumns.interior && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Interior
+                    </th>
+                  )}
+                  {visibleColumns.tires && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tires
+                    </th>
+                  )}
+                  {visibleColumns.dashboard && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Dashboard
+                    </th>
+                  )}
+                  {visibleColumns.declarations && (
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Declarations
                     </th>
                   )}
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">

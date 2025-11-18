@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical } from 'lucide-react';
+import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, Car, Circle, Wind, Home, Gauge, FileText, ScrollText } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
-import { DamagedPartsColumn } from './DamagedPartsColumn';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
 import clsx from 'clsx';
 
@@ -18,8 +17,15 @@ interface VehicleTableRowProps {
     company: boolean;
     status: boolean;
     inspectionDate: boolean;
+    mileage: boolean;
     value: boolean;
-    damagedParts: boolean;
+    carBody: boolean;
+    rim: boolean;
+    glass: boolean;
+    interior: boolean;
+    tires: boolean;
+    dashboard: boolean;
+    declarations: boolean;
   };
 }
 
@@ -42,8 +48,15 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     company: true,
     status: true,
     inspectionDate: true,
+    mileage: true,
     value: true,
-    damagedParts: false
+    carBody: true,
+    rim: true,
+    glass: true,
+    interior: true,
+    tires: true,
+    dashboard: true,
+    declarations: true
   }
 }) => {
   const [showActionsMenu, setShowActionsMenu] = useState(false);
@@ -170,9 +183,6 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               <div className="text-sm text-gray-500">
                 {vehicle.registration} • {vehicle.year}
               </div>
-              <div className="text-sm text-gray-500">
-                {vehicle.mileage.toLocaleString()} km
-              </div>
             </div>
           </div>
         </td>
@@ -214,6 +224,11 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           {formatDate(vehicle.inspectionDate)}
         </td>
       )}
+      {visibleColumns.mileage && (
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          {vehicle.mileage.toLocaleString()} km
+        </td>
+      )}
       {visibleColumns.value && (
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm font-medium text-gray-900">
@@ -226,17 +241,101 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           )}
         </td>
       )}
-      {visibleColumns.damagedParts && (
-        <td className="px-6 py-4 whitespace-nowrap">
-          {vehicle.damageInfo && vehicle.reportId ? (
-            <DamagedPartsColumn
-              vehicleId={vehicle.id}
-              reportId={vehicle.reportId}
-              vehicleStatus={vehicle.status}
-              damageCounts={vehicle.damageInfo.damageCounts}
-            />
+      {visibleColumns.carBody && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Car className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.carBody}
+              </span>
+            </div>
           ) : (
-            <span className="text-sm text-gray-400">No data</span>
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.rim && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.rims}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.glass && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Wind className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.glazing}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.interior && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Home className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.interior}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.tires && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.tires}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.dashboard && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <Gauge className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.dashboard}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
+          )}
+        </td>
+      )}
+      {visibleColumns.declarations && (
+        <td className="px-6 py-4 whitespace-nowrap text-center">
+          {vehicle.damageInfo ? (
+            <div className="inline-flex items-center gap-1.5">
+              <FileText className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                {vehicle.damageInfo.damageCounts.declarations}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
           )}
         </td>
       )}
