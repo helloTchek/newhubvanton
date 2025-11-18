@@ -467,12 +467,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 {activeFilters.map(filterId => renderFilter(filterId))}
               </div>
             )}
-
-            {activeFilters.length === 0 && (
-              <div className="text-center py-3">
-                <p className="text-xs text-gray-500">Click "Configure" to add more filters</p>
-              </div>
-            )}
           </div>
         )}
       </div>
