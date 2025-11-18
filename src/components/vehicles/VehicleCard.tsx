@@ -187,7 +187,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     <>
       <div
         className={clsx(
-          'bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200 relative',
+          'bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-200 relative',
           !shouldShowChaseUp && onClick && 'cursor-pointer hover:shadow-md hover:border-blue-200',
           isSelectionMode && 'cursor-pointer',
           isSelected && 'ring-2 ring-blue-500'
@@ -209,7 +209,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
         {/* Vehicle Image or Placeholder */}
         {shouldShowImage ? (
-          <div className="aspect-video relative">
+          <div className="aspect-video relative overflow-hidden rounded-t-xl">
             <img
               src={vehicle.imageUrl}
               alt={`${vehicle.make} ${vehicle.model}`}
@@ -226,7 +226,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           </div>
         ) : (
-          <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+          <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">
             <div className="text-center">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                 <Bell className="w-8 h-8 text-gray-400" />
@@ -367,7 +367,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     <MoreVertical className="w-5 h-5" />
                   </button>
                   {isChaseUpActionMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                       <button
                         onClick={(e) => handleDownloadReport(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -423,7 +423,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                         <MoreVertical className="w-5 h-5" />
                       </button>
                       {isShareActionMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                           <button
                             onClick={(e) => handleDownloadReport(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
