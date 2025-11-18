@@ -76,24 +76,29 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 }) => {
   const { t } = useTranslation('vehicles');
   const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
-  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
-  const actionMenuRef = useRef<HTMLDivElement>(null);
+  const [isChaseUpActionMenuOpen, setIsChaseUpActionMenuOpen] = useState(false);
+  const [isShareActionMenuOpen, setIsShareActionMenuOpen] = useState(false);
+  const chaseUpActionMenuRef = useRef<HTMLDivElement>(null);
+  const shareActionMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (actionMenuRef.current && !actionMenuRef.current.contains(event.target as Node)) {
-        setIsActionMenuOpen(false);
+      if (chaseUpActionMenuRef.current && !chaseUpActionMenuRef.current.contains(event.target as Node)) {
+        setIsChaseUpActionMenuOpen(false);
+      }
+      if (shareActionMenuRef.current && !shareActionMenuRef.current.contains(event.target as Node)) {
+        setIsShareActionMenuOpen(false);
       }
     };
 
-    if (isActionMenuOpen) {
+    if (isChaseUpActionMenuOpen || isShareActionMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isActionMenuOpen]);
+  }, [isChaseUpActionMenuOpen, isShareActionMenuOpen]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -146,23 +151,35 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     }
   };
 
-  const handleDownloadReport = (e: React.MouseEvent) => {
+  const handleDownloadReport = (e: React.MouseEvent, fromChaseUp: boolean = false) => {
     e.stopPropagation();
-    setIsActionMenuOpen(false);
+    if (fromChaseUp) {
+      setIsChaseUpActionMenuOpen(false);
+    } else {
+      setIsShareActionMenuOpen(false);
+    }
     console.log('Download report for vehicle:', vehicle.id);
   };
 
-  const handleShareFromMenu = (e: React.MouseEvent) => {
+  const handleShareFromMenu = (e: React.MouseEvent, fromChaseUp: boolean = false) => {
     e.stopPropagation();
-    setIsActionMenuOpen(false);
+    if (fromChaseUp) {
+      setIsChaseUpActionMenuOpen(false);
+    } else {
+      setIsShareActionMenuOpen(false);
+    }
     if (onShareReport) {
       onShareReport(vehicle);
     }
   };
 
-  const handleExportData = (e: React.MouseEvent) => {
+  const handleExportData = (e: React.MouseEvent, fromChaseUp: boolean = false) => {
     e.stopPropagation();
-    setIsActionMenuOpen(false);
+    if (fromChaseUp) {
+      setIsChaseUpActionMenuOpen(false);
+    } else {
+      setIsShareActionMenuOpen(false);
+    }
     console.log('Export data for vehicle:', vehicle.id);
   };
 
@@ -339,34 +356,34 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   <Bell className="w-4 h-4" />
                   <span>Chase Up?</span>
                 </button>
-                <div className="relative" ref={actionMenuRef}>
+                <div className="relative" ref={chaseUpActionMenuRef}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setIsActionMenuOpen(!isActionMenuOpen);
+                      setIsChaseUpActionMenuOpen(!isChaseUpActionMenuOpen);
                     }}
                     className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <MoreVertical className="w-5 h-5" />
                   </button>
-                  {isActionMenuOpen && (
+                  {isChaseUpActionMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                       <button
-                        onClick={handleDownloadReport}
+                        onClick={(e) => handleDownloadReport(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <Download className="w-4 h-4" />
                         <span>Download Report</span>
                       </button>
                       <button
-                        onClick={handleShareFromMenu}
+                        onClick={(e) => handleShareFromMenu(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <Share2 className="w-4 h-4" />
                         <span>Share Report</span>
                       </button>
                       <button
-                        onClick={handleExportData}
+                        onClick={(e) => handleExportData(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <FileSpreadsheet className="w-4 h-4" />
@@ -395,34 +412,34 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                       <Share2 className="w-4 h-4" />
                       <span>Share Report</span>
                     </button>
-                    <div className="relative" ref={actionMenuRef}>
+                    <div className="relative" ref={shareActionMenuRef}>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setIsActionMenuOpen(!isActionMenuOpen);
+                          setIsShareActionMenuOpen(!isShareActionMenuOpen);
                         }}
                         className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       >
                         <MoreVertical className="w-5 h-5" />
                       </button>
-                      {isActionMenuOpen && (
+                      {isShareActionMenuOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                           <button
-                            onClick={handleDownloadReport}
+                            onClick={(e) => handleDownloadReport(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <Download className="w-4 h-4" />
                             <span>Download Report</span>
                           </button>
                           <button
-                            onClick={handleShareFromMenu}
+                            onClick={(e) => handleShareFromMenu(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <Share2 className="w-4 h-4" />
                             <span>Share Report</span>
                           </button>
                           <button
-                            onClick={handleExportData}
+                            onClick={(e) => handleExportData(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <FileSpreadsheet className="w-4 h-4" />
