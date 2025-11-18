@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertCircle, Car, Home, Wind, FileText, Circle } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, Car, Armchair, Waves, FileText, Disc } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -234,31 +234,31 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Rims">
-                  <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.rims}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Glass">
-                  <Wind className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <Waves className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.glazing}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Interior">
-                  <Home className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <Armchair className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.interior}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Tires">
-                  <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.tires}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5" title="Dashboard">
-                  <AlertCircle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <AlertTriangle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
                   <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.dashboard}
                   </span>

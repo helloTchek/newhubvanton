@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, Car, Circle, Wind, Home, Gauge, FileText, ScrollText } from 'lucide-react';
+import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, Car, Disc, Waves, Armchair, AlertTriangle, FileText, ScrollText } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
@@ -259,7 +259,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
-              <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
               <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                 {vehicle.damageInfo.damageCounts.rims}
               </span>
@@ -273,7 +273,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
-              <Wind className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <Waves className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
               <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                 {vehicle.damageInfo.damageCounts.glazing}
               </span>
@@ -287,7 +287,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
-              <Home className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <Armchair className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
               <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                 {vehicle.damageInfo.damageCounts.interior}
               </span>
@@ -301,7 +301,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
-              <Circle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
               <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                 {vehicle.damageInfo.damageCounts.tires}
               </span>
@@ -315,7 +315,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
-              <Gauge className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+              <AlertTriangle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
               <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                 {vehicle.damageInfo.damageCounts.dashboard}
               </span>
