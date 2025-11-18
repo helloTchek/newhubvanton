@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertCircle, Car, Home, Wind, FileText, Circle } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -226,76 +226,62 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           {/* Damage Results Grid */}
           {visibleFields.damageResults && vehicle.damageInfo && (
             <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="grid grid-cols-3 gap-2">
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Car Body</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.carBody > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+              <div className="grid grid-cols-4 gap-3">
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Car Body</div>
+                  {vehicle.damageInfo.damageCounts.carBody > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Rim</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.rims > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Rim</div>
+                  {vehicle.damageInfo.damageCounts.rims > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Glass</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.glazing > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Glass</div>
+                  {vehicle.damageInfo.damageCounts.glazing > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Interior</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.interior > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Interior</div>
+                  {vehicle.damageInfo.damageCounts.interior > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Tires</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.tires > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Tires</div>
+                  {vehicle.damageInfo.damageCounts.tires > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Dashboard</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.dashboard > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Dashboard</div>
+                  {vehicle.damageInfo.damageCounts.dashboard > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
-                <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-xs text-gray-500 mb-1">Declarations</div>
-                  <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageInfo.damageCounts.declarations > 0 ? (
-                      <AlertCircle className="w-4 h-4 text-red-500" />
-                    ) : (
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    )}
-                  </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-xs text-gray-500">Declarations</div>
+                  {vehicle.damageInfo.damageCounts.declarations > 0 ? (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-green-500 fill-green-500" />
+                  )}
                 </div>
               </div>
             </div>
