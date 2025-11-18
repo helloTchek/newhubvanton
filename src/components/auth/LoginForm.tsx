@@ -52,14 +52,13 @@ export const LoginForm: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Car className="w-6 h-6 text-white" />
+        <div className="flex flex-col items-center justify-center mb-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+            <Car className="w-10 h-10 text-white" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Tchek.ai</h1>
-            <p className="text-sm text-gray-500">Vehicle Inspection Platform</p>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tchek.ai</h1>
+          <p className="text-lg font-medium text-gray-700 text-center">New generation car inspections</p>
+          <p className="text-base text-gray-600 text-center">Get ready for mobility</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
