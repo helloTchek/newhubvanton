@@ -347,18 +347,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
+    <div>
+      <div className="px-4 pb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium"
+              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium text-sm"
             >
               <Filter className="w-4 h-4" />
               <span>Filters</span>
               {hasActiveFilters && (
-                <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
+                <span className="ml-2 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
                   Active
                 </span>
               )}

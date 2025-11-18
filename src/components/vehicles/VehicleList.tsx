@@ -264,47 +264,51 @@ export const VehicleList: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Search and View Toggle */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+      {/* Unified Search, Sort & Filter Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        {/* Top Row: Search, Sort, View Toggle, Select */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center gap-3">
             {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by registration, make, model..."
+                placeholder="Search by registration, make, model, VIN, customer..."
                 value={filters.query}
                 onChange={(e) => updateFilters({ query: e.target.value })}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
-            {/* View Toggle and Actions */}
-            <div className="flex items-center justify-end gap-2">
-              <button
-                onClick={toggleSelectionMode}
-                className={clsx(
-                  'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium',
-                  isSelectionMode
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                )}
+            {/* Sort */}
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="w-4 h-4 text-gray-400" />
+              <select
+                value={filters.sortBy}
+                onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
+                className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white min-w-[140px]"
               >
-                {isSelectionMode ? (
-                  <>
-                    <X className="w-4 h-4" />
-                    <span>Cancel</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckSquare className="w-4 h-4" />
-                    <span>Select</span>
-                  </>
-                )}
+                <option value="date">Date (newest)</option>
+                <option value="registration">Registration</option>
+                <option value="make">Make & Model</option>
+                <option value="value">Est. Value</option>
+                <option value="repairCost">Repair Cost</option>
+                <option value="mileage">Mileage</option>
+                <option value="status">Status</option>
+              </select>
+              <button
+                onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                title={filters.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
+              >
+                {filters.sortOrder === 'desc' ? '↓' : '↑'}
               </button>
+            </div>
 
-              <span className="text-sm text-gray-600">View:</span>
+            {/* View Toggle */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">View:</span>
               <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -314,6 +318,7 @@ export const VehicleList: React.FC = () => {
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-600 hover:bg-gray-50'
                   )}
+                  title="Grid view"
                 >
                   <Grid className="w-4 h-4" />
                 </button>
@@ -325,38 +330,45 @@ export const VehicleList: React.FC = () => {
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-600 hover:bg-gray-50'
                   )}
+                  title="List view"
                 >
                   <List className="w-4 h-4" />
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Sort Options */}
-          <div className="flex items-center gap-3">
-            <ArrowUpDown className="w-4 h-4 text-gray-400" />
-            <span className="text-sm font-medium text-gray-700">Sort by:</span>
-            <select
-              value={filters.sortBy}
-              onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-            >
-              <option value="date">Date (newest first)</option>
-              <option value="registration">Registration</option>
-              <option value="make">Make & Model</option>
-              <option value="value">Estimated Value</option>
-              <option value="repairCost">Repair Cost</option>
-              <option value="mileage">Mileage</option>
-              <option value="status">Status</option>
-            </select>
+            {/* Select Mode Toggle */}
             <button
-              onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              onClick={toggleSelectionMode}
+              className={clsx(
+                'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium whitespace-nowrap',
+                isSelectionMode
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              )}
             >
-              {filters.sortOrder === 'desc' ? '↓ Descending' : '↑ Ascending'}
+              {isSelectionMode ? (
+                <>
+                  <X className="w-4 h-4" />
+                  <span>Cancel</span>
+                </>
+              ) : (
+                <>
+                  <CheckSquare className="w-4 h-4" />
+                  <span>Select</span>
+                </>
+              )}
             </button>
           </div>
         </div>
+
+        {/* Filters Section */}
+        <FilterPanel
+          filters={filters}
+          onFiltersChange={updateFilters}
+          companies={companies}
+          showCompanyFilter={user?.companyId === 'all'}
+        />
       </div>
 
       {/* Bulk Actions Toolbar */}
@@ -397,14 +409,6 @@ export const VehicleList: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Advanced Filters */}
-      <FilterPanel
-        filters={filters}
-        onFiltersChange={updateFilters}
-        companies={companies}
-        showCompanyFilter={user?.companyId === 'all'}
-      />
 
 
       {/* Vehicles Display */}
