@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -76,6 +76,24 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 }) => {
   const { t } = useTranslation('vehicles');
   const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
+  const actionMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(event.target as Node)) {
+        setIsActionMenuOpen(false);
+      }
+    };
+
+    if (isActionMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isActionMenuOpen]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -126,6 +144,26 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     if (onShareReport) {
       onShareReport(vehicle);
     }
+  };
+
+  const handleDownloadReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionMenuOpen(false);
+    console.log('Download report for vehicle:', vehicle.id);
+  };
+
+  const handleShareFromMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionMenuOpen(false);
+    if (onShareReport) {
+      onShareReport(vehicle);
+    }
+  };
+
+  const handleExportData = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionMenuOpen(false);
+    console.log('Export data for vehicle:', vehicle.id);
   };
 
   return (
@@ -293,13 +331,51 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           {/* Value or Chase Up Button */}
           <div className="pt-4 border-t border-gray-100">
             {shouldShowChaseUp ? (
-              <button
-                onClick={handleChaseUpClick}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors font-medium"
-              >
-                <Bell className="w-4 h-4" />
-                <span>Chase Up?</span>
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleChaseUpClick}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors font-medium"
+                >
+                  <Bell className="w-4 h-4" />
+                  <span>Chase Up?</span>
+                </button>
+                <div className="relative" ref={actionMenuRef}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsActionMenuOpen(!isActionMenuOpen);
+                    }}
+                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <MoreVertical className="w-5 h-5" />
+                  </button>
+                  {isActionMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                      <button
+                        onClick={handleDownloadReport}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download Report</span>
+                      </button>
+                      <button
+                        onClick={handleShareFromMenu}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <Share2 className="w-4 h-4" />
+                        <span>Share Report</span>
+                      </button>
+                      <button
+                        onClick={handleExportData}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <FileSpreadsheet className="w-4 h-4" />
+                        <span>Export Data</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             ) : (
               <div className="space-y-3">
                 {visibleFields.value && (
@@ -311,13 +387,51 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   </div>
                 )}
                 {vehicle.reportId && onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
-                  <button
-                    onClick={handleShareClick}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium text-sm"
-                  >
-                    <Share2 className="w-4 h-4" />
-                    <span>Share Report</span>
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleShareClick}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium text-sm"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span>Share Report</span>
+                    </button>
+                    <div className="relative" ref={actionMenuRef}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsActionMenuOpen(!isActionMenuOpen);
+                        }}
+                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      {isActionMenuOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                          <button
+                            onClick={handleDownloadReport}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <Download className="w-4 h-4" />
+                            <span>Download Report</span>
+                          </button>
+                          <button
+                            onClick={handleShareFromMenu}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <Share2 className="w-4 h-4" />
+                            <span>Share Report</span>
+                          </button>
+                          <button
+                            onClick={handleExportData}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <FileSpreadsheet className="w-4 h-4" />
+                            <span>Export Data</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
             )}
