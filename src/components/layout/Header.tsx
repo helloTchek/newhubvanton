@@ -69,10 +69,11 @@ export const Header: React.FC = () => {
                   className="h-8 w-auto object-contain"
                 />
               ) : (
-                <>
-                  <Car className="w-6 h-6" style={{ color: theme?.primaryColor || '#3B82F6' }} />
-                  <span className="text-xl font-bold" style={{ color: theme?.textPrimaryColor || '#111827' }}>Tchek.ai</span>
-                </>
+                <img
+                  src="/logo_tchek-web.png"
+                  alt="Tchek.ai Logo"
+                  className="h-8 w-auto object-contain"
+                />
               )}
             </div>
             
