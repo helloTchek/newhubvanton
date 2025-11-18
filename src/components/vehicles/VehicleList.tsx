@@ -64,13 +64,7 @@ export const VehicleList: React.FC = () => {
     mileage: true,
     repairCost: true,
     value: true,
-    carBody: true,
-    rim: true,
-    glass: true,
-    interior: true,
-    tires: true,
-    dashboard: true,
-    declarations: true
+    damageResults: true
   });
   const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -468,13 +462,7 @@ export const VehicleList: React.FC = () => {
                           mileage: 'Mileage',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
-                          carBody: 'Car Body',
-                          rim: 'Rim',
-                          glass: 'Glass',
-                          interior: 'Interior',
-                          tires: 'Tires',
-                          dashboard: 'Dashboard',
-                          declarations: 'Declarations'
+                          damageResults: 'Damage Results'
                         }).map(([key, label]) => (
                           <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                             <input
