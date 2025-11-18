@@ -14,6 +14,14 @@ interface VehicleCardProps {
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
+  visibleFields?: {
+    company: boolean;
+    customerEmail: boolean;
+    inspectionDate: boolean;
+    mileage: boolean;
+    repairCost: boolean;
+    value: boolean;
+  };
 }
 
 const statusesWithoutImages: VehicleStatus[] = [
@@ -37,7 +45,15 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   onShareReport,
   isSelectionMode = false,
   isSelected = false,
-  onSelectToggle
+  onSelectToggle,
+  visibleFields = {
+    company: true,
+    customerEmail: true,
+    inspectionDate: true,
+    mileage: true,
+    repairCost: true,
+    value: true
+  }
 }) => {
   const { t } = useTranslation('vehicles');
   const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
@@ -166,28 +182,36 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
             <div className="text-right">
               <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
-              <p className="text-sm text-gray-500">{vehicle.mileage.toLocaleString()} km</p>
+              {visibleFields.mileage && (
+                <p className="text-sm text-gray-500">{vehicle.mileage.toLocaleString()} km</p>
+              )}
             </div>
           </div>
 
           {/* Additional Info Grid */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <MapPin className="w-4 h-4" />
-              <span>{vehicle.companyName}</span>
-            </div>
+            {visibleFields.company && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <MapPin className="w-4 h-4" />
+                <span>{vehicle.companyName}</span>
+              </div>
+            )}
 
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <User className="w-4 h-4" />
-              <span>{vehicle.customerEmail}</span>
-            </div>
+            {visibleFields.customerEmail && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <User className="w-4 h-4" />
+                <span>{vehicle.customerEmail}</span>
+              </div>
+            )}
 
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Calendar className="w-4 h-4" />
-              <span>Inspected: {formatDate(vehicle.inspectionDate)}</span>
-            </div>
+            {visibleFields.inspectionDate && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Calendar className="w-4 h-4" />
+                <span>Inspected: {formatDate(vehicle.inspectionDate)}</span>
+              </div>
+            )}
 
-            {vehicle.status === 'inspected' && vehicle.estimatedCost > 0 && (
+            {visibleFields.repairCost && vehicle.status === 'inspected' && vehicle.estimatedCost > 0 && (
               <div className="flex items-center gap-2 text-sm">
                 <DollarSign className="w-4 h-4 text-red-500" />
                 <span className="text-red-600 font-medium">
@@ -209,12 +233,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               </button>
             ) : (
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Estimated Value</span>
-                  <span className="text-lg font-semibold text-green-600">
-                    {formatCurrency(vehicle.estimatedValue)}
-                  </span>
-                </div>
+                {visibleFields.value && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Estimated Value</span>
+                    <span className="text-lg font-semibold text-green-600">
+                      {formatCurrency(vehicle.estimatedValue)}
+                    </span>
+                  </div>
+                )}
                 {vehicle.reportId && onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
                   <button
                     onClick={handleShareClick}

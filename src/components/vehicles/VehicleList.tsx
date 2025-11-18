@@ -57,6 +57,15 @@ export const VehicleList: React.FC = () => {
     declarations: true
   });
   const [showColumnSelector, setShowColumnSelector] = useState(false);
+  const [visibleCardFields, setVisibleCardFields] = useState({
+    company: true,
+    customerEmail: true,
+    inspectionDate: true,
+    mileage: true,
+    repairCost: true,
+    value: true
+  });
+  const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
 
@@ -423,20 +432,72 @@ export const VehicleList: React.FC = () => {
           </p>
         </div>
       ) : viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {vehicles.map((vehicle) => (
-            <VehicleCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              onClick={() => handleVehicleClick(vehicle)}
-              onChaseUp={handleChaseUp}
-              onShareReport={handleShareReport}
-              isSelectionMode={isSelectionMode}
-              isSelected={selectedVehicleIds.includes(vehicle.id)}
-              onSelectToggle={handleSelectToggle}
-            />
-          ))}
-        </div>
+        <>
+          {/* Card Field Selector */}
+          <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+            <div className="relative">
+              <button
+                onClick={() => setShowCardFieldSelector(!showCardFieldSelector)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
+              >
+                <Columns3 className="w-4 h-4" />
+                <span>Fields</span>
+              </button>
+
+              {showCardFieldSelector && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowCardFieldSelector(false)}
+                  />
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                    <div className="p-3">
+                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
+                      <div className="space-y-2">
+                        {Object.entries({
+                          company: 'Company',
+                          customerEmail: 'Customer Email',
+                          inspectionDate: 'Inspection Date',
+                          mileage: 'Mileage',
+                          repairCost: 'Repair Cost',
+                          value: 'Estimated Value'
+                        }).map(([key, label]) => (
+                          <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="checkbox"
+                              checked={visibleCardFields[key as keyof typeof visibleCardFields]}
+                              onChange={(e) =>
+                                setVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
+                              }
+                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700">{label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {vehicles.map((vehicle) => (
+              <VehicleCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                onClick={() => handleVehicleClick(vehicle)}
+                onChaseUp={handleChaseUp}
+                onShareReport={handleShareReport}
+                isSelectionMode={isSelectionMode}
+                isSelected={selectedVehicleIds.includes(vehicle.id)}
+                onSelectToggle={handleSelectToggle}
+                visibleFields={visibleCardFields}
+              />
+            ))}
+          </div>
+        </>
       ) : (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
           {/* Column Selector */}
