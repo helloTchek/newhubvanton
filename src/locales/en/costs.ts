@@ -1,0 +1,43 @@
+export const costs = {
+  title: 'Cost Matrices',
+  singular: 'Cost Matrix',
+  fields: {
+    name: 'Matrix Name',
+    category: 'Category',
+    damageType: 'Damage Type',
+    severity: 'Severity',
+    baseCost: 'Base Cost',
+    laborCost: 'Labor Cost',
+    partsCost: 'Parts Cost',
+    totalCost: 'Total Cost',
+    currency: 'Currency',
+  },
+  categories: {
+    bodywork: 'Bodywork',
+    mechanical: 'Mechanical',
+    electrical: 'Electrical',
+    interior: 'Interior',
+    glass: 'Glass',
+    tires: 'Tires & Wheels',
+  },
+  severity: {
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High',
+    critical: 'Critical',
+  },
+  actions: {
+    createMatrix: 'Create Matrix',
+    editMatrix: 'Edit Matrix',
+    deleteMatrix: 'Delete Matrix',
+    importMatrix: 'Import Matrix',
+    exportMatrix: 'Export Matrix',
+  },
+  messages: {
+    noMatrices: 'No cost matrices found',
+    matrixCreated: 'Cost matrix created successfully',
+    matrixUpdated: 'Cost matrix updated successfully',
+    matrixDeleted: 'Cost matrix deleted successfully',
+    matrixImported: 'Cost matrix imported successfully',
+  },
+} as const;

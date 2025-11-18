@@ -1,0 +1,36 @@
+export const company = {
+  title: 'Entreprises',
+  singular: 'Entreprise',
+  fields: {
+    name: 'Nom de l\'Entreprise',
+    motherCompany: 'Société Mère',
+    address: 'Adresse',
+    email: 'Email',
+    phone: 'Téléphone',
+    vehicleCount: 'Nombre de Véhicules',
+    logo: 'Logo',
+    fastTrackDisabled: 'Voie Rapide Désactivée',
+  },
+  actions: {
+    selectCompany: 'Sélectionner l\'Entreprise',
+    viewAll: 'Voir Toutes les Entreprises',
+    createCompany: 'Créer une Entreprise',
+    editCompany: 'Modifier l\'Entreprise',
+    deleteCompany: 'Supprimer l\'Entreprise',
+  },
+  messages: {
+    selectPrompt: 'Veuillez sélectionner une entreprise pour continuer',
+    allCompanies: 'Toutes les Entreprises',
+    noCompanies: 'Aucune entreprise disponible',
+    companyCreated: 'Entreprise créée avec succès',
+    companyUpdated: 'Entreprise mise à jour avec succès',
+    companyDeleted: 'Entreprise supprimée avec succès',
+  },
+  placeholders: {
+    searchCompany: 'Rechercher des entreprises...',
+    enterName: 'Entrez le nom de l\'entreprise',
+    enterEmail: 'Entrez l\'adresse email',
+    enterPhone: 'Entrez le numéro de téléphone',
+    enterAddress: 'Entrez l\'adresse',
+  },
+} as const;

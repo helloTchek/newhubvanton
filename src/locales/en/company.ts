@@ -1,0 +1,36 @@
+export const company = {
+  title: 'Companies',
+  singular: 'Company',
+  fields: {
+    name: 'Company Name',
+    motherCompany: 'Mother Company',
+    address: 'Address',
+    email: 'Email',
+    phone: 'Phone',
+    vehicleCount: 'Vehicle Count',
+    logo: 'Logo',
+    fastTrackDisabled: 'Fast Track Disabled',
+  },
+  actions: {
+    selectCompany: 'Select Company',
+    viewAll: 'View All Companies',
+    createCompany: 'Create Company',
+    editCompany: 'Edit Company',
+    deleteCompany: 'Delete Company',
+  },
+  messages: {
+    selectPrompt: 'Please select a company to continue',
+    allCompanies: 'All Companies',
+    noCompanies: 'No companies available',
+    companyCreated: 'Company created successfully',
+    companyUpdated: 'Company updated successfully',
+    companyDeleted: 'Company deleted successfully',
+  },
+  placeholders: {
+    searchCompany: 'Search companies...',
+    enterName: 'Enter company name',
+    enterEmail: 'Enter email address',
+    enterPhone: 'Enter phone number',
+    enterAddress: 'Enter address',
+  },
+} as const;

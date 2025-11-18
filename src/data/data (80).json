@@ -1,0 +1,1784 @@
+{
+  "data": {
+    "detectionList": [
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/front.jpeg",
+        "status": 200,
+        "angle": 0,
+        "id": "3HQkH1nKlk",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Driver.jpeg",
+        "status": 200,
+        "angle": 2,
+        "id": "YxmKWeEBxb",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+        "status": 200,
+        "angle": 4,
+        "id": "aP9hqwSVo1",
+        "detections": {
+          "damages": {
+            "PRTAVG": [
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 12,
+                "height": 0.033778,
+                "isAuto": true,
+                "width": 0.0185,
+                "centerY": 0.695111,
+                "centerX": 0.47925,
+                "type": "dent"
+              },
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 15,
+                "height": 0.026667,
+                "isAuto": true,
+                "width": 0.017,
+                "centerY": 0.705778,
+                "centerX": 0.559,
+                "type": "dent"
+              },
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 10,
+                "height": 0.031111,
+                "isAuto": true,
+                "width": 0.076,
+                "centerY": 0.708889,
+                "centerX": 0.5305,
+                "type": "scratch"
+              }
+            ],
+            "JNAARG": [
+              {
+                "location": [
+                  -1
+                ],
+                "part": "JNAARG",
+                "uid": 2,
+                "height": 0.099556,
+                "isAuto": true,
+                "width": 0.088,
+                "centerY": 0.709333,
+                "centerX": 0.873,
+                "type": "scratch_rim"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+        "status": 200,
+        "angle": 5,
+        "id": "XXD7mhNX9s",
+        "detections": {
+          "damages": {
+            "PRTAVG": [
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 14,
+                "height": 0.031111,
+                "isAuto": true,
+                "width": 0.017,
+                "centerY": 0.792444,
+                "centerX": 0.8045,
+                "type": "scratch"
+              },
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 11,
+                "height": 0.021333,
+                "isAuto": true,
+                "width": 0.0445,
+                "centerY": 0.84,
+                "centerX": 0.79125,
+                "type": "scratch"
+              },
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRTAVG",
+                "uid": 13,
+                "height": 0.031111,
+                "isAuto": true,
+                "width": 0.017,
+                "centerY": 0.792444,
+                "centerX": 0.8045,
+                "type": "dent"
+              }
+            ],
+            "RTRG": [
+              {
+                "location": [
+                  -1
+                ],
+                "part": "RTRG",
+                "uid": 16,
+                "height": 0.049778,
+                "isAuto": true,
+                "width": 0.0255,
+                "centerY": 0.395556,
+                "centerX": 0.53425,
+                "type": "scratch"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverBackInspect.jpeg",
+        "status": 200,
+        "angle": 6,
+        "id": "HpKZy4gd1X",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg",
+        "status": 200,
+        "angle": 7,
+        "id": "Mg0VPexp20",
+        "detections": {
+          "damages": {
+            "PRCAR": [
+              {
+                "location": [
+                  1
+                ],
+                "part": "PRCAR",
+                "uid": 5,
+                "height": 0.022222,
+                "isAuto": true,
+                "width": 0.031,
+                "centerY": 0.801333,
+                "centerX": 0.728,
+                "type": "scratch"
+              },
+              {
+                "location": [
+                  2
+                ],
+                "part": "PRCAR",
+                "uid": 8,
+                "height": 0.034667,
+                "isAuto": true,
+                "width": 0.028,
+                "centerY": 0.898222,
+                "centerX": 0.8035,
+                "type": "scratch"
+              }
+            ],
+            "JNAARD": [
+              {
+                "location": [
+                  -1
+                ],
+                "part": "JNAARD",
+                "uid": 1,
+                "height": 0.320889,
+                "isAuto": true,
+                "width": 0.1065,
+                "centerY": 0.834222,
+                "centerX": 0.40025,
+                "type": "scratch_rim"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg",
+        "status": 200,
+        "angle": 9,
+        "id": "RaPsJ05A59",
+        "detections": {
+          "damages": {
+            "PRCAR": [
+              {
+                "location": [
+                  1
+                ],
+                "part": "PRCAR",
+                "uid": 4,
+                "height": 0.039111,
+                "isAuto": true,
+                "width": 0.0625,
+                "centerY": 0.952,
+                "centerX": 0.22625,
+                "type": "scratch"
+              },
+              {
+                "location": [
+                  1
+                ],
+                "part": "PRCAR",
+                "uid": 6,
+                "height": 0.030222,
+                "isAuto": true,
+                "width": 0.025,
+                "centerY": 0.948444,
+                "centerX": 0.245,
+                "type": "dent"
+              },
+              {
+                "location": [
+                  1
+                ],
+                "part": "PRCAR",
+                "uid": 7,
+                "height": 0.020444,
+                "isAuto": true,
+                "width": 0.014,
+                "centerY": 0.749778,
+                "centerX": 0.149,
+                "type": "scratch_chip"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Passenger.jpeg",
+        "status": 200,
+        "angle": 11,
+        "id": "FbUMEAp9QD",
+        "detections": {
+          "damages": {
+            "PRCAR": [
+              {
+                "location": [
+                  3
+                ],
+                "part": "PRCAR",
+                "uid": 9,
+                "height": 0.023111,
+                "isAuto": true,
+                "width": 0.012,
+                "centerY": 0.857778,
+                "centerX": 0.3705,
+                "type": "scratch"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassenger.jpeg",
+        "status": 200,
+        "angle": 13,
+        "id": "9uCsF0Zj3O",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerBackInspect.jpeg",
+        "status": 200,
+        "angle": 14,
+        "id": "PvOd2VDEdj",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg",
+        "status": 200,
+        "angle": 15,
+        "id": "zIZnpmJpGg",
+        "detections": {
+          "damages": {
+            "JNAAVD": [
+              {
+                "location": [
+                  -1
+                ],
+                "part": "JNAAVD",
+                "uid": 3,
+                "height": 0.155556,
+                "isAuto": true,
+                "width": 0.091,
+                "centerY": 0.837778,
+                "centerX": 0.6885,
+                "type": "scratch_rim"
+              }
+            ],
+            "BDCD": [
+              {
+                "location": [
+                  0
+                ],
+                "part": "BDCD",
+                "uid": 0,
+                "height": 0.060444,
+                "isAuto": true,
+                "width": 0.121,
+                "centerY": 0.840889,
+                "centerX": 0.381,
+                "type": "scratch_chip"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Passenger.jpeg",
+        "status": 200,
+        "angle": 16,
+        "id": "xCYuZz9Cqi",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/speedometer.jpeg",
+        "status": 200,
+        "id": "jXdfdYhYvr",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/steeringWheel.jpeg",
+        "status": 200,
+        "id": "UIVduzyhbb",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/dashboard.jpeg",
+        "status": 200,
+        "id": "tNVnZ0v2fk",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/gearLever.jpeg",
+        "status": 200,
+        "id": "wuT8kMCown",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/media.jpeg",
+        "status": 200,
+        "id": "WtDszPZXzR",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontSeatDriver.jpeg",
+        "status": 200,
+        "id": "eGoj8x5MKw",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backSeatDriver.jpeg",
+        "status": 200,
+        "id": "TJXy6ENg7y",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/RoofLining.jpeg",
+        "status": 200,
+        "id": "GXdBZELbqU",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/motor.jpeg",
+        "status": 200,
+        "id": "GRT6WdyNf8",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/vin.jpeg",
+        "status": 200,
+        "id": "wJhn82cCB8",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/trunk.jpeg",
+        "status": 200,
+        "id": "EV93U4sAHa",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/grayCard.jpeg",
+        "status": 200,
+        "id": "FOBXe2yOqE",
+        "detections": {
+          "damages": null
+        }
+      },
+      {
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/technicalControl.jpeg",
+        "status": 200,
+        "id": "IWqOWOFCwG",
+        "detections": {
+          "damages": null
+        }
+      }
+    ],
+    "damageNumber": 17,
+    "vehicle": {
+      "region": "",
+      "immat": "GC412EQ",
+      "detectedLicensePlate": "GC412EQ"
+    },
+    "damages": {
+      "BDCD": [
+        {
+          "uid": 0,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 283.040936,
+          "part": "BDCD",
+          "type": "scratch_chip",
+          "rois": [
+            {
+              "height": 0.060444,
+              "width": 0.121,
+              "centerY": 0.840889,
+              "centerX": 0.381,
+              "imageId": "zIZnpmJpGg",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg"
+            }
+          ]
+        }
+      ],
+      "JNAARD": [
+        {
+          "uid": 1,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 479.738562,
+          "part": "JNAARD",
+          "type": "scratch_rim",
+          "rois": [
+            {
+              "height": 0.320889,
+              "width": 0.1065,
+              "centerY": 0.834222,
+              "centerX": 0.40025,
+              "imageId": "Mg0VPexp20",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg"
+            }
+          ]
+        }
+      ],
+      "JNAARG": [
+        {
+          "uid": 2,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 313.186813,
+          "part": "JNAARG",
+          "type": "scratch_rim",
+          "rois": [
+            {
+              "height": 0.099556,
+              "width": 0.088,
+              "centerY": 0.709333,
+              "centerX": 0.873,
+              "imageId": "aP9hqwSVo1",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg"
+            }
+          ]
+        }
+      ],
+      "PRCAR": [
+        {
+          "uid": 4,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 115.044248,
+          "part": "PRCAR",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.039111,
+              "width": 0.0625,
+              "centerY": 0.952,
+              "centerX": 0.22625,
+              "imageId": "RaPsJ05A59",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 6,
+          "isAuto": true,
+          "severity": "SEV4",
+          "size": 46.017699,
+          "part": "PRCAR",
+          "type": "dent",
+          "rois": [
+            {
+              "height": 0.030222,
+              "width": 0.025,
+              "centerY": 0.948444,
+              "centerX": 0.245,
+              "imageId": "RaPsJ05A59",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 5,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 78.616141,
+          "part": "PRCAR",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.022222,
+              "width": 0.031,
+              "centerY": 0.801333,
+              "centerX": 0.728,
+              "imageId": "Mg0VPexp20",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 8,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 71.008127,
+          "part": "PRCAR",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.034667,
+              "width": 0.028,
+              "centerY": 0.898222,
+              "centerX": 0.8035,
+              "imageId": "Mg0VPexp20",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 9,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 32.773109,
+          "part": "PRCAR",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.023111,
+              "width": 0.012,
+              "centerY": 0.857778,
+              "centerX": 0.3705,
+              "imageId": "FbUMEAp9QD",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Passenger.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 7,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 25.769912,
+          "part": "PRCAR",
+          "type": "scratch_chip",
+          "rois": [
+            {
+              "height": 0.020444,
+              "width": 0.014,
+              "centerY": 0.749778,
+              "centerX": 0.149,
+              "imageId": "RaPsJ05A59",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg"
+            }
+          ]
+        }
+      ],
+      "JNAAVD": [
+        {
+          "uid": 3,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 310.714286,
+          "part": "JNAAVD",
+          "type": "scratch_rim",
+          "rois": [
+            {
+              "height": 0.155556,
+              "width": 0.091,
+              "centerY": 0.837778,
+              "centerX": 0.6885,
+              "imageId": "zIZnpmJpGg",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg"
+            }
+          ]
+        }
+      ],
+      "PRTAVG": [
+        {
+          "uid": 10,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 250.549451,
+          "part": "PRTAVG",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.031111,
+              "width": 0.076,
+              "centerY": 0.708889,
+              "centerX": 0.5305,
+              "imageId": "aP9hqwSVo1",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 12,
+          "isAuto": true,
+          "severity": "SEV4",
+          "size": 68.882175,
+          "part": "PRTAVG",
+          "type": "dent",
+          "rois": [
+            {
+              "height": 0.033778,
+              "width": 0.0185,
+              "centerY": 0.695111,
+              "centerX": 0.47925,
+              "imageId": "aP9hqwSVo1",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 13,
+          "isAuto": true,
+          "severity": "SEV4",
+          "size": 51.674641,
+          "part": "PRTAVG",
+          "type": "dent",
+          "rois": [
+            {
+              "height": 0.031111,
+              "width": 0.017,
+              "centerY": 0.792444,
+              "centerX": 0.8045,
+              "imageId": "XXD7mhNX9s",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 14,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 51.674641,
+          "part": "PRTAVG",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.031111,
+              "width": 0.017,
+              "centerY": 0.792444,
+              "centerX": 0.8045,
+              "imageId": "XXD7mhNX9s",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 11,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 96.564195,
+          "part": "PRTAVG",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.021333,
+              "width": 0.0445,
+              "centerY": 0.84,
+              "centerX": 0.79125,
+              "imageId": "XXD7mhNX9s",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg"
+            }
+          ]
+        },
+        {
+          "uid": 15,
+          "isAuto": true,
+          "severity": "SEV4",
+          "size": 57.692308,
+          "part": "PRTAVG",
+          "type": "dent",
+          "rois": [
+            {
+              "height": 0.026667,
+              "width": 0.017,
+              "centerY": 0.705778,
+              "centerX": 0.559,
+              "imageId": "aP9hqwSVo1",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg"
+            }
+          ]
+        }
+      ],
+      "RTRG": [
+        {
+          "uid": 16,
+          "isAuto": true,
+          "severity": "SEV3",
+          "size": 84.688995,
+          "part": "RTRG",
+          "type": "scratch",
+          "rois": [
+            {
+              "height": 0.049778,
+              "width": 0.0255,
+              "centerY": 0.395556,
+              "centerX": 0.53425,
+              "imageId": "XXD7mhNX9s",
+              "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg"
+            }
+          ]
+        }
+      ]
+    },
+    "reportUrl": "https://webapp.tchek.fr/fr/report?token=T3ACE91",
+    "reportUrlWithoutCosts": "https://webapp.tchek.fr/fr/report?token=TACE91F",
+    "customFormResults": [
+      {
+        "screenId": "screen1",
+        "title": [
+          {
+            "locale": "fr",
+            "text": "État de votre véhicule (1/2)"
+          },
+          {
+            "locale": "en",
+            "text": "Your vehicle's condition (1/2)"
+          }
+        ],
+        "inputs": [
+          {
+            "order": 4,
+            "blockId": "sradio1",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Rencontrez-vous des sons inhabituels ou des irrégularités lors de votre conduite quotidienne ?"
+              },
+              {
+                "locale": "en",
+                "text": "Do you experience unusual sounds or irregularities in your daily driving?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "Non"
+              },
+              {
+                "locale": "en",
+                "text": "No"
+              }
+            ],
+            "cost": 0
+          },
+          {
+            "order": 5,
+            "blockId": "sradio2",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Est-ce que le tableau de bord affiche des voyants allumés lorsque le véhicule est démarré ?"
+              },
+              {
+                "locale": "en",
+                "text": "Does the dashboard display lights up when the vehicle is started?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "Non"
+              },
+              {
+                "locale": "en",
+                "text": "No"
+              }
+            ],
+            "cost": 0
+          },
+          {
+            "order": 6,
+            "blockId": "sradio3",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Est-ce que tous les dispositifs d'assistance à la conduite, tels que le radar d'aide au stationnement et la caméra de recul, fonctionnent correctement ?"
+              },
+              {
+                "locale": "en",
+                "text": "Are all driving aids functional (parking aid, reversing camera), ignition on?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "Oui"
+              },
+              {
+                "locale": "en",
+                "text": "Yes"
+              }
+            ],
+            "cost": 0
+          }
+        ]
+      },
+      {
+        "screenId": "screen2",
+        "title": [
+          {
+            "locale": "fr",
+            "text": "État de votre véhicule (2/2)"
+          },
+          {
+            "locale": "en",
+            "text": "Your vehicle's condition (2/2)"
+          }
+        ],
+        "inputs": [
+          {
+            "order": 8,
+            "blockId": "sradio4",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Le pare-brise présente-t-il des éclats ou des fissures ?"
+              },
+              {
+                "locale": "en",
+                "text": "Is there any unrepaired stone chip or crack on the windshield?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "Oui, localisé dans la zone rouge"
+              },
+              {
+                "locale": "en",
+                "text": "Yes, the chip/crack is located in the 'red' area"
+              }
+            ],
+            "cost": 600
+          },
+          {
+            "order": 10,
+            "blockId": "sradio5",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Êtes-vous en possession du double des clés ?"
+              },
+              {
+                "locale": "en",
+                "text": "Do you have a spare key ?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "J'ai le double des clés et il fonctionne"
+              },
+              {
+                "locale": "en",
+                "text": "The spare keys are present and working"
+              }
+            ],
+            "cost": 0
+          },
+          {
+            "order": 16,
+            "blockId": "sradio6",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "L'habitacle du véhicule montre-t-il des signes de dommages ou d'usure ?"
+              },
+              {
+                "locale": "en",
+                "text": "Does the vehicle interior show signs of damage or wear?"
+              }
+            ],
+            "answer": [
+              {
+                "locale": "fr",
+                "text": "Non"
+              },
+              {
+                "locale": "en",
+                "text": "No"
+              }
+            ],
+            "cost": 0
+          },
+          {
+            "order": 20,
+            "blockId": "scomments",
+            "question": [
+              {
+                "locale": "fr",
+                "text": "Commentaires (éléments additionnels à déclarer) : ",
+                "placeholder": "..."
+              },
+              {
+                "locale": "en",
+                "text": "Comments (additional elements to declare):",
+                "placeholder": "..."
+              }
+            ],
+            "answer": "rayure proche de la roue arrière et quelques 2 bosses sur la porte conducteur",
+            "cost": null
+          }
+        ]
+      }
+    ],
+    "tokenId": "T8A24CD",
+    "severity": [
+      {
+        "cost": 200,
+        "severity": "SEV3",
+        "severityType": "sum",
+        "location": "JNAARD"
+      },
+      {
+        "cost": 200,
+        "severity": "SEV3",
+        "severityType": "sum",
+        "location": "JNAARG"
+      },
+      {
+        "cost": 350,
+        "severity": "SEV4",
+        "severityType": "sum",
+        "location": "PRCAR"
+      },
+      {
+        "cost": 200,
+        "severity": "SEV3",
+        "severityType": "sum",
+        "location": "JNAAVD"
+      },
+      {
+        "cost": 50,
+        "severity": "SEV3",
+        "severityType": "sum",
+        "location": "RTRG"
+      },
+      {
+        "cost": 350,
+        "severity": "SEV4",
+        "severityType": "sum",
+        "location": "PRTAVG"
+      },
+      {
+        "cost": 0,
+        "severity": "SEV3",
+        "severityType": "sum",
+        "location": "BDCD"
+      }
+    ],
+    "tchekId": "p8VHcTgySE",
+    "createdAt": "2025-10-06T16:44:43.101Z",
+    "inspectionImages": [
+      {
+        "name": "front.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/front.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=23770975dbae09f927f9598647495406d13fef464c63ab50aa1a7e4e5170cc1a&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/front.jpeg",
+        "shootingDate": "2025-10-08T17:38:45.526Z",
+        "angle": 0
+      },
+      {
+        "name": "frontT34Driver.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Driver.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=6e269d1359967d37a6d3f17cb6af63f80d131092d20aa72dfe46a8ec575febba&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Driver.jpeg",
+        "shootingDate": "2025-10-08T17:39:16.975Z",
+        "angle": 2
+      },
+      {
+        "name": "sideDriver.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=d1b33c768232f1e281fe73c8574dbc8846d48a5d1f16f8075bcb5b5807fce79b&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+        "shootingDate": "2025-10-08T17:39:26.236Z",
+        "angle": 4
+      },
+      {
+        "name": "sideDriverFrontInspect.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=7f6b9f27e991ad86e56337cbf242da7ef9bfb8f0bdc439b36efafc59ee18b520&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+        "shootingDate": "2025-10-08T17:39:37.164Z",
+        "angle": 5
+      },
+      {
+        "name": "sideDriverBackInspect.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverBackInspect.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=42e83d5ceb8608e502984b3e8e983c34e648aac9eeba11a2446527a62a258b3d&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverBackInspect.jpeg",
+        "shootingDate": "2025-10-08T17:39:44.379Z",
+        "angle": 6
+      },
+      {
+        "name": "backT34Driver.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=50fba1d06b8dcd2598f58638db5cdf82a628779e463b993a27b8802dbd7ef115&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg",
+        "shootingDate": "2025-10-08T17:39:59.041Z",
+        "angle": 7
+      },
+      {
+        "name": "back.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=b85b3191312413cfc8579b017092cbffa8a10b2d48b9a25d82b797ce27176bc9&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg",
+        "shootingDate": "2025-10-08T17:40:07.838Z",
+        "angle": 9
+      },
+      {
+        "name": "backT34Passenger.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Passenger.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=62bae044b3f78514c77673017ea369a5a31145521123d84e86a6a2899af73da8&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Passenger.jpeg",
+        "shootingDate": "2025-10-08T17:40:17.649Z",
+        "angle": 11
+      },
+      {
+        "name": "sidePassenger.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassenger.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=1063c9d8c00c8d695727b5b2db7b77a3941f0c4c741584e3dd3a049710dcd4dc&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassenger.jpeg",
+        "shootingDate": "2025-10-08T17:40:30.395Z",
+        "angle": 13
+      },
+      {
+        "name": "sidePassengerBackInspect.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerBackInspect.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=fb5392fc3902b31aa65e575ce8a4d64369f7c2b26a7105654a1d4398a8f23264&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerBackInspect.jpeg",
+        "shootingDate": "2025-10-08T17:40:44.217Z",
+        "angle": 14
+      },
+      {
+        "name": "sidePassengerFrontInspect.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=b3573147f70b0baf53e0266137c7b24ce26adccc9213829bea26d2ef07835261&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg",
+        "shootingDate": "2025-10-08T17:40:51.235Z",
+        "angle": 15
+      },
+      {
+        "name": "frontT34Passenger.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Passenger.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=052a3caa539791659189e1276b7a69e043d3b662af0b3d4f2feb9611fbd9c691&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontT34Passenger.jpeg",
+        "shootingDate": "2025-10-08T17:40:59.772Z",
+        "angle": 16
+      },
+      {
+        "name": "speedometer.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/speedometer.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=9758b4187b784167aedc24643a55bb9fef280c9d4c16e7f4f5159aa0e1836677&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/speedometer.jpeg",
+        "shootingDate": "2025-10-08T17:43:32.469Z"
+      },
+      {
+        "name": "steeringWheel.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/steeringWheel.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=23011a89589b08adc7820fd84c9c170d3ce505a2e1a9416cf332cb0fd33d783c&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/steeringWheel.jpeg",
+        "shootingDate": "2025-10-08T17:43:38.201Z"
+      },
+      {
+        "name": "dashboard.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/dashboard.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=caf8ab7aab2a5b2bdc15e2302a878cbec2a34754b322b15faab23cb3d4511894&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/dashboard.jpeg",
+        "shootingDate": "2025-10-08T17:43:51.152Z"
+      },
+      {
+        "name": "gearLever.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/gearLever.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=a99ef0e320b8aea33a52cd9f7b27c17e190ac50f6cc589065c340052be73356b&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/gearLever.jpeg",
+        "shootingDate": "2025-10-08T17:44:01.135Z"
+      },
+      {
+        "name": "media.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/media.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=dd4155a2fa412551b603077ef80a46f4989a709b303e75a40701598009edbe23&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/media.jpeg",
+        "shootingDate": "2025-10-08T17:44:05.860Z"
+      },
+      {
+        "name": "frontSeatDriver.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontSeatDriver.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=25dd619da4e7f5ccb655698d09ea0930bf1e1b9fd9caa8f0143bacb698082cf4&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/frontSeatDriver.jpeg",
+        "shootingDate": "2025-10-08T17:44:25.316Z"
+      },
+      {
+        "name": "backSeatDriver.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backSeatDriver.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=7036c73e5be9dc9414da95e0b9ecac88793369c2848eeaa780e184a4ecb1d0a6&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backSeatDriver.jpeg",
+        "shootingDate": "2025-10-08T17:44:34.622Z"
+      },
+      {
+        "name": "RoofLining.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/RoofLining.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=1bd41509c48c38b2f1e3795ce6b8a23fb598051c307f19d67ba31c92652aeb9b&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/RoofLining.jpeg",
+        "shootingDate": "2025-10-08T17:44:48.645Z"
+      },
+      {
+        "name": "motor.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/motor.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=990ad79cf4f764ff8b27e3a8139455ab96fc56a76de7d377f5f616a651f147b2&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/motor.jpeg",
+        "shootingDate": "2025-10-08T17:45:08.057Z"
+      },
+      {
+        "name": "vin.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/vin.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=191f7a986dfa287feaaf92b6ec43fec402bc787c40b2d1f76d511d324f420ed5&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/vin.jpeg",
+        "shootingDate": "2025-10-08T17:45:24.174Z"
+      },
+      {
+        "name": "trunk.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/trunk.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=30bc8232ae9a17b5aaf562ed0f42506c42e8bb2d46688447a67d6e912145a6f7&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/trunk.jpeg",
+        "shootingDate": "2025-10-08T17:46:02.760Z"
+      },
+      {
+        "name": "grayCard.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/grayCard.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=580f577f6f211da52179b9629e4016efb00ff1c879252950e4ac49184e70e575&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/grayCard.jpeg",
+        "shootingDate": "2025-10-08T17:47:10.849Z"
+      },
+      {
+        "name": "technicalControl.jpeg",
+        "url": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/technicalControl.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVTL4GKBTE63ETUWC%2F20251009%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251009T071226Z&X-Amz-Expires=7200&X-Amz-Signature=539482b42080a223d94f992cee3b4f87b660420e3071074dd445ffd58aebdf10&X-Amz-SignedHeaders=host",
+        "originUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/technicalControl.jpeg",
+        "shootingDate": "2025-10-08T17:48:00.628Z"
+      }
+    ],
+    "partsCondition": [
+      {
+        "id": "q8r9hspV8L",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "JNAARD",
+        "cost": 200,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 3,
+        "reparation": "painting",
+        "condition": "scratched",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "iEGAuo55Oj",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 479.738562,
+            "type": "scratch_rim",
+            "confidence": 0.431273,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "a59B5t2OeP",
+                "cropS3ObjectName": "",
+                "height": 0.320889,
+                "width": 0.1065,
+                "centerX": 0.40025,
+                "centerY": 0.834222,
+                "imageId": "Mg0VPexp20",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg",
+                "type": "scratch_rim",
+                "uid": 0,
+                "confidence": 0.431273,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 479.738562
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "4DMvXq1LeW",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "JNAARG",
+        "cost": 200,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 3,
+        "reparation": "painting",
+        "condition": "scratched",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "PXoZLCFBXf",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 313.186813,
+            "type": "scratch_rim",
+            "confidence": 0.441163,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "REI0U5cUk9",
+                "cropS3ObjectName": "",
+                "height": 0.099556,
+                "width": 0.088,
+                "centerX": 0.873,
+                "centerY": 0.709333,
+                "imageId": "aP9hqwSVo1",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+                "type": "scratch_rim",
+                "uid": 0,
+                "confidence": 0.441163,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 313.186813
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "RWr6PhBOCl",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "PRCAR",
+        "cost": 350,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 4,
+        "reparation": "sheet_metal_work_and_painting",
+        "condition": "damaged",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "3PzJbvK0jI",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 115.044248,
+            "type": "scratch",
+            "confidence": 0.544081,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "dcUMgcLjqD",
+                "cropS3ObjectName": "",
+                "height": 0.039111,
+                "width": 0.0625,
+                "centerX": 0.22625,
+                "centerY": 0.952,
+                "imageId": "RaPsJ05A59",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.544081,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 115.044248
+              }
+            ]
+          },
+          {
+            "id": "4HPhicdZMU",
+            "isAuto": true,
+            "severityLevel": 4,
+            "size": 46.017699,
+            "type": "dent",
+            "confidence": 0.183178,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "6ZourrfcmR",
+                "cropS3ObjectName": "",
+                "height": 0.030222,
+                "width": 0.025,
+                "centerX": 0.245,
+                "centerY": 0.948444,
+                "imageId": "RaPsJ05A59",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg",
+                "type": "dent",
+                "uid": 0,
+                "confidence": 0.183178,
+                "isAuto": true,
+                "severityLevel": 4,
+                "size": 46.017699
+              }
+            ]
+          },
+          {
+            "id": "cMJdLPJaZX",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 78.616141,
+            "type": "scratch",
+            "confidence": 0.504486,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "2YJsDvIGiV",
+                "cropS3ObjectName": "",
+                "height": 0.022222,
+                "width": 0.031,
+                "centerX": 0.728,
+                "centerY": 0.801333,
+                "imageId": "Mg0VPexp20",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.504486,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 78.616141
+              }
+            ]
+          },
+          {
+            "id": "mBC1IaGzOi",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 71.008127,
+            "type": "scratch",
+            "confidence": 0.511523,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "oVBXCbN07b",
+                "cropS3ObjectName": "",
+                "height": 0.034667,
+                "width": 0.028,
+                "centerX": 0.8035,
+                "centerY": 0.898222,
+                "imageId": "Mg0VPexp20",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Driver.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.511523,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 71.008127
+              }
+            ]
+          },
+          {
+            "id": "9Ttpd5Pjap",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 32.773109,
+            "type": "scratch",
+            "confidence": 0.403834,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "GaHhMBCEhh",
+                "cropS3ObjectName": "",
+                "height": 0.023111,
+                "width": 0.012,
+                "centerX": 0.3705,
+                "centerY": 0.857778,
+                "imageId": "FbUMEAp9QD",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/backT34Passenger.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.403834,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 32.773109
+              }
+            ]
+          },
+          {
+            "id": "J8JhmYFNWM",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 25.769912,
+            "type": "scratch_chip",
+            "confidence": 0.458152,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "ntXisKVZqJ",
+                "cropS3ObjectName": "",
+                "height": 0.020444,
+                "width": 0.014,
+                "centerX": 0.149,
+                "centerY": 0.749778,
+                "imageId": "RaPsJ05A59",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/back.jpeg",
+                "type": "scratch_chip",
+                "uid": 0,
+                "confidence": 0.458152,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 25.769912
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "JrR22lBRWy",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "JNAAVD",
+        "cost": 200,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 3,
+        "reparation": "painting",
+        "condition": "scratched",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "vTVAWMAdse",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 310.714286,
+            "type": "scratch_rim",
+            "confidence": 0.727395,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "VA85J7Hams",
+                "cropS3ObjectName": "",
+                "height": 0.155556,
+                "width": 0.091,
+                "centerX": 0.6885,
+                "centerY": 0.837778,
+                "imageId": "zIZnpmJpGg",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg",
+                "type": "scratch_rim",
+                "uid": 0,
+                "confidence": 0.727395,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 310.714286
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bQGIUZ6Wda",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "RTRG",
+        "cost": 50,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 3,
+        "reparation": "painting",
+        "condition": "scratched",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "GD8JFCXsrw",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 84.688995,
+            "type": "scratch",
+            "confidence": 0.489873,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "A7cfakvHwS",
+                "cropS3ObjectName": "",
+                "height": 0.049778,
+                "width": 0.0255,
+                "centerX": 0.53425,
+                "centerY": 0.395556,
+                "imageId": "XXD7mhNX9s",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.489873,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 84.688995
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "YG4nCDWmOM",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "PRTAVG",
+        "cost": 350,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 4,
+        "reparation": "sheet_metal_work_and_painting",
+        "condition": "damaged",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "flEiuZSYkE",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 250.549451,
+            "type": "scratch",
+            "confidence": 0.22979,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "OywFCAi7Zm",
+                "cropS3ObjectName": "",
+                "height": 0.031111,
+                "width": 0.076,
+                "centerX": 0.5305,
+                "centerY": 0.708889,
+                "imageId": "aP9hqwSVo1",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.22979,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 250.549451
+              }
+            ]
+          },
+          {
+            "id": "GuN83r6UGv",
+            "isAuto": true,
+            "severityLevel": 4,
+            "size": 68.882175,
+            "type": "dent",
+            "confidence": 0.245486,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "UKxEygUOsq",
+                "cropS3ObjectName": "",
+                "height": 0.033778,
+                "width": 0.0185,
+                "centerX": 0.47925,
+                "centerY": 0.695111,
+                "imageId": "aP9hqwSVo1",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+                "type": "dent",
+                "uid": 0,
+                "confidence": 0.245486,
+                "isAuto": true,
+                "severityLevel": 4,
+                "size": 68.882175
+              }
+            ]
+          },
+          {
+            "id": "ldMHkGPWw7",
+            "isAuto": true,
+            "severityLevel": 4,
+            "size": 51.674641,
+            "type": "dent",
+            "confidence": 0.386797,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "sVoW7faPSU",
+                "cropS3ObjectName": "",
+                "height": 0.031111,
+                "width": 0.017,
+                "centerX": 0.8045,
+                "centerY": 0.792444,
+                "imageId": "XXD7mhNX9s",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+                "type": "dent",
+                "uid": 0,
+                "confidence": 0.386797,
+                "isAuto": true,
+                "severityLevel": 4,
+                "size": 51.674641
+              }
+            ]
+          },
+          {
+            "id": "5yQZIQIOI0",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 51.674641,
+            "type": "scratch",
+            "confidence": 0.208803,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "whOGLVAUKI",
+                "cropS3ObjectName": "",
+                "height": 0.031111,
+                "width": 0.017,
+                "centerX": 0.8045,
+                "centerY": 0.792444,
+                "imageId": "XXD7mhNX9s",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.208803,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 51.674641
+              }
+            ]
+          },
+          {
+            "id": "jm6j8aBLhw",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 96.564195,
+            "type": "scratch",
+            "confidence": 0.517732,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "W1ev1ZFj0k",
+                "cropS3ObjectName": "",
+                "height": 0.021333,
+                "width": 0.0445,
+                "centerX": 0.79125,
+                "centerY": 0.84,
+                "imageId": "XXD7mhNX9s",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriverFrontInspect.jpeg",
+                "type": "scratch",
+                "uid": 0,
+                "confidence": 0.517732,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 96.564195
+              }
+            ]
+          },
+          {
+            "id": "ZRIinaxOHj",
+            "isAuto": true,
+            "severityLevel": 4,
+            "size": 57.692308,
+            "type": "dent",
+            "confidence": 0.606988,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "cM9d8FNRzQ",
+                "cropS3ObjectName": "",
+                "height": 0.026667,
+                "width": 0.017,
+                "centerX": 0.559,
+                "centerY": 0.705778,
+                "imageId": "aP9hqwSVo1",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sideDriver.jpeg",
+                "type": "dent",
+                "uid": 0,
+                "confidence": 0.606988,
+                "isAuto": true,
+                "severityLevel": 4,
+                "size": 57.692308
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "VZSlIHQATm",
+        "partType": "carbody",
+        "category": "exterior",
+        "code": "BDCD",
+        "cost": 0,
+        "currency": "€",
+        "tax": 20,
+        "severityLevel": 3,
+        "reparation": "painting",
+        "condition": "scratched",
+        "confidence": null,
+        "nonBillable": false,
+        "damages": [
+          {
+            "id": "y6gkddBvSf",
+            "isAuto": true,
+            "severityLevel": 3,
+            "size": 283.040936,
+            "type": "scratch_chip",
+            "confidence": 0.278434,
+            "nonBillable": false,
+            "rois": [
+              {
+                "id": "QnmHvG34kf",
+                "cropS3ObjectName": "",
+                "height": 0.060444,
+                "width": 0.121,
+                "centerX": 0.381,
+                "centerY": 0.840889,
+                "imageId": "zIZnpmJpGg",
+                "imageUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/ooH7iAfgsD/p8VHcTgySE/sidePassengerFrontInspect.jpeg",
+                "type": "scratch_chip",
+                "uid": 0,
+                "confidence": 0.278434,
+                "isAuto": true,
+                "severityLevel": 3,
+                "size": 283.040936
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "pdfReportUrl": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/bXoSUdeeqM/p8VHcTgySE/report/GC412EQ_20251009_071232_with_costs.pdf",
+    "pdfReportUrlWithoutCosts": "https://tchekprod-b257.s3.eu-central-1.amazonaws.com/bXoSUdeeqM/p8VHcTgySE/report/GC412EQ_20251009_071232_without_costs.pdf"
+  },
+  "status": 200,
+  "totalTime": 23.50859,
+  "requestId": "12b5fb852d441322"
+}
