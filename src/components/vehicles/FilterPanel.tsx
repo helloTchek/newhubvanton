@@ -130,46 +130,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const renderFilter = (filterId: string) => {
     switch (filterId) {
       case 'inspectionType':
-        return (
-          <div key={filterId}>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <FileCheck className="w-4 h-4 text-gray-400" />
-              Inspection Type
-            </label>
-            <select
-              value={filters.inspectionType || 'all'}
-              onChange={(e) => onFiltersChange({ inspectionType: e.target.value as InspectionType | 'all' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-            >
-              {inspectionTypeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
-
       case 'status':
-        return (
-          <div key={filterId}>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-400" />
-              Status
-            </label>
-            <select
-              value={filters.status}
-              onChange={(e) => onFiltersChange({ status: e.target.value as VehicleStatus | 'all' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-            >
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
+        // These are now rendered inline in the compact row
+        return null;
 
       case 'dateRange':
         return (
