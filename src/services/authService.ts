@@ -99,16 +99,35 @@ class AuthService {
       }
 
       // Wait a moment for the trigger to create the profile
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Fetch the created profile
-      const { data: profile, error: profileError } = await supabase
+      // Check if profile exists, if not create it manually
+      let { data: profile, error: profileError } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('id', authData.user.id)
         .maybeSingle();
 
-      if (profileError) {
+      if (!profile && !profileError) {
+        // Profile doesn't exist, create it manually
+        const { data: newProfile, error: insertError } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: authData.user.id,
+            name: credentials.name,
+            role: credentials.role || 'viewer',
+            company_id: credentials.companyId || null,
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error('Profile creation error:', insertError);
+          throw new Error('Failed to create user profile: ' + insertError.message);
+        }
+
+        profile = newProfile;
+      } else if (profileError) {
         console.error('Profile fetch error:', profileError);
       }
 
