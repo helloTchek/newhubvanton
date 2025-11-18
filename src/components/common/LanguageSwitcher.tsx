@@ -25,7 +25,7 @@ export const LanguageSwitcher: React.FC = () => {
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+      <Menu.Button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors">
         <Globe className="w-4 h-4" />
         <span>{currentLanguage.nativeName}</span>
       </Menu.Button>
@@ -48,8 +48,8 @@ export const LanguageSwitcher: React.FC = () => {
                     onClick={() => changeLanguage(language.code)}
                     className={clsx(
                       'group flex w-full items-center justify-between px-4 py-2 text-sm',
-                      active ? 'bg-blue-50 text-blue-700' : 'text-gray-700',
-                      i18n.language === language.code && 'bg-blue-50'
+                      active ? 'bg-teal-50 text-teal-700' : 'text-gray-700',
+                      i18n.language === language.code && 'bg-teal-50'
                     )}
                   >
                     <span className="flex items-center gap-3">
@@ -57,7 +57,7 @@ export const LanguageSwitcher: React.FC = () => {
                       <span className="text-gray-500 text-xs">{language.name}</span>
                     </span>
                     {i18n.language === language.code && (
-                      <Check className="w-4 h-4 text-blue-600" />
+                      <Check className="w-4 h-4 text-teal-600" />
                     )}
                   </button>
                 )}

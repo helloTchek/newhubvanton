@@ -5,6 +5,7 @@ import { Company, LoadingState } from '../../types';
 import { companyService } from '../../services/companyService';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../common/LoadingSpinner';
+import { LanguageSwitcher } from '../common/LanguageSwitcher';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
@@ -96,6 +97,11 @@ export const CompanySelection: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-4">
       <div className="max-w-6xl mx-auto py-12">
+        {/* Language Switcher */}
+        <div className="flex justify-end mb-6">
+          <LanguageSwitcher />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <img
