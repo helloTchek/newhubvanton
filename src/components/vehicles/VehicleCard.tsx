@@ -213,7 +213,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               </div>
             )}
 
-            {visibleFields.repairCost && vehicle.status === 'inspected' && vehicle.estimatedCost > 0 && (
+            {visibleFields.repairCost && vehicle.estimatedCost > 0 && (
               <div className="flex items-center gap-2 text-sm">
                 <DollarSign className="w-4 h-4 text-red-500" />
                 <span className="text-red-600 font-medium">
@@ -224,13 +224,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
 
           {/* Damage Results Grid */}
-          {visibleFields.damageResults && vehicle.status === 'inspected' && (
+          {visibleFields.damageResults && vehicle.damageInfo && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="grid grid-cols-3 gap-2">
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Car Body</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.carBody ? (
+                    {vehicle.damageInfo.damageCounts.carBody > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -240,7 +240,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Rim</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.rim ? (
+                    {vehicle.damageInfo.damageCounts.rims > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -250,7 +250,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Glass</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.glass ? (
+                    {vehicle.damageInfo.damageCounts.glazing > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -260,7 +260,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Interior</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.interior ? (
+                    {vehicle.damageInfo.damageCounts.interior > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -270,7 +270,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Tires</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.tires ? (
+                    {vehicle.damageInfo.damageCounts.tires > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -280,7 +280,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Dashboard</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.dashboard ? (
+                    {vehicle.damageInfo.damageCounts.dashboard > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -290,7 +290,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="text-center p-2 bg-gray-50 rounded">
                   <div className="text-xs text-gray-500 mb-1">Declarations</div>
                   <div className="flex items-center justify-center gap-1">
-                    {vehicle.damageResults?.declarations ? (
+                    {vehicle.damageInfo.damageCounts.declarations > 0 ? (
                       <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
