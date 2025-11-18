@@ -421,7 +421,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         {isExpanded && !isConfiguring && activeFilters.length > 0 && (
           <div className="pt-3 border-t border-gray-200">
             {/* Compact row for Inspection Type and Status - Now on single line */}
-            <div className="flex gap-3 mb-3 bg-gray-50 p-3 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">QUICK FILTERS</span>
+            </div>
+            <div className="flex gap-3 mb-3 bg-gradient-to-r from-blue-50 to-gray-50 p-3 rounded-lg border border-blue-100">
               {activeFilters.includes('inspectionType') && (
                 <div className="flex-1 min-w-[180px]">
                   <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
