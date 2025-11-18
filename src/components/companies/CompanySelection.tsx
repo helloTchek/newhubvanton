@@ -211,29 +211,24 @@ export const CompanySelection: React.FC = () => {
 
                   {/* Company Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900 truncate">
                           {company.name}
                         </h3>
                         {company.motherCompany && (
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 mt-1">
                             Part of {company.motherCompany}
                           </p>
                         )}
                       </div>
                       <ArrowRight className={clsx(
-                        'w-5 h-5 transition-colors',
+                        'w-5 h-5 transition-colors flex-shrink-0 ml-2',
                         selectedCompany === company.id ? 'text-teal-600' : 'text-gray-400'
                       )} />
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {company.address}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">{company.email}</span>
+                    <div className="flex items-center">
                       <div className="bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
                         {company.vehicleCount} vehicles
                       </div>
