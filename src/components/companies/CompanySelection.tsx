@@ -70,6 +70,9 @@ export const CompanySelection: React.FC = () => {
     (company.motherCompany?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   );
 
+  // Calculate total vehicles across all companies
+  const totalVehicles = companies.reduce((sum, company) => sum + company.vehicleCount, 0);
+
   if (loading.isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
@@ -145,49 +148,62 @@ export const CompanySelection: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* All Companies Option */}
-            <div className="max-w-md mx-auto">
-              <div
-                className={clsx(
-                  'bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
-                  selectedCompany === 'all'
-                    ? 'border-white bg-opacity-90'
-                    : 'border-transparent hover:border-white hover:border-opacity-50'
-                )}
-                onClick={() => handleCompanySelect('all')}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold">All Companies</h3>
-                      <p className="text-teal-100 text-sm">
-                        Access all companies and vehicles
-                      </p>
-                    </div>
+            {/* Individual Companies - Including "All Companies" as first card */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* All Companies Card */}
+            <div
+              className={clsx(
+                'bg-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
+                selectedCompany === 'all'
+                  ? 'border-teal-500 bg-teal-50'
+                  : 'border-gray-200 hover:border-teal-300'
+              )}
+              onClick={() => handleCompanySelect('all')}
+            >
+              <div className="flex items-start gap-4">
+                {/* Logo */}
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-white" />
                   </div>
-                  <ArrowRight className="w-5 h-5 text-white" />
                 </div>
 
-                {selectedCompany === 'all' && (
-                  <div className="mt-4 pt-4 border-t border-white border-opacity-20">
-                    <div className="flex items-center justify-center gap-2 text-white">
-                      <LoadingSpinner size="sm" />
-                      <span className="text-sm font-medium">Selecting all companies...</span>
+                {/* Company Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        All Companies
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Global Access
+                      </p>
+                    </div>
+                    <ArrowRight className={clsx(
+                      'w-5 h-5 transition-colors flex-shrink-0 ml-2',
+                      selectedCompany === 'all' ? 'text-teal-600' : 'text-gray-400'
+                    )} />
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
+                      {totalVehicles} vehicles
                     </div>
                   </div>
-                )}
+                </div>
               </div>
+
+              {selectedCompany === 'all' && (
+                <div className="mt-4 pt-4 border-t border-teal-200">
+                  <div className="flex items-center justify-center gap-2 text-teal-600">
+                    <LoadingSpinner size="sm" />
+                    <span className="text-sm font-medium">Selecting...</span>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Individual Companies */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 text-center mb-6">
-                Or select a specific company:
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Individual Company Cards */}
             {filteredCompanies.map((company) => (
               <div
                 key={company.id}
@@ -252,7 +268,6 @@ export const CompanySelection: React.FC = () => {
                 )}
               </div>
             ))}
-              </div>
             </div>
           </div>
         )}
