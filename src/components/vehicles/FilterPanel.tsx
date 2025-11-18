@@ -456,8 +456,57 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         )}
 
         {isExpanded && !isConfiguring && activeFilters.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4 border-t border-gray-200">
-            {activeFilters.map(filterId => renderFilter(filterId))}
+          <div className="pt-4 border-t border-gray-200">
+            {/* Compact row for Inspection Type and Status */}
+            <div className="flex flex-wrap gap-4 mb-4">
+              {activeFilters.includes('inspectionType') && (
+                <div className="flex-1 min-w-[200px]">
+                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <FileCheck className="w-3.5 h-3.5 text-gray-400" />
+                    Inspection Type
+                  </label>
+                  <select
+                    value={filters.inspectionType || 'all'}
+                    onChange={(e) => onFiltersChange({ inspectionType: e.target.value as InspectionType | 'all' })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
+                  >
+                    {inspectionTypeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              {activeFilters.includes('status') && (
+                <div className="flex-1 min-w-[200px]">
+                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Filter className="w-3.5 h-3.5 text-gray-400" />
+                    Status
+                  </label>
+                  <select
+                    value={filters.status}
+                    onChange={(e) => onFiltersChange({ status: e.target.value as VehicleStatus | 'all' })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
+                  >
+                    {statusOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {/* Other filters in grid */}
+            {activeFilters.filter(f => f !== 'inspectionType' && f !== 'status').length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {activeFilters
+                  .filter(filterId => filterId !== 'inspectionType' && filterId !== 'status')
+                  .map(filterId => renderFilter(filterId))}
+              </div>
+            )}
           </div>
         )}
 
