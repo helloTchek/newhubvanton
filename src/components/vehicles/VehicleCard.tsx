@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -171,6 +171,17 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     if (onShareReport) {
       onShareReport(vehicle);
     }
+  };
+
+  const handleOpenUrlReport = (e: React.MouseEvent, fromChaseUp: boolean = false) => {
+    e.stopPropagation();
+    if (fromChaseUp) {
+      setIsChaseUpActionMenuOpen(false);
+    } else {
+      setIsShareActionMenuOpen(false);
+    }
+    const reportUrl = `/vehicle/${vehicle.id}/report`;
+    window.open(reportUrl, '_blank');
   };
 
   const handleExportData = (e: React.MouseEvent, fromChaseUp: boolean = false) => {
@@ -376,11 +387,11 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                         <span>Download Report</span>
                       </button>
                       <button
-                        onClick={(e) => handleShareFromMenu(e, true)}
+                        onClick={(e) => handleOpenUrlReport(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
-                        <Share2 className="w-4 h-4" />
-                        <span>Share Report</span>
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Open URL Report</span>
                       </button>
                       <button
                         onClick={(e) => handleExportData(e, true)}
@@ -432,11 +443,11 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                             <span>Download Report</span>
                           </button>
                           <button
-                            onClick={(e) => handleShareFromMenu(e, false)}
+                            onClick={(e) => handleOpenUrlReport(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
-                            <Share2 className="w-4 h-4" />
-                            <span>Share Report</span>
+                            <ExternalLink className="w-4 h-4" />
+                            <span>Open URL Report</span>
                           </button>
                           <button
                             onClick={(e) => handleExportData(e, false)}

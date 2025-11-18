@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText } from 'lucide-react';
+import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
@@ -138,6 +138,13 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   const handleExportData = (e: React.MouseEvent) => {
     e.stopPropagation();
     console.log('Export data for vehicle:', vehicle.id);
+    setShowActionsMenu(false);
+  };
+
+  const handleOpenUrlReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const reportUrl = `/vehicle/${vehicle.id}/report`;
+    window.open(reportUrl, '_blank');
     setShowActionsMenu(false);
   };
 
@@ -376,6 +383,14 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                 >
                   <Download className="h-4 w-4" />
                   Download Report
+                </button>
+                <button
+                  onClick={handleOpenUrlReport}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  role="menuitem"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Open URL Report
                 </button>
                 {(vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
                   <button
