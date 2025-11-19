@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -11,8 +11,10 @@ import { VehicleCard } from './VehicleCard';
 import { VehicleTableRow } from './VehicleTableRow';
 import { FilterPanel } from './FilterPanel';
 import { BulkChaseUpModal } from './BulkChaseUpModal';
+import { BulkTagModal } from './BulkTagModal';
 import { ShareReportModal } from './ShareReportModal';
 import { shareService } from '../../services/shareService';
+import { tagService } from '../../services/tagService';
 import { userPreferencesService } from '../../services/userPreferencesService';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -43,6 +45,7 @@ export const VehicleList: React.FC = () => {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedVehicleIds, setSelectedVehicleIds] = useState<string[]>([]);
   const [isBulkChaseUpModalOpen, setIsBulkChaseUpModalOpen] = useState(false);
+  const [isBulkTagModalOpen, setIsBulkTagModalOpen] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     vehicle: true,
     company: true,
@@ -289,6 +292,25 @@ export const VehicleList: React.FC = () => {
       await loadVehicles();
     } catch (error: unknown) {
       toast.error(error.message || 'Failed to archive vehicles');
+    }
+  };
+
+  const handleBulkTagApplied = async (tagId: string) => {
+    if (selectedVehicleIds.length === 0 || !tagId) {
+      toast.error('No vehicles or tag selected');
+      return;
+    }
+
+    try {
+      await tagService.addTagToMultipleVehicles(selectedVehicleIds, tagId);
+      toast.success(`Tag applied to ${selectedVehicleIds.length} vehicle${selectedVehicleIds.length !== 1 ? 's' : ''}`);
+      setSelectedVehicleIds([]);
+      setIsSelectionMode(false);
+      setIsBulkTagModalOpen(false);
+      await loadVehicles();
+    } catch (error: unknown) {
+      toast.error(error.message || 'Failed to apply tag');
+      throw error;
     }
   };
 
@@ -677,6 +699,14 @@ export const VehicleList: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsBulkTagModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                <TagIcon className="w-4 h-4" />
+                <span>Apply Tag</span>
+              </button>
+
               {canChaseUpSelection() && (
                 <button
                   onClick={() => setIsBulkChaseUpModalOpen(true)}
@@ -791,6 +821,13 @@ export const VehicleList: React.FC = () => {
         isOpen={isBulkChaseUpModalOpen}
         onClose={() => setIsBulkChaseUpModalOpen(false)}
         onChaseUp={handleBulkChaseUp}
+      />
+
+      <BulkTagModal
+        vehicleCount={selectedVehicleIds.length}
+        isOpen={isBulkTagModalOpen}
+        onClose={() => setIsBulkTagModalOpen(false)}
+        onTagsApplied={handleBulkTagApplied}
       />
 
       {vehicleToShare && (

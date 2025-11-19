@@ -109,6 +109,46 @@ class TagService {
       throw new ApiError('Failed to delete tag', 'DELETE_TAG_ERROR');
     }
   }
+
+  async addTagToMultipleVehicles(vehicleIds: string[], tagId: string): Promise<void> {
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+
+      if (!userData.user) {
+        throw new ApiError('User not authenticated', 'AUTH_ERROR');
+      }
+
+      const records = vehicleIds.map(vehicleId => ({
+        vehicle_id: vehicleId,
+        tag_id: tagId,
+        created_by: userData.user.id
+      }));
+
+      const { error } = await supabase
+        .from('vehicle_tags')
+        .insert(records);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Failed to add tag to vehicles:', error);
+      throw new ApiError('Failed to add tag to vehicles', 'BULK_ADD_TAG_ERROR');
+    }
+  }
+
+  async removeTagFromMultipleVehicles(vehicleIds: string[], tagId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('vehicle_tags')
+        .delete()
+        .in('vehicle_id', vehicleIds)
+        .eq('tag_id', tagId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Failed to remove tag from vehicles:', error);
+      throw new ApiError('Failed to remove tag from vehicles', 'BULK_REMOVE_TAG_ERROR');
+    }
+  }
 }
 
 export const tagService = new TagService();
