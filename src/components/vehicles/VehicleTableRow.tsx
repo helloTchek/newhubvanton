@@ -328,9 +328,9 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
             {vehicle.damageInfo ? (
               <div className="inline-flex items-center gap-1.5">
-                <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rim > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rim > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                  {vehicle.damageInfo.damageCounts.rim}
+                <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.rims}
                 </span>
               </div>
             ) : (
@@ -344,9 +344,9 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
             {vehicle.damageInfo ? (
               <div className="inline-flex items-center gap-1.5">
-                <WindshieldIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glass > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glass > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                  {vehicle.damageInfo.damageCounts.glass}
+                <WindshieldIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.glazing}
                 </span>
               </div>
             ) : (
