@@ -1,4 +1,12 @@
 // Core data models
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+  createdAt?: string;
+  createdBy?: string;
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -34,6 +42,7 @@ export interface Vehicle {
   isFastTrackDisabled?: boolean;
   manualReviewCompleted?: boolean;
   sharedReport?: SharedReportInfo;
+  tags?: Tag[];
 }
 
 export interface SharedReportInfo {
@@ -236,6 +245,7 @@ export interface SearchFilters {
   customerEmail?: string;
   customerPhone?: string;
   sharedStatus?: 'all' | 'shared' | 'not_shared';
+  tagIds?: string[];
   sortBy?: SortField;
   sortOrder?: SortOrder;
   page?: number;

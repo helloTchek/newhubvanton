@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed } from 'lucide-react';
-import { SearchFilters, VehicleStatus, InspectionType, Company, FilterType } from '../../types';
+import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag } from 'lucide-react';
+import { SearchFilters, VehicleStatus, InspectionType, Company, FilterType, Tag as TagType } from '../../types';
+import { tagService } from '../../services/tagService';
 import clsx from 'clsx';
 
 interface FilterPanelProps {
@@ -33,6 +34,7 @@ const inspectionTypeOptions: { value: InspectionType | 'all'; label: string }[] 
 const availableFilters: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'inspectionType', label: 'Inspection Type', icon: FileCheck },
   { id: 'status', label: 'Status', icon: CheckCircle2 },
+  { id: 'tags', label: 'Tags', icon: Tag },
   { id: 'dateRange', label: 'Date Range', icon: Calendar },
   { id: 'company', label: 'Company', icon: Building2 },
   { id: 'repairCost', label: 'Repair Cost', icon: DollarSign },
@@ -51,7 +53,20 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [isExpanded, setIsExpanded] = useState(true);
   const [isConfiguring, setIsConfiguring] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(['inspectionType', 'status']);
+  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
 
+  useEffect(() => {
+    loadTags();
+  }, []);
+
+  const loadTags = async () => {
+    try {
+      const tags = await tagService.getAllTags();
+      setAvailableTags(tags);
+    } catch (error) {
+      console.error('Failed to load tags:', error);
+    }
+  };
 
   useEffect(() => {
     setActiveFilters(prev => {
@@ -181,6 +196,45 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 </option>
               ))}
             </select>
+          </div>
+        );
+
+      case 'tags':
+        return (
+          <div key={filterId} className="flex-1 min-w-[200px]">
+            <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
+              <Tag className="w-3 h-3 text-gray-500" />
+              Tags
+            </label>
+            <div className="flex flex-wrap gap-1.5">
+              {availableTags.map(tag => {
+                const isSelected = filters.tagIds?.includes(tag.id);
+                return (
+                  <button
+                    key={tag.id}
+                    onClick={() => {
+                      const currentTags = filters.tagIds || [];
+                      const newTags = isSelected
+                        ? currentTags.filter(id => id !== tag.id)
+                        : [...currentTags, tag.id];
+                      onFiltersChange({ tagIds: newTags.length > 0 ? newTags : undefined });
+                    }}
+                    className={clsx(
+                      'px-2 py-1 rounded-full text-xs font-medium transition-all',
+                      isSelected
+                        ? 'text-white ring-2 ring-offset-1 ring-gray-400'
+                        : 'text-white opacity-60 hover:opacity-100'
+                    )}
+                    style={{ backgroundColor: tag.color }}
+                  >
+                    {tag.name}
+                  </button>
+                );
+              })}
+              {availableTags.length === 0 && (
+                <span className="text-xs text-gray-500">No tags available</span>
+              )}
+            </div>
           </div>
         );
 

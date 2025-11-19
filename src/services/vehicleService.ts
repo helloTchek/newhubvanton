@@ -87,6 +87,14 @@ class VehicleService {
             manual_review_completed,
             manual_review_completed_at,
             manual_review_completed_by
+          ),
+          vehicle_tags(
+            tag_id,
+            tags(
+              id,
+              name,
+              color
+            )
           )
         `)
         .range(from, to);
@@ -135,6 +143,15 @@ class VehicleService {
 
       if (filters?.mileageRange?.max !== undefined && filters.mileageRange.max !== null) {
         query = query.lte('mileage', filters.mileageRange.max);
+      }
+
+      if (filters?.tagIds && filters.tagIds.length > 0) {
+        query = query.in('id',
+          supabase
+            .from('vehicle_tags')
+            .select('vehicle_id')
+            .in('tag_id', filters.tagIds)
+        );
       }
 
       // Apply sorting
@@ -194,6 +211,11 @@ class VehicleService {
           actualStatus = 'to_review';
         }
 
+        // Map vehicle tags
+        const tags = (row.vehicle_tags || [])
+          .map((vt: any) => vt.tags)
+          .filter((tag: any) => tag !== null);
+
         return {
           id: row.id,
           registration: row.registration,
@@ -215,7 +237,8 @@ class VehicleService {
           reportId,
           damageInfo,
           isFastTrackDisabled,
-          manualReviewCompleted
+          manualReviewCompleted,
+          tags
         };
       });
 

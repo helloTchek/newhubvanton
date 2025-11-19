@@ -3,6 +3,7 @@ import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFro
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
+import { TagManager } from './TagManager';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -326,6 +327,21 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           </div>
 
+          {/* Tags Section */}
+          {vehicle.tags && vehicle.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {vehicle.tags.map(tag => (
+                <div
+                  key={tag.id}
+                  className="px-2 py-1 rounded-full text-xs font-medium text-white"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Additional Info Grid */}
           <div className="space-y-3">
             {visibleFields.company && (
@@ -523,6 +539,15 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 )}
               </div>
             )}
+          </div>
+
+          {/* Tag Manager */}
+          <div className="pt-3 border-t border-gray-100">
+            <TagManager
+              vehicleId={vehicle.id}
+              currentTags={vehicle.tags || []}
+              onTagsUpdated={() => window.location.reload()}
+            />
           </div>
         </div>
       </div>
