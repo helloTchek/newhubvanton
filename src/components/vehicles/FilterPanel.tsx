@@ -8,6 +8,7 @@ interface FilterPanelProps {
   onFiltersChange: (filters: Partial<SearchFilters>) => void;
   companies: Company[];
   showCompanyFilter?: boolean;
+  rightContent?: React.ReactNode;
 }
 
 const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
@@ -44,7 +45,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFiltersChange,
   companies,
-  showCompanyFilter = false
+  showCompanyFilter = false,
+  rightContent
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -424,15 +426,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             )}
           </div>
 
-          {hasActiveFilters && (
-            <button
-              onClick={clearAllFilters}
-              className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-            >
-              <X className="w-3 h-3" />
-              Clear all
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {hasActiveFilters && (
+              <button
+                onClick={clearAllFilters}
+                className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
+              >
+                <X className="w-3 h-3" />
+                Clear all
+              </button>
+            )}
+            {rightContent}
+          </div>
         </div>
 
         {isExpanded && isConfiguring && (

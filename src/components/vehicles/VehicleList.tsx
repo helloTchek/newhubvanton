@@ -440,38 +440,36 @@ export const VehicleList: React.FC = () => {
           </div>
         </div>
 
-        {/* Filters Section with Select */}
-        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-          <FilterPanel
-            filters={filters}
-            onFiltersChange={updateFilters}
-            companies={companies}
-            showCompanyFilter={user?.companyId === 'all'}
-          />
-
-          {/* Select Mode Toggle */}
-          <button
-            onClick={toggleSelectionMode}
-            className={clsx(
-              'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium whitespace-nowrap',
-              isSelectionMode
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            )}
-          >
-            {isSelectionMode ? (
-              <>
-                <X className="w-4 h-4" />
-                <span>Cancel</span>
-              </>
-            ) : (
-              <>
-                <CheckSquare className="w-4 h-4" />
-                <span>Select</span>
-              </>
-            )}
-          </button>
-        </div>
+        {/* Filters Section */}
+        <FilterPanel
+          filters={filters}
+          onFiltersChange={updateFilters}
+          companies={companies}
+          showCompanyFilter={user?.companyId === 'all'}
+          rightContent={
+            <button
+              onClick={toggleSelectionMode}
+              className={clsx(
+                'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium whitespace-nowrap',
+                isSelectionMode
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              )}
+            >
+              {isSelectionMode ? (
+                <>
+                  <X className="w-4 h-4" />
+                  <span>Cancel</span>
+                </>
+              ) : (
+                <>
+                  <CheckSquare className="w-4 h-4" />
+                  <span>Select</span>
+                </>
+              )}
+            </button>
+          }
+        />
       </div>
 
       {/* Bulk Actions Toolbar */}
