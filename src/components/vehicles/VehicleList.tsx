@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3 } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -73,6 +73,12 @@ export const VehicleList: React.FC = () => {
   const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
+  const [columnOrder, setColumnOrder] = useState<string[]>([
+    'vehicle', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'interior', 'tires', 'dashboard', 'declarations'
+  ]);
+  const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
 
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
@@ -218,6 +224,46 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const handleDragStart = (columnId: string) => {
+    setDraggedColumn(columnId);
+  };
+
+  const handleDragOver = (e: React.DragEvent, columnId: string) => {
+    e.preventDefault();
+    if (!draggedColumn || draggedColumn === columnId) return;
+
+    const newOrder = [...columnOrder];
+    const draggedIndex = newOrder.indexOf(draggedColumn);
+    const targetIndex = newOrder.indexOf(columnId);
+
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedColumn);
+    setColumnOrder(newOrder);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedColumn(null);
+  };
+
+  const handleSort = (field: SortField) => {
+    if (filters.sortBy === field) {
+      updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' });
+    } else {
+      updateFilters({ sortBy: field, sortOrder: 'desc' });
+    }
+  };
+
+  const getSortableField = (columnId: string): SortField | null => {
+    const sortableMap: Record<string, SortField> = {
+      'vehicle': 'registration',
+      'inspectionDate': 'date',
+      'mileage': 'mileage',
+      'value': 'value',
+      'status': 'status'
+    };
+    return sortableMap[columnId] || null;
+  };
+
   const handleShareReport = (vehicle: Vehicle) => {
     if (!vehicle.reportId) {
       toast.error('No report available to share');
@@ -245,6 +291,72 @@ export const VehicleList: React.FC = () => {
       const errorMessage = error instanceof Error ? error.message : 'Failed to share report';
       throw new Error(errorMessage);
     }
+  };
+
+  const getColumnLabel = (columnId: string): string => {
+    const labels: Record<string, string> = {
+      'vehicle': 'Vehicle',
+      'company': 'Company',
+      'status': 'Status',
+      'inspectionDate': 'Inspection Date',
+      'inspectionId': 'Inspection ID',
+      'mileage': 'Mileage',
+      'value': 'Value',
+      'tags': 'Tags',
+      'carBody': 'Car Body',
+      'rim': 'Rim',
+      'glass': 'Glass',
+      'interior': 'Interior',
+      'tires': 'Tires',
+      'dashboard': 'Dashboard',
+      'declarations': 'Declarations'
+    };
+    return labels[columnId] || columnId;
+  };
+
+  const renderColumnHeader = (columnId: string, align: 'left' | 'center' = 'left') => {
+    const sortableField = getSortableField(columnId);
+    const isSorted = sortableField && filters.sortBy === sortableField;
+    const alignClass = align === 'center' ? 'text-center justify-center' : 'text-left';
+
+    return (
+      <th
+        key={columnId}
+        draggable
+        onDragStart={() => handleDragStart(columnId)}
+        onDragOver={(e) => handleDragOver(e, columnId)}
+        onDragEnd={handleDragEnd}
+        className={clsx(
+          'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider select-none',
+          'cursor-move hover:bg-gray-100 transition-colors',
+          draggedColumn === columnId && 'opacity-50'
+        )}
+      >
+        <div className={clsx('flex items-center gap-2', alignClass)}>
+          <GripVertical className="w-3 h-3 text-gray-400" />
+          <span>{getColumnLabel(columnId)}</span>
+          {sortableField && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSort(sortableField);
+              }}
+              className="ml-1 p-0.5 hover:bg-gray-200 rounded transition-colors"
+            >
+              {isSorted ? (
+                filters.sortOrder === 'asc' ? (
+                  <ArrowUp className="w-3.5 h-3.5 text-blue-600" />
+                ) : (
+                  <ArrowDown className="w-3.5 h-3.5 text-blue-600" />
+                )
+              ) : (
+                <ArrowUpDown className="w-3.5 h-3.5 text-gray-400" />
+              )}
+            </button>
+          )}
+        </div>
+      </th>
+    );
   };
 
   const canChaseUpSelection = () => {
@@ -565,81 +677,12 @@ export const VehicleList: React.FC = () => {
                       />
                     </th>
                   )}
-                  {visibleColumns.vehicle && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Vehicle
-                    </th>
-                  )}
-                  {visibleColumns.company && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Company
-                    </th>
-                  )}
-                  {visibleColumns.status && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                  )}
-                  {visibleColumns.inspectionDate && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Inspection Date
-                    </th>
-                  )}
-                  {visibleColumns.inspectionId && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Inspection ID
-                    </th>
-                  )}
-                  {visibleColumns.mileage && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Mileage
-                    </th>
-                  )}
-                  {visibleColumns.value && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Value
-                    </th>
-                  )}
-                  {visibleColumns.tags && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tags
-                    </th>
-                  )}
-                  {visibleColumns.carBody && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Car Body
-                    </th>
-                  )}
-                  {visibleColumns.rim && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Rim
-                    </th>
-                  )}
-                  {visibleColumns.glass && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Glass
-                    </th>
-                  )}
-                  {visibleColumns.interior && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Interior
-                    </th>
-                  )}
-                  {visibleColumns.tires && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tires
-                    </th>
-                  )}
-                  {visibleColumns.dashboard && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Dashboard
-                    </th>
-                  )}
-                  {visibleColumns.declarations && (
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Declarations
-                    </th>
-                  )}
+                  {columnOrder.map(columnId => {
+                    if (!visibleColumns[columnId as keyof typeof visibleColumns]) return null;
+
+                    const isCentered = ['carBody', 'rim', 'glass', 'interior', 'tires', 'dashboard', 'declarations'].includes(columnId);
+                    return renderColumnHeader(columnId, isCentered ? 'center' : 'left');
+                  })}
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
@@ -655,6 +698,7 @@ export const VehicleList: React.FC = () => {
                     isSelectionMode={isSelectionMode}
                     isSelected={selectedVehicleIds.includes(vehicle.id)}
                     onSelectToggle={handleSelectToggle}
+                    columnOrder={columnOrder}
                     visibleColumns={visibleColumns}
                   />
                 ))}

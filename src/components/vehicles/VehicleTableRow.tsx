@@ -30,6 +30,7 @@ interface VehicleTableRowProps {
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
+  columnOrder?: string[];
   visibleColumns?: {
     vehicle: boolean;
     company: boolean;
@@ -63,13 +64,20 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
+  columnOrder = [
+    'vehicle', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'interior', 'tires', 'dashboard', 'declarations'
+  ],
   visibleColumns = {
     vehicle: true,
     company: true,
     status: true,
     inspectionDate: true,
+    inspectionId: true,
     mileage: true,
     value: true,
+    tags: true,
     carBody: true,
     rim: true,
     glass: true,
