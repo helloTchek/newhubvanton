@@ -16,7 +16,7 @@ const defaultTheme: ThemeConfiguration = {
   companyId: '',
   logoUrl: '',
   logoDarkUrl: undefined,
-  primaryColor: '#3B82F6',
+  primaryColor: '#10B981',
   accentColor: '#10B981',
   dominantColor: '#1F2937',
   textPrimaryColor: '#111827',

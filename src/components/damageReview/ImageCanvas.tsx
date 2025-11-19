@@ -113,7 +113,7 @@ export const ImageCanvas: React.FC<ImageCanvasProps> = ({
 
     // Draw current drawing box
     if (currentDraw && isDrawingMode) {
-      ctx.strokeStyle = '#3B82F6';
+      ctx.strokeStyle = '#10B981';
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 5]);
       ctx.strokeRect(

@@ -15,7 +15,7 @@ export const TagManager: React.FC<TagManagerProps> = ({ vehicleId, currentTags, 
   const [allTags, setAllTags] = useState<Tag[]>([]);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [newTagName, setNewTagName] = useState('');
-  const [newTagColor, setNewTagColor] = useState('#3B82F6');
+  const [newTagColor, setNewTagColor] = useState('#10B981');
   const menuRef = useRef<HTMLDivElement>(null);
 
   const colors = [
@@ -85,7 +85,7 @@ export const TagManager: React.FC<TagManagerProps> = ({ vehicleId, currentTags, 
       await tagService.addTagToVehicle(vehicleId, tag.id);
       toast.success('Tag created and added');
       setNewTagName('');
-      setNewTagColor('#3B82F6');
+      setNewTagColor('#10B981');
       setIsCreatingTag(false);
       onTagsUpdated();
       loadTags();
@@ -204,7 +204,7 @@ export const TagManager: React.FC<TagManagerProps> = ({ vehicleId, currentTags, 
                     onClick={() => {
                       setIsCreatingTag(false);
                       setNewTagName('');
-                      setNewTagColor('#3B82F6');
+                      setNewTagColor('#10B981');
                     }}
                     className="px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   >
