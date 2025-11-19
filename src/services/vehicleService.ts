@@ -201,11 +201,15 @@ class VehicleService {
         const isFastTrackDisabled = row.companies?.is_fast_track_disabled || false;
         const manualReviewCompleted = row.inspection_reports?.[0]?.manual_review_completed || false;
 
+        console.log('Processing vehicle', row.registration, 'inspection_reports:', row.inspection_reports);
+
         if (row.inspection_reports && row.inspection_reports.length > 0) {
           reportId = row.inspection_reports[0].id;
           // Always fetch damage info if we have a report
           damageInfo = await this.getDamageInfo(reportId);
           console.log('Damage info for', row.registration, ':', damageInfo);
+        } else {
+          console.log('No inspection reports for', row.registration);
         }
 
         // Determine actual status based on fast track settings
