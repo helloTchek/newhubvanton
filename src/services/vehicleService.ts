@@ -203,10 +203,9 @@ class VehicleService {
 
         if (row.inspection_reports && row.inspection_reports.length > 0) {
           reportId = row.inspection_reports[0].id;
-
-          if (['inspected', 'to_review'].includes(row.status)) {
-            damageInfo = await this.getDamageInfo(reportId);
-          }
+          // Always fetch damage info if we have a report
+          damageInfo = await this.getDamageInfo(reportId);
+          console.log('Damage info for', row.registration, ':', damageInfo);
         }
 
         // Determine actual status based on fast track settings
