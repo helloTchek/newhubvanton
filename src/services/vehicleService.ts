@@ -398,11 +398,14 @@ class VehicleService {
   
   private async getDamageInfo(reportId: string) {
     try {
+      console.log('getDamageInfo called for reportId:', reportId);
       const { data: damages, error } = await supabase
         .from('damages')
         .select('section_id, part_name')
         .eq('report_id', reportId)
         .neq('status', 'false_positive');
+
+      console.log('Damages query result:', { damages, error });
 
       if (error) {
         console.error('Failed to fetch damages:', error);
