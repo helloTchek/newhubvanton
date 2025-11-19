@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 class VehicleService {
   async getVehicles(filters?: SearchFilters): Promise<ApiResponse<Vehicle[]>> {
     try {
+      console.log('getVehicles called with filters:', filters);
       const page = filters?.page || 1;
       const pageSize = filters?.pageSize || 20;
       const from = (page - 1) * pageSize;
@@ -187,7 +188,10 @@ class VehicleService {
 
       const { data, error } = await query;
 
+      console.log('Query result:', { dataCount: data?.length, error, totalItems });
+
       if (error) {
+        console.error('Supabase query error:', error);
         throw error;
       }
 

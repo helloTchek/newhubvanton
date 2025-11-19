@@ -99,13 +99,16 @@ export const VehicleList: React.FC = () => {
 
   const loadVehicles = useCallback(async () => {
     try {
+      console.log('VehicleList loadVehicles called with filters:', filters);
       setLoading({ isLoading: true, error: null });
       const response = await vehicleService.getVehicles(filters);
+      console.log('VehicleList received response:', { vehicleCount: response.data.length, pagination: response.pagination });
       setVehicles(response.data);
       if (response.pagination) {
         setPagination(response.pagination);
       }
     } catch (error: unknown) {
+      console.error('VehicleList error:', error);
       const errorMessage = error.message || 'Failed to load vehicles';
       setLoading({ isLoading: false, error: errorMessage });
       toast.error(errorMessage);
