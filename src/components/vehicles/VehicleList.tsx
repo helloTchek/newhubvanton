@@ -254,30 +254,14 @@ export const VehicleList: React.FC = () => {
   };
 
   const handleBulkChaseUp = async (method: 'email' | 'sms') => {
-    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
-    const eligibleVehicles = selectedVehicles.filter(v =>
-      ['link_sent', 'chased_up_1', 'chased_up_2', 'inspection_in_progress'].includes(v.status)
-    );
-
-    if (eligibleVehicles.length === 0) {
-      toast.error('No eligible vehicles selected for chase up');
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
       return;
     }
 
-    const skippedCount = selectedVehicles.length - eligibleVehicles.length;
-
     try {
-      await chaseUpService.sendBulkChaseUp(
-        eligibleVehicles.map(v => v.id),
-        method
-      );
-
-      let message = `Bulk chase up ${method} sent to ${eligibleVehicles.length} customer${eligibleVehicles.length !== 1 ? 's' : ''}`;
-      if (skippedCount > 0) {
-        message += ` (${skippedCount} vehicle${skippedCount !== 1 ? 's' : ''} skipped - already completed)`;
-      }
-      toast.success(message);
-
+      await chaseUpService.sendBulkChaseUp(selectedVehicleIds, method);
+      toast.success(`Bulk chase up ${method} sent to ${selectedVehicleIds.length} customer${selectedVehicleIds.length !== 1 ? 's' : ''}`);
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
       await loadVehicles();
@@ -459,7 +443,7 @@ export const VehicleList: React.FC = () => {
 
   const canChaseUpSelection = () => {
     const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
-    return selectedVehicles.some(v =>
+    return selectedVehicles.every(v =>
       ['link_sent', 'chased_up_1', 'chased_up_2', 'inspection_in_progress'].includes(v.status)
     );
   };
@@ -715,15 +699,20 @@ export const VehicleList: React.FC = () => {
                 <span>Apply Tag</span>
               </button>
 
-              {canChaseUpSelection() && (
-                <button
-                  onClick={() => setIsBulkChaseUpModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium"
-                >
-                  <Bell className="w-4 h-4" />
-                  <span>Bulk Chase Up</span>
-                </button>
-              )}
+              <button
+                onClick={() => setIsBulkChaseUpModalOpen(true)}
+                disabled={!canChaseUpSelection()}
+                className={clsx(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium",
+                  canChaseUpSelection()
+                    ? "bg-orange-600 text-white hover:bg-orange-700"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                )}
+                title={!canChaseUpSelection() ? "Some selected vehicles are not eligible for chase up" : "Send bulk chase up"}
+              >
+                <Bell className="w-4 h-4" />
+                <span>Bulk Chase Up</span>
+              </button>
 
               <button
                 onClick={handleBulkArchive}
