@@ -346,6 +346,109 @@ export const VehicleList: React.FC = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Filters Section with Configure */}
+        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <FilterPanel
+            filters={filters}
+            onFiltersChange={updateFilters}
+            companies={companies}
+            showCompanyFilter={user?.companyId === 'all'}
+          />
+
+          <div className="flex items-center gap-2">
+            {/* Field/Column Selector */}
+            <div className="relative">
+              <button
+                onClick={() => viewMode === 'grid' ? setShowCardFieldSelector(!showCardFieldSelector) : setShowColumnSelector(!showColumnSelector)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
+              >
+                <Columns3 className="w-4 h-4" />
+                <span>{viewMode === 'grid' ? 'Fields' : 'Columns'}</span>
+              </button>
+
+              {viewMode === 'grid' && showCardFieldSelector && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowCardFieldSelector(false)}
+                  />
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                    <div className="p-3">
+                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
+                      <div className="space-y-2">
+                        {Object.entries({
+                          company: 'Company',
+                          customerEmail: 'Customer Email',
+                          inspectionDate: 'Inspection Date',
+                          mileage: 'Mileage',
+                          repairCost: 'Repair Cost',
+                          value: 'Estimated Value',
+                          damageResults: 'Damage Results'
+                        }).map(([key, label]) => (
+                          <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="checkbox"
+                              checked={visibleCardFields[key as keyof typeof visibleCardFields]}
+                              onChange={(e) =>
+                                setVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
+                              }
+                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700">{label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {viewMode === 'list' && showColumnSelector && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowColumnSelector(false)}
+                  />
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                    <div className="p-3">
+                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
+                      <div className="space-y-2">
+                        {Object.entries({
+                          vehicle: 'Vehicle',
+                          company: 'Company',
+                          status: 'Status',
+                          inspectionDate: 'Inspection Date',
+                          mileage: 'Mileage',
+                          value: 'Value',
+                          carBody: 'Car Body',
+                          rim: 'Rim',
+                          glass: 'Glass',
+                          interior: 'Interior',
+                          tires: 'Tires',
+                          dashboard: 'Dashboard',
+                          declarations: 'Declarations'
+                        }).map(([key, label]) => (
+                          <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="checkbox"
+                              checked={visibleColumns[key as keyof typeof visibleColumns]}
+                              onChange={(e) =>
+                                setVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))
+                              }
+                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700">{label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* Select Mode Toggle */}
             <button
@@ -371,14 +474,6 @@ export const VehicleList: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* Filters Section */}
-        <FilterPanel
-          filters={filters}
-          onFiltersChange={updateFilters}
-          companies={companies}
-          showCompanyFilter={user?.companyId === 'all'}
-        />
       </div>
 
       {/* Bulk Actions Toolbar */}
@@ -434,57 +529,7 @@ export const VehicleList: React.FC = () => {
         </div>
       ) : viewMode === 'grid' ? (
         <>
-          {/* Card Field Selector */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
-            <div className="relative">
-              <button
-                onClick={() => setShowCardFieldSelector(!showCardFieldSelector)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
-              >
-                <Columns3 className="w-4 h-4" />
-                <span>Fields</span>
-              </button>
-
-              {showCardFieldSelector && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowCardFieldSelector(false)}
-                  />
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
-                    <div className="p-3">
-                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
-                      <div className="space-y-2">
-                        {Object.entries({
-                          company: 'Company',
-                          customerEmail: 'Customer Email',
-                          inspectionDate: 'Inspection Date',
-                          mileage: 'Mileage',
-                          repairCost: 'Repair Cost',
-                          value: 'Estimated Value',
-                          damageResults: 'Damage Results'
-                        }).map(([key, label]) => (
-                          <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                            <input
-                              type="checkbox"
-                              checked={visibleCardFields[key as keyof typeof visibleCardFields]}
-                              onChange={(e) =>
-                                setVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
-                              }
-                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="text-sm text-gray-700">{label}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}
@@ -502,62 +547,6 @@ export const VehicleList: React.FC = () => {
         </>
       ) : (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          {/* Column Selector */}
-          <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-            <div className="relative">
-              <button
-                onClick={() => setShowColumnSelector(!showColumnSelector)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
-              >
-                <Columns3 className="w-4 h-4" />
-                <span>Columns</span>
-              </button>
-
-              {showColumnSelector && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowColumnSelector(false)}
-                  />
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
-                    <div className="p-3">
-                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
-                      <div className="space-y-2">
-                        {Object.entries({
-                          vehicle: 'Vehicle',
-                          company: 'Company',
-                          status: 'Status',
-                          inspectionDate: 'Inspection Date',
-                          mileage: 'Mileage',
-                          value: 'Value',
-                          carBody: 'Car Body',
-                          rim: 'Rim',
-                          glass: 'Glass',
-                          interior: 'Interior',
-                          tires: 'Tires',
-                          dashboard: 'Dashboard',
-                          declarations: 'Declarations'
-                        }).map(([key, label]) => (
-                          <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                            <input
-                              type="checkbox"
-                              checked={visibleColumns[key as keyof typeof visibleColumns]}
-                              onChange={(e) =>
-                                setVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))
-                              }
-                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="text-sm text-gray-700">{label}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
