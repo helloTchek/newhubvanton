@@ -264,12 +264,20 @@ export const VehicleList: React.FC = () => {
       return;
     }
 
+    const skippedCount = selectedVehicles.length - eligibleVehicles.length;
+
     try {
       await chaseUpService.sendBulkChaseUp(
         eligibleVehicles.map(v => v.id),
         method
       );
-      toast.success(`Bulk chase up ${method} sent to ${eligibleVehicles.length} customers`);
+
+      let message = `Bulk chase up ${method} sent to ${eligibleVehicles.length} customer${eligibleVehicles.length !== 1 ? 's' : ''}`;
+      if (skippedCount > 0) {
+        message += ` (${skippedCount} vehicle${skippedCount !== 1 ? 's' : ''} skipped - already completed)`;
+      }
+      toast.success(message);
+
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
       await loadVehicles();
