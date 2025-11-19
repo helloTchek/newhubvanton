@@ -34,6 +34,7 @@ interface VehicleTableRowProps {
     company: boolean;
     status: boolean;
     inspectionDate: boolean;
+    inspectionId: boolean;
     mileage: boolean;
     value: boolean;
     carBody: boolean;
@@ -246,6 +247,15 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       {visibleColumns.inspectionDate && (
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
           {formatDate(vehicle.inspectionDate)}
+        </td>
+      )}
+      {visibleColumns.inspectionId && (
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          {vehicle.reportId ? (
+            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{vehicle.reportId}</span>
+          ) : (
+            <span className="text-gray-400">-</span>
+          )}
         </td>
       )}
       {visibleColumns.mileage && (

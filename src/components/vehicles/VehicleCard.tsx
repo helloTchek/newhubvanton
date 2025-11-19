@@ -35,6 +35,7 @@ interface VehicleCardProps {
     company: boolean;
     customerEmail: boolean;
     inspectionDate: boolean;
+    inspectionId: boolean;
     mileage: boolean;
     repairCost: boolean;
     value: boolean;
@@ -293,6 +294,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Calendar className="w-4 h-4" />
                 <span>Inspected: {formatDate(vehicle.inspectionDate)}</span>
+              </div>
+            )}
+
+            {visibleFields.inspectionId && vehicle.reportId && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <FileText className="w-4 h-4" />
+                <span>ID: {vehicle.reportId}</span>
               </div>
             )}
 

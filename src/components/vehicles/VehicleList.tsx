@@ -46,6 +46,7 @@ export const VehicleList: React.FC = () => {
     company: true,
     status: true,
     inspectionDate: true,
+    inspectionId: true,
     mileage: true,
     value: true,
     carBody: true,
@@ -61,6 +62,7 @@ export const VehicleList: React.FC = () => {
     company: true,
     customerEmail: true,
     inspectionDate: true,
+    inspectionId: true,
     mileage: true,
     repairCost: true,
     value: true,
@@ -371,6 +373,7 @@ export const VehicleList: React.FC = () => {
                           company: 'Company',
                           customerEmail: 'Customer Email',
                           inspectionDate: 'Inspection Date',
+                          inspectionId: 'Inspection ID',
                           mileage: 'Mileage',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
@@ -409,6 +412,7 @@ export const VehicleList: React.FC = () => {
                           company: 'Company',
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
+                          inspectionId: 'Inspection ID',
                           mileage: 'Mileage',
                           value: 'Value',
                           carBody: 'Car Body',
@@ -575,6 +579,11 @@ export const VehicleList: React.FC = () => {
                   {visibleColumns.inspectionDate && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Inspection Date
+                    </th>
+                  )}
+                  {visibleColumns.inspectionId && (
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Inspection ID
                     </th>
                   )}
                   {visibleColumns.mileage && (
