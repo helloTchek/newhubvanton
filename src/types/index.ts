@@ -25,6 +25,7 @@ export interface Vehicle {
   estimatedValue: number;
   estimatedCost: number;
   imageUrl: string;
+  images?: string[];
   customerEmail: string;
   customerPhone?: string;
   inspectionType?: InspectionType;

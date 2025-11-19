@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -79,8 +79,12 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
   const [isChaseUpActionMenuOpen, setIsChaseUpActionMenuOpen] = useState(false);
   const [isShareActionMenuOpen, setIsShareActionMenuOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const chaseUpActionMenuRef = useRef<HTMLDivElement>(null);
   const shareActionMenuRef = useRef<HTMLDivElement>(null);
+
+  const images = vehicle.images && vehicle.images.length > 0 ? vehicle.images : [vehicle.imageUrl];
+  const hasMultipleImages = images.length > 1;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -195,6 +199,16 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     console.log('Export data for vehicle:', vehicle.id);
   };
 
+  const handlePreviousImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <>
       <div
@@ -221,9 +235,9 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
         {/* Vehicle Image or Placeholder */}
         {shouldShowImage ? (
-          <div className="aspect-video relative overflow-hidden rounded-t-xl">
+          <div className="aspect-video relative overflow-hidden rounded-t-xl group">
             <img
-              src={vehicle.imageUrl}
+              src={images[currentImageIndex]}
               alt={`${vehicle.make} ${vehicle.model}`}
               className="w-full h-full object-cover"
             />
@@ -236,6 +250,44 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 </div>
               )}
             </div>
+
+            {hasMultipleImages && (
+              <>
+                <button
+                  onClick={handlePreviousImage}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-800" />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-800" />
+                </button>
+
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex(index);
+                      }}
+                      className={clsx(
+                        'w-2 h-2 rounded-full transition-all',
+                        index === currentImageIndex
+                          ? 'bg-white w-6'
+                          : 'bg-white/60 hover:bg-white/80'
+                      )}
+                      aria-label={`Go to image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">

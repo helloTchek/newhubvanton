@@ -73,6 +73,12 @@ export const mockVehicles: Vehicle[] = [
     estimatedValue: 17500,
     estimatedCost: 950,
     imageUrl: 'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/893894/pexels-photo-893894.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
     customerEmail: 'jane.smith@autocorp.com'
   },
   {
@@ -120,6 +126,11 @@ export const mockVehicles: Vehicle[] = [
     estimatedValue: 35000,
     estimatedCost: 2100,
     imageUrl: 'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
     customerEmail: 'emma.brown@urbantransport.com'
   },
   {
