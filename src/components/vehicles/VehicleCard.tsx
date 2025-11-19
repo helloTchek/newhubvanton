@@ -433,8 +433,17 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           )}
 
-          {/* Value or Chase Up Button */}
-          <div className="pt-4 border-t border-gray-100">
+          {/* Tag Manager */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <TagManager
+              vehicleId={vehicle.id}
+              currentTags={vehicle.tags || []}
+              onTagsUpdated={() => window.location.reload()}
+            />
+          </div>
+
+          {/* Value or Chase Up / Share Report Button */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
             {shouldShowChaseUp ? (
               <div className="flex gap-2">
                 <button
@@ -491,7 +500,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     </span>
                   </div>
                 )}
-                {vehicle.reportId && onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
+                {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
                   <div className="flex gap-2">
                     <button
                       onClick={handleShareClick}
@@ -540,15 +549,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 )}
               </div>
             )}
-          </div>
-
-          {/* Tag Manager */}
-          <div className="pt-3 border-t border-gray-100">
-            <TagManager
-              vehicleId={vehicle.id}
-              currentTags={vehicle.tags || []}
-              onTagsUpdated={() => window.location.reload()}
-            />
           </div>
         </div>
       </div>
