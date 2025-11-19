@@ -384,7 +384,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
 
           {/* Damage Results */}
-          {visibleFields.damageResults && vehicle.damageInfo && (
+          {vehicle.damageInfo && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="grid grid-cols-4 gap-x-3 gap-y-2">
                 <div className="flex items-center gap-1.5" title="Car Body">
