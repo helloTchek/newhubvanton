@@ -208,6 +208,7 @@ class VehicleService {
           estimatedValue: parseFloat(row.estimated_value || 0),
           estimatedCost: parseFloat(row.estimated_cost || 0),
           imageUrl: row.image_url || '',
+          images: row.images || undefined,
           customerEmail: row.customer_email,
           customerPhone: row.customer_phone,
           inspectionType: row.inspection_type,
