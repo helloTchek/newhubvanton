@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
+import { TagManager } from './TagManager';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
 import clsx from 'clsx';
 
@@ -277,22 +278,27 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         </td>
       )}
       {visibleColumns.tags && (
-        <td className="px-6 py-4 whitespace-nowrap">
-          {vehicle.tags && vehicle.tags.length > 0 ? (
-            <div className="flex flex-wrap gap-1">
-              {vehicle.tags.map(tag => (
-                <span
-                  key={tag.id}
-                  className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
-                  style={{ backgroundColor: tag.color }}
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <span className="text-sm text-gray-400">-</span>
-          )}
+        <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center gap-2">
+            {vehicle.tags && vehicle.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {vehicle.tags.map(tag => (
+                  <span
+                    key={tag.id}
+                    className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                    style={{ backgroundColor: tag.color }}
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            )}
+            <TagManager
+              vehicleId={vehicle.id}
+              currentTags={vehicle.tags || []}
+              onTagsUpdated={() => window.location.reload()}
+            />
+          </div>
         </td>
       )}
       {visibleColumns.carBody && (
