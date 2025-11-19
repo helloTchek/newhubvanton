@@ -13,6 +13,7 @@ import { FilterPanel } from './FilterPanel';
 import { BulkChaseUpModal } from './BulkChaseUpModal';
 import { ShareReportModal } from './ShareReportModal';
 import { shareService } from '../../services/shareService';
+import { userPreferencesService } from '../../services/userPreferencesService';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -31,6 +32,7 @@ export const VehicleList: React.FC = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<LoadingState>({ isLoading: true, error: null });
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -121,17 +123,80 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const loadUserPreferences = useCallback(async () => {
+    if (!user?.id) return;
+
+    try {
+      const preferences = await userPreferencesService.getUserPreferences(user.id);
+
+      if (preferences) {
+        setViewMode(preferences.viewMode);
+        setFilters(prev => ({ ...prev, ...preferences.filters }));
+        setColumnOrder(preferences.columnOrder);
+        setVisibleColumns(preferences.visibleColumns);
+        setVisibleCardFields(preferences.visibleCardFields);
+      }
+    } catch (error) {
+      console.error('Failed to load user preferences:', error);
+    } finally {
+      setPreferencesLoaded(true);
+    }
+  }, [user?.id]);
+
+  const saveUserPreferences = useCallback(async () => {
+    if (!user?.id || !preferencesLoaded) return;
+
+    try {
+      await userPreferencesService.saveUserPreferences({
+        userId: user.id,
+        viewMode,
+        filters: {
+          query: filters.query,
+          status: filters.status,
+          companyId: filters.companyId,
+          inspectionType: filters.inspectionType,
+          userId: filters.userId,
+          customerEmail: filters.customerEmail,
+          customerPhone: filters.customerPhone
+        },
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder,
+        columnOrder,
+        visibleColumns,
+        visibleCardFields
+      });
+    } catch (error) {
+      console.error('Failed to save user preferences:', error);
+    }
+  }, [user?.id, preferencesLoaded, viewMode, filters, columnOrder, visibleColumns, visibleCardFields]);
+
+  useEffect(() => {
+    loadUserPreferences();
+  }, [loadUserPreferences]);
+
   useEffect(() => {
     loadCompanies();
   }, []);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     const debounceTimer = setTimeout(() => {
       loadVehicles();
     }, 1000);
 
     return () => clearTimeout(debounceTimer);
-  }, [filters, loadVehicles]);
+  }, [filters, loadVehicles, preferencesLoaded]);
+
+  useEffect(() => {
+    if (!preferencesLoaded) return;
+
+    const saveTimer = setTimeout(() => {
+      saveUserPreferences();
+    }, 500);
+
+    return () => clearTimeout(saveTimer);
+  }, [viewMode, filters, columnOrder, visibleColumns, visibleCardFields, saveUserPreferences, preferencesLoaded]);
 
   const handleVehicleClick = (vehicle: Vehicle) => {
     navigate(`/vehicles/${vehicle.id}/report`);
