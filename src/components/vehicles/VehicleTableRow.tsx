@@ -175,6 +175,255 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     };
   }, [showActionsMenu]);
 
+  const renderCell = (columnId: string) => {
+    if (!visibleColumns[columnId as keyof typeof visibleColumns]) return null;
+
+    switch (columnId) {
+      case 'vehicle':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              {shouldShowImage ? (
+                <img
+                  className="h-12 w-20 rounded-lg object-cover"
+                  src={vehicle.imageUrl}
+                  alt={`${vehicle.make} ${vehicle.model}`}
+                />
+              ) : (
+                <div className="h-12 w-20 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-gray-400" />
+                </div>
+              )}
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {vehicle.make} {vehicle.model}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {vehicle.registration} • {vehicle.year}
+                </div>
+              </div>
+            </div>
+          </td>
+        );
+
+      case 'company':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">{vehicle.companyName}</div>
+            <div className="text-sm text-gray-500">{vehicle.customerEmail}</div>
+          </td>
+        );
+
+      case 'status':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="flex flex-col gap-1">
+              <StatusBadge status={vehicle.status} />
+              {statusInfo.badge && (
+                <div className={clsx(
+                  'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border',
+                  getBadgeColorClasses(statusInfo.badge.color)
+                )}>
+                  {statusInfo.badge.color === 'green' ? (
+                    <CheckCircle className="w-3 h-3" />
+                  ) : (
+                    <AlertCircle className="w-3 h-3" />
+                  )}
+                  {statusInfo.badge.text}
+                </div>
+              )}
+              {vehicle.sharedReport && (
+                <div className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full border border-green-200">
+                  <Share2 className="w-3 h-3" />
+                  <span>Shared</span>
+                </div>
+              )}
+            </div>
+          </td>
+        );
+
+      case 'inspectionDate':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {formatDate(vehicle.inspectionDate)}
+          </td>
+        );
+
+      case 'inspectionId':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {vehicle.reportId ? (
+              <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{vehicle.reportId}</span>
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'mileage':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {vehicle.mileage.toLocaleString()} km
+          </td>
+        );
+
+      case 'value':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-medium text-gray-900">
+              {formatCurrency(vehicle.estimatedValue)}
+            </div>
+            {vehicle.estimatedCost > 0 && (
+              <div className="text-sm text-red-600">
+                Cost: {formatCurrency(vehicle.estimatedCost)}
+              </div>
+            )}
+          </td>
+        );
+
+      case 'tags':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2">
+              {vehicle.tags && vehicle.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {vehicle.tags.map(tag => (
+                    <span
+                      key={tag.id}
+                      className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                      style={{ backgroundColor: tag.color }}
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <TagManager
+                vehicleId={vehicle.id}
+                currentTags={vehicle.tags || []}
+                onTagsUpdated={() => window.location.reload()}
+              />
+            </div>
+          </td>
+        );
+
+      case 'carBody':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <CarFront className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.carBody}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'rim':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rim > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rim > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.rim}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'glass':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <WindshieldIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glass > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glass > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.glass}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'interior':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <CarSeatIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.interior}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'tires':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.tires}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'dashboard':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <AlertTriangle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.dashboard}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'declarations':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-center">
+            {vehicle.damageInfo ? (
+              <div className="inline-flex items-center gap-1.5">
+                <FileText className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                  {vehicle.damageInfo.damageCounts.declarations}
+                </span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <tr
       className={clsx(
@@ -197,7 +446,8 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           />
         </td>
       )}
-      {visibleColumns.vehicle && (
+      {columnOrder.map(columnId => renderCell(columnId))}
+      {false && visibleColumns.vehicle && (
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             {shouldShowImage ? (
@@ -393,7 +643,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           )}
         </td>
       )}
-      {visibleColumns.declarations && (
+      {false && visibleColumns.declarations && (
         <td className="px-6 py-4 whitespace-nowrap text-center">
           {vehicle.damageInfo ? (
             <div className="inline-flex items-center gap-1.5">
