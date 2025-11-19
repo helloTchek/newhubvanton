@@ -37,6 +37,7 @@ interface VehicleTableRowProps {
     inspectionId: boolean;
     mileage: boolean;
     value: boolean;
+    tags: boolean;
     carBody: boolean;
     rim: boolean;
     glass: boolean;
@@ -272,6 +273,25 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
             <div className="text-sm text-red-600">
               Cost: {formatCurrency(vehicle.estimatedCost)}
             </div>
+          )}
+        </td>
+      )}
+      {visibleColumns.tags && (
+        <td className="px-6 py-4 whitespace-nowrap">
+          {vehicle.tags && vehicle.tags.length > 0 ? (
+            <div className="flex flex-wrap gap-1">
+              {vehicle.tags.map(tag => (
+                <span
+                  key={tag.id}
+                  className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <span className="text-sm text-gray-400">-</span>
           )}
         </td>
       )}

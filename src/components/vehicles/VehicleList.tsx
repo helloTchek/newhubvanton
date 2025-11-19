@@ -49,6 +49,7 @@ export const VehicleList: React.FC = () => {
     inspectionId: true,
     mileage: true,
     value: true,
+    tags: true,
     carBody: true,
     rim: true,
     glass: true,
@@ -66,7 +67,8 @@ export const VehicleList: React.FC = () => {
     mileage: true,
     repairCost: true,
     value: true,
-    damageResults: true
+    damageResults: true,
+    tags: true
   });
   const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -377,7 +379,8 @@ export const VehicleList: React.FC = () => {
                           mileage: 'Mileage',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
-                          damageResults: 'Damage Results'
+                          damageResults: 'Damage Results',
+                          tags: 'Tags'
                         }).map(([key, label]) => (
                           <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                             <input
@@ -415,6 +418,7 @@ export const VehicleList: React.FC = () => {
                           inspectionId: 'Inspection ID',
                           mileage: 'Mileage',
                           value: 'Value',
+                          tags: 'Tags',
                           carBody: 'Car Body',
                           rim: 'Rim',
                           glass: 'Glass',
@@ -594,6 +598,11 @@ export const VehicleList: React.FC = () => {
                   {visibleColumns.value && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Value
+                    </th>
+                  )}
+                  {visibleColumns.tags && (
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tags
                     </th>
                   )}
                   {visibleColumns.carBody && (

@@ -41,6 +41,7 @@ interface VehicleCardProps {
     repairCost: boolean;
     value: boolean;
     damageResults: boolean;
+    tags: boolean;
   };
 }
 
@@ -328,7 +329,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
 
           {/* Tags Section */}
-          {vehicle.tags && vehicle.tags.length > 0 && (
+          {visibleFields.tags && vehicle.tags && vehicle.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {vehicle.tags.map(tag => (
                 <div
