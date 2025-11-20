@@ -502,30 +502,6 @@ export const VehicleList: React.FC = () => {
               />
             </div>
 
-            {/* Sort */}
-            <div className="flex items-center gap-2">
-              <select
-                value={filters.sortBy}
-                onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
-                className="px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white min-w-[160px]"
-              >
-                <option value="date">Date (newest)</option>
-                <option value="registration">Registration</option>
-                <option value="make">Make & Model</option>
-                <option value="value">Est. Value</option>
-                <option value="repairCost">Repair Cost</option>
-                <option value="mileage">Mileage</option>
-                <option value="status">Status</option>
-              </select>
-              <button
-                onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
-                className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                title={filters.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
-              >
-                {filters.sortOrder === 'desc' ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
-              </button>
-            </div>
-
             {/* View Toggle */}
             <div className="flex border border-gray-300 rounded-lg overflow-hidden">
               <button
@@ -672,29 +648,9 @@ export const VehicleList: React.FC = () => {
               />
             </div>
 
-            {/* Sort & View Controls */}
+            {/* View Controls */}
             <div className="flex items-center gap-2">
-              <select
-                value={filters.sortBy}
-                onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
-                className="flex-1 px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-              >
-                <option value="date">Date (newest)</option>
-                <option value="registration">Registration</option>
-                <option value="make">Make & Model</option>
-                <option value="value">Est. Value</option>
-                <option value="repairCost">Repair Cost</option>
-                <option value="mileage">Mileage</option>
-                <option value="status">Status</option>
-              </select>
-              <button
-                onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
-                className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                title={filters.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
-              >
-                {filters.sortOrder === 'desc' ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
-              </button>
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden ml-auto">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={clsx(
