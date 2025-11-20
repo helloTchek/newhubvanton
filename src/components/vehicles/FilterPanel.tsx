@@ -617,7 +617,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               setIsConfiguring(false);
             }}
           />
-          <div className="absolute top-full right-0 mt-2 w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-20" style={{ maxWidth: 'calc(100vw - 32px)' }}>
+          <div
+            className="fixed w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+            style={{
+              top: filterButtonRef.current ? `${filterButtonRef.current.getBoundingClientRect().bottom + 8}px` : '0',
+              right: '1.5rem',
+              maxWidth: 'calc(100vw - 3rem)'
+            }}
+          >
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
