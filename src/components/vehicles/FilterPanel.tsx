@@ -9,7 +9,6 @@ interface FilterPanelProps {
   onFiltersChange: (filters: Partial<SearchFilters>) => void;
   companies: Company[];
   showCompanyFilter?: boolean;
-  rightContent?: React.ReactNode;
 }
 
 const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
@@ -47,11 +46,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFiltersChange,
   companies,
-  showCompanyFilter = false,
-  rightContent
+  showCompanyFilter = false
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
+  const filterButtonRef = useRef<HTMLDivElement>(null);
   const [activeFilters, setActiveFilters] = useState<string[]>(['inspectionType', 'status']);
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [showInspectionTypeDropdown, setShowInspectionTypeDropdown] = useState(false);
@@ -67,9 +66,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (filterButtonRef.current && !filterButtonRef.current.contains(event.target as Node)) {
+        if (isExpanded && !isConfiguring) {
+          setIsExpanded(false);
+        }
+      }
       if (inspectionTypeRef.current && !inspectionTypeRef.current.contains(event.target as Node)) {
         if (showInspectionTypeDropdown) {
-          // Apply changes when closing
           onFiltersChange({
             inspectionTypeIds: tempInspectionTypeIds.length > 0 ? tempInspectionTypeIds : undefined,
             inspectionType: tempInspectionTypeIds.length === 0 ? 'all' : filters.inspectionType
@@ -79,7 +82,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       }
       if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
         if (showStatusDropdown) {
-          // Apply changes when closing
           onFiltersChange({
             statusIds: tempStatusIds.length > 0 ? tempStatusIds : undefined,
             status: tempStatusIds.length === 0 ? 'all' : filters.status
@@ -91,7 +93,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, filters.inspectionType, filters.status, onFiltersChange]);
+  }, [isExpanded, isConfiguring, showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, filters.inspectionType, filters.status, onFiltersChange]);
 
   const loadTags = async () => {
     try {
@@ -200,8 +202,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'inspectionType':
         return (
           <div key={filterId} className="w-full" ref={inspectionTypeRef}>
-            <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
-              <FileCheck className="w-3 h-3 text-gray-500" />
+            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
+              <FileCheck className="w-3.5 h-3.5 text-gray-500" />
               Inspection Type
             </label>
             <div className="relative">
@@ -263,8 +265,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'status':
         return (
           <div key={filterId} className="w-full" ref={statusRef}>
-            <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-gray-500" />
+            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-gray-500" />
               Status
             </label>
             <div className="relative">
@@ -326,8 +328,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'tags':
         return (
           <div key={filterId} className="w-full col-span-full">
-            <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
-              <Tag className="w-3 h-3 text-gray-500" />
+            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
+              <Tag className="w-3.5 h-3.5 text-gray-500" />
               Tags
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -575,91 +577,126 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   return (
-    <div>
-      <div className="px-4 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
-          <div className="flex items-center gap-3 flex-wrap">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium text-sm"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Filters</span>
-              {hasActiveFilters && (
-                <span className="ml-2 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                  Active
-                </span>
+    <div className="relative" ref={filterButtonRef}>
+      {/* Filter Button */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className={clsx(
+          "flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors text-sm font-medium relative",
+          hasActiveFilters
+            ? "bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100"
+            : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+        )}
+      >
+        <Filter className="w-4 h-4" />
+        <span className="hidden sm:inline">Filters</span>
+        {hasActiveFilters && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+            {[
+              filters.status !== 'all' || (filters.statusIds && filters.statusIds.length > 0),
+              filters.inspectionType !== 'all' || (filters.inspectionTypeIds && filters.inspectionTypeIds.length > 0),
+              filters.tagIds && filters.tagIds.length > 0,
+              hasDateRangeFilter,
+              hasRepairCostFilter,
+              hasMileageFilter,
+              filters.companyId !== 'all',
+              filters.customerEmail,
+              filters.customerPhone
+            ].filter(Boolean).length}
+          </span>
+        )}
+      </button>
+
+      {/* Filter Dropdown */}
+      {isExpanded && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => {
+              setIsExpanded(false);
+              setIsConfiguring(false);
+            }}
+          />
+          <div className="absolute top-full right-0 mt-2 w-screen max-w-2xl bg-white rounded-lg shadow-xl border border-gray-200 z-20">
+            <div className="p-4">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-sm font-semibold text-gray-900">Filter Vehicles</h3>
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearAllFilters}
+                      className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                    >
+                      <X className="w-3 h-3" />
+                      Clear all
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => setIsConfiguring(!isConfiguring)}
+                  className={clsx(
+                    "flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors",
+                    isConfiguring
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:bg-gray-100"
+                  )}
+                >
+                  <Settings className="w-3 h-3" />
+                  <span>Configure</span>
+                </button>
+              </div>
+
+              {/* Configure Mode */}
+              {isConfiguring && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-xs font-medium text-gray-700 mb-2">Select filters to display:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.map((filter) => {
+                      const Icon = filter.icon;
+                      const isActive = activeFilters.includes(filter.id);
+                      const isDisabled = filter.id === 'company' && !showCompanyFilter;
+
+                      if (isDisabled) return null;
+
+                      return (
+                        <button
+                          key={filter.id}
+                          onClick={() => toggleFilter(filter.id)}
+                          className={clsx(
+                            'flex items-center gap-2 px-2 py-1 rounded-md border transition-colors text-xs',
+                            isActive
+                              ? 'bg-blue-50 border-blue-200 text-blue-700'
+                              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          )}
+                        >
+                          <Icon className="w-3 h-3" />
+                          <span>{filter.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
-            </button>
 
-            {isExpanded && (
-              <button
-                onClick={() => setIsConfiguring(!isConfiguring)}
-                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                <Settings className="w-4 h-4" />
-                <span className="hidden sm:inline">Configure</span>
-              </button>
-            )}
+              {/* Filter Fields */}
+              {!isConfiguring && activeFilters.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+                  {activeFilters.map(filterId => renderFilter(filterId))}
+                </div>
+              )}
 
-            {hasActiveFilters && (
-              <button
-                onClick={clearAllFilters}
-                className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-              >
-                <X className="w-3 h-3" />
-                <span className="hidden sm:inline">Clear all</span>
-              </button>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
-            {rightContent}
-          </div>
-        </div>
-
-        {isExpanded && isConfiguring && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-sm font-medium text-gray-700 mb-2">Select filters to display:</p>
-            <div className="flex flex-wrap gap-2">
-              {availableFilters.map((filter) => {
-                const Icon = filter.icon;
-                const isActive = activeFilters.includes(filter.id);
-                const isDisabled = filter.id === 'company' && !showCompanyFilter;
-
-                if (isDisabled) return null;
-
-                return (
-                  <button
-                    key={filter.id}
-                    onClick={() => toggleFilter(filter.id)}
-                    className={clsx(
-                      'flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors text-sm',
-                      isActive
-                        ? 'bg-blue-50 border-blue-200 text-blue-700'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{filter.label}</span>
-                  </button>
-                );
-              })}
+              {!isConfiguring && activeFilters.length === 0 && (
+                <div className="text-center py-8 text-gray-500 text-sm">
+                  <Filter className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p>No filters configured</p>
+                  <p className="text-xs mt-1">Click "Configure" to add filters</p>
+                </div>
+              )}
             </div>
           </div>
-        )}
-
-        {isExpanded && !isConfiguring && (
-          <div className="pt-3 border-t border-gray-200">
-            {/* All active filters */}
-            {activeFilters.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 bg-gradient-to-r from-blue-50 to-gray-50 p-3 rounded-lg border border-blue-100">
-                {activeFilters.map(filterId => renderFilter(filterId))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };

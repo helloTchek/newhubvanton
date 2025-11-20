@@ -484,30 +484,37 @@ export const VehicleList: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Unified Search, Sort & Filter Section */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        {/* Top Row: Search, Sort, View Toggle, Columns, Select */}
-        <div className="p-4 border-b border-gray-200">
-          {/* Desktop Layout */}
-          <div className="hidden lg:flex items-center gap-3">
-            {/* Search */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by registration, make, model, VIN, customer..."
-                value={filters.query}
-                onChange={(e) => updateFilters({ query: e.target.value })}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
+      {/* Compact Search & Filter Bar */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
+          {/* Search */}
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by registration, make, model, VIN, customer..."
+              value={filters.query}
+              onChange={(e) => updateFilters({ query: e.target.value })}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            />
+          </div>
+
+          {/* Right Controls */}
+          <div className="flex items-center gap-2">
+            {/* Filter Toggle with Badge */}
+            <FilterPanel
+              filters={filters}
+              onFiltersChange={updateFilters}
+              companies={companies}
+              showCompanyFilter={user?.companyId === 'all'}
+            />
 
             {/* View Toggle */}
             <div className="flex border border-gray-300 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('grid')}
                 className={clsx(
-                  'p-2.5 transition-colors',
+                  'p-2 transition-colors',
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-50'
@@ -519,7 +526,7 @@ export const VehicleList: React.FC = () => {
               <button
                 onClick={() => setViewMode('list')}
                 className={clsx(
-                  'p-2.5 transition-colors',
+                  'p-2 transition-colors',
                   viewMode === 'list'
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-50'
@@ -530,14 +537,14 @@ export const VehicleList: React.FC = () => {
               </button>
             </div>
 
-            {/* Field/Column Selector */}
-            <div className="relative">
+            {/* Columns Selector - Desktop Only */}
+            <div className="hidden lg:block relative">
               <button
                 onClick={() => viewMode === 'grid' ? setShowCardFieldSelector(!showCardFieldSelector) : setShowColumnSelector(!showColumnSelector)}
-                className="flex items-center gap-2 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
+                className="p-2 text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
+                title="Columns"
               >
                 <Columns3 className="w-4 h-4" />
-                <span className="hidden xl:inline">Columns</span>
               </button>
 
               {viewMode === 'grid' && showCardFieldSelector && (
@@ -632,61 +639,8 @@ export const VehicleList: React.FC = () => {
                 </>
               )}
             </div>
-          </div>
 
-          {/* Mobile Layout */}
-          <div className="lg:hidden space-y-3">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search vehicles..."
-                value={filters.query}
-                onChange={(e) => updateFilters({ query: e.target.value })}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
-
-            {/* View Controls */}
-            <div className="flex items-center gap-2">
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden ml-auto">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={clsx(
-                    'p-2.5 transition-colors',
-                    viewMode === 'grid'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-600 hover:bg-gray-50'
-                  )}
-                  title="Grid view"
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={clsx(
-                    'p-2.5 transition-colors',
-                    viewMode === 'list'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-600 hover:bg-gray-50'
-                  )}
-                  title="List view"
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters Section */}
-        <FilterPanel
-          filters={filters}
-          onFiltersChange={updateFilters}
-          companies={companies}
-          showCompanyFilter={user?.companyId === 'all'}
-          rightContent={
+            {/* Select Button */}
             <button
               onClick={toggleSelectionMode}
               className={clsx(
@@ -708,8 +662,8 @@ export const VehicleList: React.FC = () => {
                 </>
               )}
             </button>
-          }
-        />
+          </div>
+        </div>
       </div>
 
       {/* Bulk Actions Toolbar */}
