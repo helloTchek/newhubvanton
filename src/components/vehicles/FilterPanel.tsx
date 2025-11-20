@@ -60,6 +60,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const inspectionTypeRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
+  // Local filter state (pending changes)
+  const [pendingFilters, setPendingFilters] = useState<SearchFilters>(filters);
+
+  // Sync pending filters with actual filters when modal opens
+  useEffect(() => {
+    if (isExpanded) {
+      setPendingFilters(filters);
+    }
+  }, [isExpanded, filters]);
+
   useEffect(() => {
     loadTags();
   }, []);
@@ -73,18 +83,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       }
       if (inspectionTypeRef.current && !inspectionTypeRef.current.contains(event.target as Node)) {
         if (showInspectionTypeDropdown) {
-          onFiltersChange({
+          updatePendingFilters({
             inspectionTypeIds: tempInspectionTypeIds.length > 0 ? tempInspectionTypeIds : undefined,
-            inspectionType: tempInspectionTypeIds.length === 0 ? 'all' : filters.inspectionType
+            inspectionType: tempInspectionTypeIds.length === 0 ? 'all' : pendingFilters.inspectionType
           });
           setShowInspectionTypeDropdown(false);
         }
       }
       if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
         if (showStatusDropdown) {
-          onFiltersChange({
+          updatePendingFilters({
             statusIds: tempStatusIds.length > 0 ? tempStatusIds : undefined,
-            status: tempStatusIds.length === 0 ? 'all' : filters.status
+            status: tempStatusIds.length === 0 ? 'all' : pendingFilters.status
           });
           setShowStatusDropdown(false);
         }
@@ -93,7 +103,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isExpanded, isConfiguring, showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, filters.inspectionType, filters.status, onFiltersChange]);
+  }, [isExpanded, isConfiguring, showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, pendingFilters.inspectionType, pendingFilters.status]);
 
   const loadTags = async () => {
     try {
@@ -120,43 +130,43 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         changed = true;
       }
 
-      if ((filters.mileageRange?.min !== undefined || filters.mileageRange?.max !== undefined) && !newFilters.includes('mileage')) {
+      if ((pendingFilters.mileageRange?.min !== undefined || pendingFilters.mileageRange?.max !== undefined) && !newFilters.includes('mileage')) {
         newFilters.push('mileage');
         changed = true;
       }
 
-      if ((filters.repairCostRange?.min !== undefined || filters.repairCostRange?.max !== undefined) && !newFilters.includes('repairCost')) {
+      if ((pendingFilters.repairCostRange?.min !== undefined || pendingFilters.repairCostRange?.max !== undefined) && !newFilters.includes('repairCost')) {
         newFilters.push('repairCost');
         changed = true;
       }
 
-      if ((filters.dateRange?.start || filters.dateRange?.end) && !newFilters.includes('dateRange')) {
+      if ((pendingFilters.dateRange?.start || pendingFilters.dateRange?.end) && !newFilters.includes('dateRange')) {
         newFilters.push('dateRange');
         changed = true;
       }
 
-      if (filters.companyId && filters.companyId !== 'all' && !newFilters.includes('company')) {
+      if (pendingFilters.companyId && pendingFilters.companyId !== 'all' && !newFilters.includes('company')) {
         newFilters.push('company');
         changed = true;
       }
 
-      if (filters.customerEmail && !newFilters.includes('customerEmail')) {
+      if (pendingFilters.customerEmail && !newFilters.includes('customerEmail')) {
         newFilters.push('customerEmail');
         changed = true;
       }
 
-      if (filters.customerPhone && !newFilters.includes('customerPhone')) {
+      if (pendingFilters.customerPhone && !newFilters.includes('customerPhone')) {
         newFilters.push('customerPhone');
         changed = true;
       }
 
       return changed ? newFilters : prev;
     });
-  }, [filters]);
+  }, [pendingFilters]);
 
-  const hasRepairCostFilter = filters.repairCostRange?.min !== undefined || filters.repairCostRange?.max !== undefined;
-  const hasMileageFilter = filters.mileageRange?.min !== undefined || filters.mileageRange?.max !== undefined;
-  const hasDateRangeFilter = filters.dateRange?.start || filters.dateRange?.end;
+  const hasRepairCostFilter = pendingFilters.repairCostRange?.min !== undefined || pendingFilters.repairCostRange?.max !== undefined;
+  const hasMileageFilter = pendingFilters.mileageRange?.min !== undefined || pendingFilters.mileageRange?.max !== undefined;
+  const hasDateRangeFilter = pendingFilters.dateRange?.start || pendingFilters.dateRange?.end;
 
   const hasActiveFilters =
     filters.status !== 'all' ||
@@ -165,19 +175,35 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     filters.inspectionType !== 'all' ||
     (filters.inspectionTypeIds && filters.inspectionTypeIds.length > 0) ||
     (filters.tagIds && filters.tagIds.length > 0) ||
-    hasDateRangeFilter ||
-    hasRepairCostFilter ||
-    hasMileageFilter ||
+    (filters.dateRange?.start || filters.dateRange?.end) ||
+    (filters.repairCostRange?.min !== undefined || filters.repairCostRange?.max !== undefined) ||
+    (filters.mileageRange?.min !== undefined || filters.mileageRange?.max !== undefined) ||
     filters.userId !== 'all' ||
     filters.customerEmail ||
     filters.customerPhone;
 
+  const hasPendingChanges = JSON.stringify(filters) !== JSON.stringify(pendingFilters);
+
+  const updatePendingFilters = (updates: Partial<SearchFilters>) => {
+    setPendingFilters(prev => ({ ...prev, ...updates }));
+  };
+
+  const applyFilters = () => {
+    onFiltersChange(pendingFilters);
+    setIsExpanded(false);
+    setIsConfiguring(false);
+  };
+
+  const resetFilters = () => {
+    setPendingFilters(filters);
+  };
+
   const clearAllFilters = () => {
-    onFiltersChange({
-      status: 'all',
+    const clearedFilters = {
+      status: 'all' as const,
       statusIds: undefined,
       companyId: 'all',
-      inspectionType: 'all',
+      inspectionType: 'all' as const,
       inspectionTypeIds: undefined,
       tagIds: undefined,
       dateRange: undefined,
@@ -186,7 +212,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       userId: 'all',
       customerEmail: '',
       customerPhone: ''
-    });
+    };
+    setPendingFilters(prev => ({ ...prev, ...clearedFilters }));
   };
 
   const toggleFilter = (filterId: string) => {
@@ -211,15 +238,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 type="button"
                 onClick={() => {
                   if (!showInspectionTypeDropdown) {
-                    setTempInspectionTypeIds(filters.inspectionTypeIds || []);
+                    setTempInspectionTypeIds(pendingFilters.inspectionTypeIds || []);
                   }
                   setShowInspectionTypeDropdown(!showInspectionTypeDropdown);
                 }}
                 className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
               >
                 <div className="flex flex-wrap gap-1 flex-1 text-left">
-                  {filters.inspectionTypeIds && filters.inspectionTypeIds.length > 0 ? (
-                    filters.inspectionTypeIds.map(typeId => {
+                  {pendingFilters.inspectionTypeIds && pendingFilters.inspectionTypeIds.length > 0 ? (
+                    pendingFilters.inspectionTypeIds.map(typeId => {
                       const option = inspectionTypeOptions.find(opt => opt.value === typeId);
                       return option ? (
                         <span key={typeId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
@@ -274,15 +301,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 type="button"
                 onClick={() => {
                   if (!showStatusDropdown) {
-                    setTempStatusIds(filters.statusIds || []);
+                    setTempStatusIds(pendingFilters.statusIds || []);
                   }
                   setShowStatusDropdown(!showStatusDropdown);
                 }}
                 className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
               >
                 <div className="flex flex-wrap gap-1 flex-1 text-left">
-                  {filters.statusIds && filters.statusIds.length > 0 ? (
-                    filters.statusIds.map(statusId => {
+                  {pendingFilters.statusIds && pendingFilters.statusIds.length > 0 ? (
+                    pendingFilters.statusIds.map(statusId => {
                       const option = statusOptions.find(opt => opt.value === statusId);
                       return option ? (
                         <span key={statusId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
@@ -339,11 +366,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                   <button
                     key={tag.id}
                     onClick={() => {
-                      const currentTags = filters.tagIds || [];
+                      const currentTags = pendingFilters.tagIds || [];
                       const newTags = isSelected
                         ? currentTags.filter(id => id !== tag.id)
                         : [...currentTags, tag.id];
-                      onFiltersChange({ tagIds: newTags.length > 0 ? newTags : undefined });
+                      updatePendingFilters({ tagIds: newTags.length > 0 ? newTags : undefined });
                     }}
                     className={clsx(
                       'px-2 py-1 rounded-full text-xs font-medium transition-all',
@@ -374,21 +401,21 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <div className="flex gap-2">
               <input
                 type="date"
-                value={filters.dateRange?.start || ''}
-                onChange={(e) => onFiltersChange({
+                value={pendingFilters.dateRange?.start || ''}
+                onChange={(e) => updatePendingFilters({
                   dateRange: {
                     start: e.target.value,
-                    end: filters.dateRange?.end || ''
+                    end: pendingFilters.dateRange?.end || ''
                   }
                 })}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <input
                 type="date"
-                value={filters.dateRange?.end || ''}
-                onChange={(e) => onFiltersChange({
+                value={pendingFilters.dateRange?.end || ''}
+                onChange={(e) => updatePendingFilters({
                   dateRange: {
-                    start: filters.dateRange?.start || '',
+                    start: pendingFilters.dateRange?.start || '',
                     end: e.target.value
                   }
                 })}
@@ -407,8 +434,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               Company
             </label>
             <select
-              value={filters.companyId}
-              onChange={(e) => onFiltersChange({ companyId: e.target.value })}
+              value={pendingFilters.companyId}
+              onChange={(e) => updatePendingFilters({ companyId: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
             >
               <option value="all">All Companies</option>
@@ -431,8 +458,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <input
               type="email"
               placeholder="customer@example.com"
-              value={filters.customerEmail || ''}
-              onChange={(e) => onFiltersChange({ customerEmail: e.target.value })}
+              value={pendingFilters.customerEmail || ''}
+              onChange={(e) => updatePendingFilters({ customerEmail: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -448,8 +475,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <input
               type="tel"
               placeholder="+1234567890"
-              value={filters.customerPhone || ''}
-              onChange={(e) => onFiltersChange({ customerPhone: e.target.value })}
+              value={pendingFilters.customerPhone || ''}
+              onChange={(e) => updatePendingFilters({ customerPhone: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -468,14 +495,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 min="0"
                 step="1"
                 placeholder="Min"
-                value={filters.repairCostRange?.min ?? ''}
+                value={pendingFilters.repairCostRange?.min ?? ''}
                 onChange={(e) => {
                   const value = e.target.value;
                   const numValue = value === '' ? undefined : Math.max(0, Number(value));
-                  onFiltersChange({
+                  updatePendingFilters({
                     repairCostRange: {
                       min: numValue,
-                      max: filters.repairCostRange?.max
+                      max: pendingFilters.repairCostRange?.max
                     }
                   });
                 }}
@@ -491,13 +518,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 min="0"
                 step="1"
                 placeholder="Max"
-                value={filters.repairCostRange?.max ?? ''}
+                value={pendingFilters.repairCostRange?.max ?? ''}
                 onChange={(e) => {
                   const value = e.target.value;
                   const numValue = value === '' ? undefined : Math.max(0, Number(value));
-                  onFiltersChange({
+                  updatePendingFilters({
                     repairCostRange: {
-                      min: filters.repairCostRange?.min,
+                      min: pendingFilters.repairCostRange?.min,
                       max: numValue
                     }
                   });
@@ -526,14 +553,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 min="0"
                 step="1"
                 placeholder="Min"
-                value={filters.mileageRange?.min ?? ''}
+                value={pendingFilters.mileageRange?.min ?? ''}
                 onChange={(e) => {
                   const value = e.target.value;
                   const numValue = value === '' ? undefined : Math.max(0, Number(value));
-                  onFiltersChange({
+                  updatePendingFilters({
                     mileageRange: {
                       min: numValue,
-                      max: filters.mileageRange?.max
+                      max: pendingFilters.mileageRange?.max
                     }
                   });
                 }}
@@ -549,13 +576,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 min="0"
                 step="1"
                 placeholder="Max"
-                value={filters.mileageRange?.max ?? ''}
+                value={pendingFilters.mileageRange?.max ?? ''}
                 onChange={(e) => {
                   const value = e.target.value;
                   const numValue = value === '' ? undefined : Math.max(0, Number(value));
-                  onFiltersChange({
+                  updatePendingFilters({
                     mileageRange: {
-                      min: filters.mileageRange?.min,
+                      min: pendingFilters.mileageRange?.min,
                       max: numValue
                     }
                   });
@@ -698,6 +725,36 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                   <Filter className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p>No filters configured</p>
                   <p className="text-xs mt-1">Click "Configure" to add filters</p>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              {!isConfiguring && activeFilters.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between">
+                  <button
+                    onClick={resetFilters}
+                    disabled={!hasPendingChanges}
+                    className={clsx(
+                      "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                      hasPendingChanges
+                        ? "text-gray-700 hover:bg-gray-100"
+                        : "text-gray-400 cursor-not-allowed"
+                    )}
+                  >
+                    Reset
+                  </button>
+                  <button
+                    onClick={applyFilters}
+                    disabled={!hasPendingChanges}
+                    className={clsx(
+                      "px-6 py-2 text-sm font-medium rounded-lg transition-colors",
+                      hasPendingChanges
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    )}
+                  >
+                    Apply Filters
+                  </button>
                 </div>
               )}
             </div>
