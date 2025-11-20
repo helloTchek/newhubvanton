@@ -182,14 +182,24 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     filters.customerEmail ||
     filters.customerPhone;
 
-  const hasPendingChanges = JSON.stringify(filters) !== JSON.stringify(pendingFilters);
+  // Compare filters excluding query field (search is handled separately)
+  const hasPendingChanges = (() => {
+    // Create copies without the query field for comparison
+    const { query: _, ...currentFilters } = filters;
+    const { query: __, ...pending } = pendingFilters;
+    const hasChanges = JSON.stringify(currentFilters) !== JSON.stringify(pending);
+    console.log('Filter comparison:', { currentFilters, pending, hasChanges });
+    return hasChanges;
+  })();
 
   const updatePendingFilters = (updates: Partial<SearchFilters>) => {
     setPendingFilters(prev => ({ ...prev, ...updates }));
   };
 
   const applyFilters = () => {
-    onFiltersChange(pendingFilters);
+    // Only send filter changes, not the query field
+    const { query, ...filterUpdates } = pendingFilters;
+    onFiltersChange(filterUpdates);
     setIsExpanded(false);
     setIsConfiguring(false);
   };
@@ -276,6 +286,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                               ? tempInspectionTypeIds.filter(t => t !== option.value)
                               : [...tempInspectionTypeIds, option.value as InspectionType];
                             setTempInspectionTypeIds(newTypes);
+                            // Update pending filters immediately
+                            updatePendingFilters({
+                              inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
+                              inspectionType: newTypes.length === 0 ? 'all' : pendingFilters.inspectionType
+                            });
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
@@ -339,6 +354,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                               ? tempStatusIds.filter(s => s !== option.value)
                               : [...tempStatusIds, option.value as VehicleStatus];
                             setTempStatusIds(newStatuses);
+                            // Update pending filters immediately
+                            updatePendingFilters({
+                              statusIds: newStatuses.length > 0 ? newStatuses : undefined,
+                              status: newStatuses.length === 0 ? 'all' : pendingFilters.status
+                            });
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
