@@ -94,6 +94,8 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   }
 }) => {
   const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState(false);
+  const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState(false);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -140,10 +142,11 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     setShowActionsMenu(!showActionsMenu);
   };
 
-  const handleDownloadReport = (e: React.MouseEvent) => {
+  const handleDownloadReport = (e: React.MouseEvent, withCosts: boolean) => {
     e.stopPropagation();
-    console.log('Download report for vehicle:', vehicle.id);
+    console.log('Download report for vehicle:', vehicle.id, 'with costs:', withCosts);
     setShowActionsMenu(false);
+    setDownloadSubmenuOpen(false);
   };
 
   const handleShareReport = (e: React.MouseEvent) => {
@@ -160,11 +163,12 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     setShowActionsMenu(false);
   };
 
-  const handleOpenUrlReport = (e: React.MouseEvent) => {
+  const handleOpenUrlReport = (e: React.MouseEvent, withCosts: boolean) => {
     e.stopPropagation();
-    const reportUrl = `/vehicle/${vehicle.id}/report`;
+    const reportUrl = `/vehicle/${vehicle.id}/report?costs=${withCosts}`;
     window.open(reportUrl, '_blank');
     setShowActionsMenu(false);
+    setOpenUrlSubmenuOpen(false);
   };
 
   useEffect(() => {
@@ -489,24 +493,70 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </button>
 
           {showActionsMenu && (
-            <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
+            <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
               <div className="py-1" role="menu">
-                <button
-                  onClick={handleDownloadReport}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
+                <div className="relative"
+                  onMouseEnter={() => setDownloadSubmenuOpen(true)}
+                  onMouseLeave={() => setDownloadSubmenuOpen(false)}
                 >
-                  <Download className="h-4 w-4" />
-                  Download Report
-                </button>
-                <button
-                  onClick={handleOpenUrlReport}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    role="menuitem"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Download className="h-4 w-4" />
+                      Download Report
+                    </div>
+                    <span className="text-gray-400">›</span>
+                  </button>
+                  {downloadSubmenuOpen && (
+                    <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
+                      <button
+                        onClick={(e) => handleDownloadReport(e, true)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        With repair costs
+                      </button>
+                      <button
+                        onClick={(e) => handleDownloadReport(e, false)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        Without repair costs
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div className="relative"
+                  onMouseEnter={() => setOpenUrlSubmenuOpen(true)}
+                  onMouseLeave={() => setOpenUrlSubmenuOpen(false)}
                 >
-                  <ExternalLink className="h-4 w-4" />
-                  Open URL Report
-                </button>
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    role="menuitem"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ExternalLink className="h-4 w-4" />
+                      Open URL Report
+                    </div>
+                    <span className="text-gray-400">›</span>
+                  </button>
+                  {openUrlSubmenuOpen && (
+                    <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, true)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        With repair costs
+                      </button>
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, false)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        Without repair costs
+                      </button>
+                    </div>
+                  )}
+                </div>
                 {(vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
                   <button
                     onClick={handleShareReport}
