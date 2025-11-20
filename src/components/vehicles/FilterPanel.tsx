@@ -54,9 +54,27 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [isConfiguring, setIsConfiguring] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(['inspectionType', 'status']);
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
+  const [showInspectionTypeDropdown, setShowInspectionTypeDropdown] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const inspectionTypeRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadTags();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (inspectionTypeRef.current && !inspectionTypeRef.current.contains(event.target as Node)) {
+        setShowInspectionTypeDropdown(false);
+      }
+      if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
+        setShowStatusDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const loadTags = async () => {
@@ -165,76 +183,124 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     switch (filterId) {
       case 'inspectionType':
         return (
-          <div key={filterId} className="flex-1 min-w-[200px]">
+          <div key={filterId} className="flex-1 min-w-[200px]" ref={inspectionTypeRef}>
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <FileCheck className="w-3 h-3 text-gray-500" />
               Inspection Type
             </label>
-            <div className="flex flex-wrap gap-1.5">
-              {inspectionTypeOptions.filter(opt => opt.value !== 'all').map(option => {
-                const isSelected = filters.inspectionTypeIds?.includes(option.value as InspectionType);
-                return (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      const currentTypes = filters.inspectionTypeIds || [];
-                      const newTypes = isSelected
-                        ? currentTypes.filter(t => t !== option.value)
-                        : [...currentTypes, option.value as InspectionType];
-                      onFiltersChange({
-                        inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
-                        inspectionType: newTypes.length === 0 ? 'all' : filters.inspectionType
-                      });
-                    }}
-                    className={clsx(
-                      'px-3 py-1.5 rounded-md text-xs font-medium transition-all border',
-                      isSelected
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                );
-              })}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowInspectionTypeDropdown(!showInspectionTypeDropdown)}
+                className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
+              >
+                <div className="flex flex-wrap gap-1 flex-1 text-left">
+                  {filters.inspectionTypeIds && filters.inspectionTypeIds.length > 0 ? (
+                    filters.inspectionTypeIds.map(typeId => {
+                      const option = inspectionTypeOptions.find(opt => opt.value === typeId);
+                      return option ? (
+                        <span key={typeId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                          {option.label}
+                        </span>
+                      ) : null;
+                    })
+                  ) : (
+                    <span className="text-gray-500">All Types</span>
+                  )}
+                </div>
+              </button>
+              {showInspectionTypeDropdown && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
+                  {inspectionTypeOptions.filter(opt => opt.value !== 'all').map(option => {
+                    const isSelected = filters.inspectionTypeIds?.includes(option.value as InspectionType);
+                    return (
+                      <label
+                        key={option.value}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {
+                            const currentTypes = filters.inspectionTypeIds || [];
+                            const newTypes = isSelected
+                              ? currentTypes.filter(t => t !== option.value)
+                              : [...currentTypes, option.value as InspectionType];
+                            onFiltersChange({
+                              inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
+                              inspectionType: newTypes.length === 0 ? 'all' : filters.inspectionType
+                            });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         );
 
       case 'status':
         return (
-          <div key={filterId} className="flex-1 min-w-[250px]">
+          <div key={filterId} className="flex-1 min-w-[250px]" ref={statusRef}>
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-gray-500" />
               Status
             </label>
-            <div className="flex flex-wrap gap-1.5">
-              {statusOptions.filter(opt => opt.value !== 'all').map(option => {
-                const isSelected = filters.statusIds?.includes(option.value as VehicleStatus);
-                return (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      const currentStatuses = filters.statusIds || [];
-                      const newStatuses = isSelected
-                        ? currentStatuses.filter(s => s !== option.value)
-                        : [...currentStatuses, option.value as VehicleStatus];
-                      onFiltersChange({
-                        statusIds: newStatuses.length > 0 ? newStatuses : undefined,
-                        status: newStatuses.length === 0 ? 'all' : filters.status
-                      });
-                    }}
-                    className={clsx(
-                      'px-3 py-1.5 rounded-md text-xs font-medium transition-all border',
-                      isSelected
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                );
-              })}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
+              >
+                <div className="flex flex-wrap gap-1 flex-1 text-left">
+                  {filters.statusIds && filters.statusIds.length > 0 ? (
+                    filters.statusIds.map(statusId => {
+                      const option = statusOptions.find(opt => opt.value === statusId);
+                      return option ? (
+                        <span key={statusId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                          {option.label}
+                        </span>
+                      ) : null;
+                    })
+                  ) : (
+                    <span className="text-gray-500">All Status</span>
+                  )}
+                </div>
+              </button>
+              {showStatusDropdown && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {statusOptions.filter(opt => opt.value !== 'all').map(option => {
+                    const isSelected = filters.statusIds?.includes(option.value as VehicleStatus);
+                    return (
+                      <label
+                        key={option.value}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {
+                            const currentStatuses = filters.statusIds || [];
+                            const newStatuses = isSelected
+                              ? currentStatuses.filter(s => s !== option.value)
+                              : [...currentStatuses, option.value as VehicleStatus];
+                            onFiltersChange({
+                              statusIds: newStatuses.length > 0 ? newStatuses : undefined,
+                              status: newStatuses.length === 0 ? 'all' : filters.status
+                            });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         );
