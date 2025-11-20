@@ -68,10 +68,8 @@ export const Sidebar: React.FC = () => {
       <div className={clsx(
         'flex flex-col flex-shrink-0 transition-all duration-300 fixed top-14 sm:top-16 bottom-0 z-40',
         // Mobile styles
-        'lg:hidden',
         isMobileOpen ? 'left-0 w-64' : '-left-64',
         // Desktop styles
-        'lg:flex',
         isCollapsed ? 'lg:w-16' : 'lg:w-64',
         'lg:left-0'
       )}>
