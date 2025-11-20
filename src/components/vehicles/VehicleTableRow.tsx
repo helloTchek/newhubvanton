@@ -455,27 +455,16 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   return (
     <tr
       className={clsx(
-        'hover:bg-gray-50 transition-colors',
+        'group hover:bg-gray-50 transition-colors',
         (isSelectionMode || onClick) && 'cursor-pointer',
         isSelected && 'bg-blue-50'
       )}
       onClick={handleRowClick}
     >
-      {isSelectionMode && (
-        <td
-          className="px-6 py-4 whitespace-nowrap"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={handleCheckboxClick}
-            className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-          />
-        </td>
-      )}
-      {columnOrder.map(columnId => renderCell(columnId))}
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+      <td className={clsx(
+        "sticky left-0 z-10 px-6 py-4 whitespace-nowrap text-right text-sm font-medium border-r border-gray-200",
+        isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+      )}>
         <div className="relative" ref={actionsMenuRef}>
           <button
             onClick={handleActionsClick}
@@ -527,6 +516,20 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           )}
         </div>
       </td>
+      {isSelectionMode && (
+        <td
+          className="px-6 py-4 whitespace-nowrap"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleCheckboxClick}
+            className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+          />
+        </td>
+      )}
+      {columnOrder.map(columnId => renderCell(columnId))}
     </tr>
   );
 };
