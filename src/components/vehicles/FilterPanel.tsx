@@ -124,8 +124,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
   const hasActiveFilters =
     filters.status !== 'all' ||
+    (filters.statusIds && filters.statusIds.length > 0) ||
     filters.companyId !== 'all' ||
     filters.inspectionType !== 'all' ||
+    (filters.inspectionTypeIds && filters.inspectionTypeIds.length > 0) ||
+    (filters.tagIds && filters.tagIds.length > 0) ||
     hasDateRangeFilter ||
     hasRepairCostFilter ||
     hasMileageFilter ||
@@ -136,8 +139,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const clearAllFilters = () => {
     onFiltersChange({
       status: 'all',
+      statusIds: undefined,
       companyId: 'all',
       inspectionType: 'all',
+      inspectionTypeIds: undefined,
+      tagIds: undefined,
       dateRange: undefined,
       repairCostRange: undefined,
       mileageRange: undefined,
@@ -159,43 +165,77 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     switch (filterId) {
       case 'inspectionType':
         return (
-          <div key={filterId} className="flex-1 min-w-[180px]">
+          <div key={filterId} className="flex-1 min-w-[200px]">
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <FileCheck className="w-3 h-3 text-gray-500" />
               Inspection Type
             </label>
-            <select
-              value={filters.inspectionType || 'all'}
-              onChange={(e) => onFiltersChange({ inspectionType: e.target.value as InspectionType | 'all' })}
-              className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
-            >
-              {inspectionTypeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-wrap gap-1.5">
+              {inspectionTypeOptions.filter(opt => opt.value !== 'all').map(option => {
+                const isSelected = filters.inspectionTypeIds?.includes(option.value as InspectionType);
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      const currentTypes = filters.inspectionTypeIds || [];
+                      const newTypes = isSelected
+                        ? currentTypes.filter(t => t !== option.value)
+                        : [...currentTypes, option.value as InspectionType];
+                      onFiltersChange({
+                        inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
+                        inspectionType: newTypes.length === 0 ? 'all' : filters.inspectionType
+                      });
+                    }}
+                    className={clsx(
+                      'px-3 py-1.5 rounded-md text-xs font-medium transition-all border',
+                      isSelected
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         );
 
       case 'status':
         return (
-          <div key={filterId} className="flex-1 min-w-[180px]">
+          <div key={filterId} className="flex-1 min-w-[250px]">
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-gray-500" />
               Status
             </label>
-            <select
-              value={filters.status || 'all'}
-              onChange={(e) => onFiltersChange({ status: e.target.value as VehicleStatus | 'all' })}
-              className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm"
-            >
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-wrap gap-1.5">
+              {statusOptions.filter(opt => opt.value !== 'all').map(option => {
+                const isSelected = filters.statusIds?.includes(option.value as VehicleStatus);
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      const currentStatuses = filters.statusIds || [];
+                      const newStatuses = isSelected
+                        ? currentStatuses.filter(s => s !== option.value)
+                        : [...currentStatuses, option.value as VehicleStatus];
+                      onFiltersChange({
+                        statusIds: newStatuses.length > 0 ? newStatuses : undefined,
+                        status: newStatuses.length === 0 ? 'all' : filters.status
+                      });
+                    }}
+                    className={clsx(
+                      'px-3 py-1.5 rounded-md text-xs font-medium transition-all border',
+                      isSelected
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         );
 

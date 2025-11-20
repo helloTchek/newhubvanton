@@ -23,7 +23,9 @@ class VehicleService {
         countQuery = countQuery.or(`registration.ilike.%${searchQuery}%,make.ilike.%${searchQuery}%,model.ilike.%${searchQuery}%,customer_email.ilike.%${searchQuery}%`);
       }
 
-      if (filters?.status && filters.status !== 'all') {
+      if (filters?.statusIds && filters.statusIds.length > 0) {
+        countQuery = countQuery.in('status', filters.statusIds);
+      } else if (filters?.status && filters.status !== 'all') {
         countQuery = countQuery.eq('status', filters.status);
       }
 
@@ -31,7 +33,9 @@ class VehicleService {
         countQuery = countQuery.eq('company_id', filters.companyId);
       }
 
-      if (filters?.inspectionType && filters.inspectionType !== 'all') {
+      if (filters?.inspectionTypeIds && filters.inspectionTypeIds.length > 0) {
+        countQuery = countQuery.in('inspection_type', filters.inspectionTypeIds);
+      } else if (filters?.inspectionType && filters.inspectionType !== 'all') {
         countQuery = countQuery.eq('inspection_type', filters.inspectionType);
       }
 
@@ -105,7 +109,9 @@ class VehicleService {
         query = query.or(`registration.ilike.%${searchQuery}%,make.ilike.%${searchQuery}%,model.ilike.%${searchQuery}%,customer_email.ilike.%${searchQuery}%`);
       }
 
-      if (filters?.status && filters.status !== 'all') {
+      if (filters?.statusIds && filters.statusIds.length > 0) {
+        query = query.in('status', filters.statusIds);
+      } else if (filters?.status && filters.status !== 'all') {
         query = query.eq('status', filters.status);
       }
 
@@ -113,7 +119,9 @@ class VehicleService {
         query = query.eq('company_id', filters.companyId);
       }
 
-      if (filters?.inspectionType && filters.inspectionType !== 'all') {
+      if (filters?.inspectionTypeIds && filters.inspectionTypeIds.length > 0) {
+        query = query.in('inspection_type', filters.inspectionTypeIds);
+      } else if (filters?.inspectionType && filters.inspectionType !== 'all') {
         query = query.eq('inspection_type', filters.inspectionType);
       }
 

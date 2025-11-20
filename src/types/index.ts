@@ -227,8 +227,10 @@ export type SortOrder = 'asc' | 'desc';
 export interface SearchFilters {
   query: string;
   status: VehicleStatus | 'all';
+  statusIds?: VehicleStatus[];
   companyId: string | 'all';
   inspectionType?: InspectionType | 'all';
+  inspectionTypeIds?: InspectionType[];
   dateRange?: {
     start: string;
     end: string;
