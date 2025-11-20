@@ -187,9 +187,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     // Create copies without the query field for comparison
     const { query: _, ...currentFilters } = filters;
     const { query: __, ...pending } = pendingFilters;
-    const hasChanges = JSON.stringify(currentFilters) !== JSON.stringify(pending);
-    console.log('Filter comparison:', { currentFilters, pending, hasChanges });
-    return hasChanges;
+    return JSON.stringify(currentFilters) !== JSON.stringify(pending);
   })();
 
   const updatePendingFilters = (updates: Partial<SearchFilters>) => {
@@ -259,8 +257,21 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     pendingFilters.inspectionTypeIds.map(typeId => {
                       const option = inspectionTypeOptions.find(opt => opt.value === typeId);
                       return option ? (
-                        <span key={typeId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                        <span
+                          key={typeId}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded cursor-pointer hover:bg-blue-200 transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newTypes = pendingFilters.inspectionTypeIds?.filter(t => t !== typeId) || [];
+                            setTempInspectionTypeIds(newTypes);
+                            updatePendingFilters({
+                              inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
+                              inspectionType: newTypes.length === 0 ? 'all' : pendingFilters.inspectionType
+                            });
+                          }}
+                        >
                           {option.label}
+                          <X className="w-3 h-3" />
                         </span>
                       ) : null;
                     })
@@ -327,8 +338,21 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     pendingFilters.statusIds.map(statusId => {
                       const option = statusOptions.find(opt => opt.value === statusId);
                       return option ? (
-                        <span key={statusId} className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                        <span
+                          key={statusId}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded cursor-pointer hover:bg-blue-200 transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newStatuses = pendingFilters.statusIds?.filter(s => s !== statusId) || [];
+                            setTempStatusIds(newStatuses);
+                            updatePendingFilters({
+                              statusIds: newStatuses.length > 0 ? newStatuses : undefined,
+                              status: newStatuses.length === 0 ? 'all' : pendingFilters.status
+                            });
+                          }}
+                        >
                           {option.label}
+                          <X className="w-3 h-3" />
                         </span>
                       ) : null;
                     })
@@ -677,13 +701,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-3">
                   <h3 className="text-sm font-semibold text-gray-900">Filter Vehicles</h3>
-                  {hasActiveFilters && (
+                  {(hasPendingChanges || hasActiveFilters) && (
                     <button
                       onClick={clearAllFilters}
                       className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
                     >
                       <X className="w-3 h-3" />
-                      Clear all
+                      Clear all filters
                     </button>
                   )}
                 </div>
@@ -760,8 +784,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                         ? "text-gray-700 hover:bg-gray-100"
                         : "text-gray-400 cursor-not-allowed"
                     )}
+                    title="Discard changes and revert to applied filters"
                   >
-                    Reset
+                    Discard Changes
                   </button>
                   <button
                     onClick={applyFilters}
@@ -772,6 +797,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                         ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     )}
+                    title="Apply filters and reload vehicle list"
                   >
                     Apply Filters
                   </button>
