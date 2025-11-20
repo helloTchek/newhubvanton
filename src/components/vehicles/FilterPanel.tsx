@@ -56,6 +56,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [showInspectionTypeDropdown, setShowInspectionTypeDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [tempInspectionTypeIds, setTempInspectionTypeIds] = useState<InspectionType[]>([]);
+  const [tempStatusIds, setTempStatusIds] = useState<VehicleStatus[]>([]);
   const inspectionTypeRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
@@ -66,16 +68,30 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (inspectionTypeRef.current && !inspectionTypeRef.current.contains(event.target as Node)) {
-        setShowInspectionTypeDropdown(false);
+        if (showInspectionTypeDropdown) {
+          // Apply changes when closing
+          onFiltersChange({
+            inspectionTypeIds: tempInspectionTypeIds.length > 0 ? tempInspectionTypeIds : undefined,
+            inspectionType: tempInspectionTypeIds.length === 0 ? 'all' : filters.inspectionType
+          });
+          setShowInspectionTypeDropdown(false);
+        }
       }
       if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
-        setShowStatusDropdown(false);
+        if (showStatusDropdown) {
+          // Apply changes when closing
+          onFiltersChange({
+            statusIds: tempStatusIds.length > 0 ? tempStatusIds : undefined,
+            status: tempStatusIds.length === 0 ? 'all' : filters.status
+          });
+          setShowStatusDropdown(false);
+        }
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, filters.inspectionType, filters.status, onFiltersChange]);
 
   const loadTags = async () => {
     try {
@@ -191,7 +207,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setShowInspectionTypeDropdown(!showInspectionTypeDropdown)}
+                onClick={() => {
+                  if (!showInspectionTypeDropdown) {
+                    setTempInspectionTypeIds(filters.inspectionTypeIds || []);
+                  }
+                  setShowInspectionTypeDropdown(!showInspectionTypeDropdown);
+                }}
                 className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
               >
                 <div className="flex flex-wrap gap-1 flex-1 text-left">
@@ -212,7 +233,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               {showInspectionTypeDropdown && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
                   {inspectionTypeOptions.filter(opt => opt.value !== 'all').map(option => {
-                    const isSelected = filters.inspectionTypeIds?.includes(option.value as InspectionType);
+                    const isSelected = tempInspectionTypeIds.includes(option.value as InspectionType);
                     return (
                       <label
                         key={option.value}
@@ -222,14 +243,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => {
-                            const currentTypes = filters.inspectionTypeIds || [];
                             const newTypes = isSelected
-                              ? currentTypes.filter(t => t !== option.value)
-                              : [...currentTypes, option.value as InspectionType];
-                            onFiltersChange({
-                              inspectionTypeIds: newTypes.length > 0 ? newTypes : undefined,
-                              inspectionType: newTypes.length === 0 ? 'all' : filters.inspectionType
-                            });
+                              ? tempInspectionTypeIds.filter(t => t !== option.value)
+                              : [...tempInspectionTypeIds, option.value as InspectionType];
+                            setTempInspectionTypeIds(newTypes);
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
@@ -253,7 +270,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                onClick={() => {
+                  if (!showStatusDropdown) {
+                    setTempStatusIds(filters.statusIds || []);
+                  }
+                  setShowStatusDropdown(!showStatusDropdown);
+                }}
                 className="w-full px-2.5 py-1.5 border border-gray-300 rounded-md bg-white text-sm min-h-[34px] flex items-center hover:border-gray-400 transition-colors"
               >
                 <div className="flex flex-wrap gap-1 flex-1 text-left">
@@ -274,7 +296,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               {showStatusDropdown && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto">
                   {statusOptions.filter(opt => opt.value !== 'all').map(option => {
-                    const isSelected = filters.statusIds?.includes(option.value as VehicleStatus);
+                    const isSelected = tempStatusIds.includes(option.value as VehicleStatus);
                     return (
                       <label
                         key={option.value}
@@ -284,14 +306,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => {
-                            const currentStatuses = filters.statusIds || [];
                             const newStatuses = isSelected
-                              ? currentStatuses.filter(s => s !== option.value)
-                              : [...currentStatuses, option.value as VehicleStatus];
-                            onFiltersChange({
-                              statusIds: newStatuses.length > 0 ? newStatuses : undefined,
-                              status: newStatuses.length === 0 ? 'all' : filters.status
-                            });
+                              ? tempStatusIds.filter(s => s !== option.value)
+                              : [...tempStatusIds, option.value as VehicleStatus];
+                            setTempStatusIds(newStatuses);
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
