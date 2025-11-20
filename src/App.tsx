@@ -127,12 +127,32 @@ const Support = () => (
 );
 
 function App() {
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowWelcome(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ErrorBoundary>
       <AuthProvider>
         <ThemeProvider>
           <Router>
           <div className="App">
+            {showWelcome && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4 transform animate-fade-in">
+                  <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">
+                    Hello Andy and Sue
+                  </h2>
+                  <p className="text-gray-600 text-center">Welcome to the Vehicle Inspection Platform</p>
+                </div>
+              </div>
+            )}
             <Routes>
               <Route path="/login" element={<LoginForm />} />
               <Route path="/*" element={
