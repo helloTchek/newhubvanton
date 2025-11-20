@@ -617,8 +617,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               setIsConfiguring(false);
             }}
           />
-          <div className="absolute top-full right-0 mt-2 w-[800px] max-w-[90vw] bg-white rounded-lg shadow-xl border border-gray-200 z-20">
-            <div className="p-5">
+          <div className="absolute top-full right-0 mt-2 w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-20" style={{ maxWidth: 'calc(100vw - 32px)' }}>
+            <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-3">
@@ -681,7 +681,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
               {/* Filter Fields */}
               {!isConfiguring && activeFilters.length > 0 && (
-                <div className="grid grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2">
+                <div className="grid grid-cols-3 gap-5 max-h-[520px] overflow-y-auto pr-2">
                   {activeFilters.map(filterId => renderFilter(filterId))}
                 </div>
               )}
