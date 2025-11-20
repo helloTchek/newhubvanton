@@ -73,6 +73,49 @@ class UserPreferencesService {
       return null;
     }
 
+    // Migrate old data format if needed
+    const visibleColumns = data.visible_columns || {};
+
+    // Remove deprecated 'vehicle' field and ensure all required fields exist
+    const migratedVisibleColumns = {
+      image: visibleColumns.image !== undefined ? visibleColumns.image : true,
+      registration: visibleColumns.registration !== undefined ? visibleColumns.registration : true,
+      vin: visibleColumns.vin !== undefined ? visibleColumns.vin : true,
+      makeModel: visibleColumns.makeModel !== undefined ? visibleColumns.makeModel : true,
+      company: visibleColumns.company !== undefined ? visibleColumns.company : true,
+      status: visibleColumns.status !== undefined ? visibleColumns.status : true,
+      inspectionDate: visibleColumns.inspectionDate !== undefined ? visibleColumns.inspectionDate : true,
+      inspectionId: visibleColumns.inspectionId !== undefined ? visibleColumns.inspectionId : true,
+      mileage: visibleColumns.mileage !== undefined ? visibleColumns.mileage : true,
+      value: visibleColumns.value !== undefined ? visibleColumns.value : true,
+      tags: visibleColumns.tags !== undefined ? visibleColumns.tags : true,
+      carBody: visibleColumns.carBody !== undefined ? visibleColumns.carBody : true,
+      rim: visibleColumns.rim !== undefined ? visibleColumns.rim : true,
+      glass: visibleColumns.glass !== undefined ? visibleColumns.glass : true,
+      interior: visibleColumns.interior !== undefined ? visibleColumns.interior : true,
+      tires: visibleColumns.tires !== undefined ? visibleColumns.tires : true,
+      dashboard: visibleColumns.dashboard !== undefined ? visibleColumns.dashboard : true,
+      declarations: visibleColumns.declarations !== undefined ? visibleColumns.declarations : true,
+    };
+
+    const visibleCardFields = data.visible_card_fields || {};
+    const migratedVisibleCardFields = {
+      image: visibleCardFields.image !== undefined ? visibleCardFields.image : true,
+      registration: visibleCardFields.registration !== undefined ? visibleCardFields.registration : true,
+      vin: visibleCardFields.vin !== undefined ? visibleCardFields.vin : true,
+      makeModel: visibleCardFields.makeModel !== undefined ? visibleCardFields.makeModel : true,
+      age: visibleCardFields.age !== undefined ? visibleCardFields.age : true,
+      mileage: visibleCardFields.mileage !== undefined ? visibleCardFields.mileage : true,
+      company: visibleCardFields.company !== undefined ? visibleCardFields.company : true,
+      customerEmail: visibleCardFields.customerEmail !== undefined ? visibleCardFields.customerEmail : true,
+      inspectionDate: visibleCardFields.inspectionDate !== undefined ? visibleCardFields.inspectionDate : true,
+      inspectionId: visibleCardFields.inspectionId !== undefined ? visibleCardFields.inspectionId : true,
+      repairCost: visibleCardFields.repairCost !== undefined ? visibleCardFields.repairCost : true,
+      value: visibleCardFields.value !== undefined ? visibleCardFields.value : true,
+      damageResults: visibleCardFields.damageResults !== undefined ? visibleCardFields.damageResults : true,
+      tags: visibleCardFields.tags !== undefined ? visibleCardFields.tags : true,
+    };
+
     return {
       id: data.id,
       userId: data.user_id,
@@ -81,8 +124,8 @@ class UserPreferencesService {
       sortBy: data.sort_by,
       sortOrder: data.sort_order,
       columnOrder: data.column_order,
-      visibleColumns: data.visible_columns,
-      visibleCardFields: data.visible_card_fields,
+      visibleColumns: migratedVisibleColumns,
+      visibleCardFields: migratedVisibleCardFields,
       createdAt: data.created_at,
       updatedAt: data.updated_at
     };
