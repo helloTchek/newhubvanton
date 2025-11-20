@@ -229,6 +229,7 @@ class VehicleService {
         return {
           id: row.id,
           registration: row.registration,
+          vin: row.vin,
           make: row.make,
           model: row.model,
           year: row.year,
@@ -298,6 +299,7 @@ class VehicleService {
       const vehicle: Vehicle = {
         id: data.id,
         registration: data.registration,
+        vin: data.vin,
         make: data.make,
         model: data.model,
         year: data.year,
@@ -352,6 +354,7 @@ class VehicleService {
       const vehicle: Vehicle = {
         id: vehicleData.id,
         registration: vehicleData.registration,
+        vin: vehicleData.vin,
         make: vehicleData.make,
         model: vehicleData.model,
         year: vehicleData.year,
