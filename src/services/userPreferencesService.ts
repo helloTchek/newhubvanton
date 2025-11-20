@@ -17,7 +17,10 @@ export interface UserPreferences {
   sortOrder: 'asc' | 'desc';
   columnOrder: string[];
   visibleColumns: {
-    vehicle: boolean;
+    image: boolean;
+    registration: boolean;
+    vin: boolean;
+    makeModel: boolean;
     company: boolean;
     status: boolean;
     inspectionDate: boolean;
@@ -35,11 +38,16 @@ export interface UserPreferences {
   };
   visibleCardFields: {
     image: boolean;
-    status: boolean;
-    inspectionDate: boolean;
     registration: boolean;
-    company: boolean;
+    vin: boolean;
+    makeModel: boolean;
+    age: boolean;
     mileage: boolean;
+    company: boolean;
+    customerEmail: boolean;
+    inspectionDate: boolean;
+    inspectionId: boolean;
+    repairCost: boolean;
     value: boolean;
     damageResults: boolean;
     tags: boolean;
