@@ -94,8 +94,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   const [isChaseUpActionMenuOpen, setIsChaseUpActionMenuOpen] = useState(false);
   const [isShareActionMenuOpen, setIsShareActionMenuOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState<'chase' | 'share' | null>(null);
-  const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState<'chase' | 'share' | null>(null);
   const chaseUpActionMenuRef = useRef<HTMLDivElement>(null);
   const shareActionMenuRef = useRef<HTMLDivElement>(null);
 
@@ -181,7 +179,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     } else {
       setIsShareActionMenuOpen(false);
     }
-    setDownloadSubmenuOpen(null);
     console.log('Download report for vehicle:', vehicle.id, 'with costs:', withCosts);
   };
 
@@ -204,7 +201,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     } else {
       setIsShareActionMenuOpen(false);
     }
-    setOpenUrlSubmenuOpen(null);
     const reportUrl = `/vehicle/${vehicle.id}/report?costs=${withCosts}`;
     window.open(reportUrl, '_blank');
   };
@@ -506,67 +502,37 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     <MoreVertical className="w-5 h-5" />
                   </button>
                   {isChaseUpActionMenuOpen && (
-                    <div className="absolute right-0 bottom-full mb-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                      <div className="relative"
-                        onMouseEnter={() => setDownloadSubmenuOpen('chase')}
-                        onMouseLeave={() => setDownloadSubmenuOpen(null)}
+                    <div className="absolute right-0 bottom-full mb-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                      <button
+                        onClick={(e) => handleDownloadReport(e, true, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
-                        <button
-                          className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Download className="w-4 h-4" />
-                            <span>Download Report</span>
-                          </div>
-                          <span className="text-gray-400">›</span>
-                        </button>
-                        {downloadSubmenuOpen === 'chase' && (
-                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                            <button
-                              onClick={(e) => handleDownloadReport(e, true, true)}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              With repair costs
-                            </button>
-                            <button
-                              onClick={(e) => handleDownloadReport(e, false, true)}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              Without repair costs
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                      <div className="relative"
-                        onMouseEnter={() => setOpenUrlSubmenuOpen('chase')}
-                        onMouseLeave={() => setOpenUrlSubmenuOpen(null)}
+                        <Download className="w-4 h-4" />
+                        <span>Download with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleDownloadReport(e, false, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       >
-                        <button
-                          className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-center gap-3">
-                            <ExternalLink className="w-4 h-4" />
-                            <span>Open URL Report</span>
-                          </div>
-                          <span className="text-gray-400">›</span>
-                        </button>
-                        {openUrlSubmenuOpen === 'chase' && (
-                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                            <button
-                              onClick={(e) => handleOpenUrlReport(e, true, true)}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              With repair costs
-                            </button>
-                            <button
-                              onClick={(e) => handleOpenUrlReport(e, false, true)}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              Without repair costs
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                        <Download className="w-4 h-4" />
+                        <span>Download without repair costs</span>
+                      </button>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, true, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Open with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, false, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Open without repair costs</span>
+                      </button>
+                      <div className="border-t border-gray-100 my-1"></div>
                       <button
                         onClick={(e) => handleExportData(e, true)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -608,67 +574,37 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                         <MoreVertical className="w-5 h-5" />
                       </button>
                       {isShareActionMenuOpen && (
-                        <div className="absolute right-0 bottom-full mb-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                          <div className="relative"
-                            onMouseEnter={() => setDownloadSubmenuOpen('share')}
-                            onMouseLeave={() => setDownloadSubmenuOpen(null)}
+                        <div className="absolute right-0 bottom-full mb-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                          <button
+                            onClick={(e) => handleDownloadReport(e, true, false)}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
-                            <button
-                              className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <div className="flex items-center gap-3">
-                                <Download className="w-4 h-4" />
-                                <span>Download Report</span>
-                              </div>
-                              <span className="text-gray-400">›</span>
-                            </button>
-                            {downloadSubmenuOpen === 'share' && (
-                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                                <button
-                                  onClick={(e) => handleDownloadReport(e, true, false)}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  With repair costs
-                                </button>
-                                <button
-                                  onClick={(e) => handleDownloadReport(e, false, false)}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  Without repair costs
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                          <div className="relative"
-                            onMouseEnter={() => setOpenUrlSubmenuOpen('share')}
-                            onMouseLeave={() => setOpenUrlSubmenuOpen(null)}
+                            <Download className="w-4 h-4" />
+                            <span>Download with repair costs</span>
+                          </button>
+                          <button
+                            onClick={(e) => handleDownloadReport(e, false, false)}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
-                            <button
-                              className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <div className="flex items-center gap-3">
-                                <ExternalLink className="w-4 h-4" />
-                                <span>Open URL Report</span>
-                              </div>
-                              <span className="text-gray-400">›</span>
-                            </button>
-                            {openUrlSubmenuOpen === 'share' && (
-                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                                <button
-                                  onClick={(e) => handleOpenUrlReport(e, true, false)}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  With repair costs
-                                </button>
-                                <button
-                                  onClick={(e) => handleOpenUrlReport(e, false, false)}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  Without repair costs
-                                </button>
-                              </div>
-                            )}
-                          </div>
+                            <Download className="w-4 h-4" />
+                            <span>Download without repair costs</span>
+                          </button>
+                          <div className="border-t border-gray-100 my-1"></div>
+                          <button
+                            onClick={(e) => handleOpenUrlReport(e, true, false)}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            <span>Open with repair costs</span>
+                          </button>
+                          <button
+                            onClick={(e) => handleOpenUrlReport(e, false, false)}
+                            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            <span>Open without repair costs</span>
+                          </button>
+                          <div className="border-t border-gray-100 my-1"></div>
                           <button
                             onClick={(e) => handleExportData(e, false)}
                             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
