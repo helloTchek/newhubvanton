@@ -703,14 +703,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             }}
           />
           <div
-            className="fixed w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+            className="fixed md:w-[900px] w-full left-0 md:left-auto md:right-6 bg-white md:rounded-lg shadow-xl border-t md:border border-gray-200 z-50 bottom-0 md:bottom-auto max-h-[85vh] md:max-h-none overflow-y-auto"
             style={{
-              top: filterButtonRef.current ? `${filterButtonRef.current.getBoundingClientRect().bottom + 8}px` : '0',
-              right: '1.5rem',
-              maxWidth: 'calc(100vw - 3rem)'
+              top: filterButtonRef.current && window.innerWidth >= 768 ? `${filterButtonRef.current.getBoundingClientRect().bottom + 8}px` : undefined,
             }}
           >
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-3">
@@ -773,7 +771,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
               {/* Filter Fields */}
               {!isConfiguring && activeFilters.length > 0 && (
-                <div className="grid grid-cols-3 gap-5 max-h-[520px] overflow-y-auto pr-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-h-[520px] overflow-y-auto pr-2">
                   {activeFilters.map(filterId => renderFilter(filterId))}
                 </div>
               )}
@@ -788,12 +786,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
               {/* Action Buttons */}
               {!isConfiguring && activeFilters.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                   <button
                     onClick={resetFilters}
                     disabled={!hasPendingChanges}
                     className={clsx(
-                      "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                      "px-4 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
                       hasPendingChanges
                         ? "text-gray-700 hover:bg-gray-100"
                         : "text-gray-400 cursor-not-allowed"
@@ -806,7 +804,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     onClick={applyFilters}
                     disabled={!hasPendingChanges}
                     className={clsx(
-                      "px-6 py-2 text-sm font-medium rounded-lg transition-colors",
+                      "px-6 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
                       hasPendingChanges
                         ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

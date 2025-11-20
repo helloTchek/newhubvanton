@@ -370,29 +370,29 @@ export const DamageReviewPage: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-4">
+      <div className="bg-white border-b border-gray-200 p-3 sm:p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Damage Review</h1>
-            <p className="text-sm text-gray-600">Report ID: {reportId}</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Damage Review</h1>
+            <p className="text-xs sm:text-sm text-gray-600">Report ID: {reportId}</p>
           </div>
           <button
             onClick={() => {
               console.log('Return button clicked');
               navigate(-1);
             }}
-            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             type="button"
           >
             <ArrowLeft className="w-4 h-4" />
-            Return
+            <span className="hidden sm:inline">Return</span>
           </button>
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar - Sections & Parts */}
-        <div className="w-80 bg-white border-r border-gray-200 overflow-y-auto">
+        <div className="w-full md:w-80 bg-white border-b md:border-b-0 md:border-r border-gray-200 overflow-y-auto max-h-48 md:max-h-none">
           <div className="p-4">
             <h2 className="text-lg font-semibold mb-4">Sections</h2>
             {sections.map(section => {

@@ -71,7 +71,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Header />
       <Sidebar />
       <main className={clsx(
-        "pt-16 min-h-screen transition-all duration-300",
+        "pt-14 sm:pt-16 min-h-screen transition-all duration-300",
         sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
       )}>
         {children}

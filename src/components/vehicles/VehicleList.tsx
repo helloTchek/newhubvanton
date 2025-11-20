@@ -483,10 +483,10 @@ export const VehicleList: React.FC = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-20 lg:pb-6">
       {/* Compact Search & Filter Bar */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           {/* Search */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -500,7 +500,7 @@ export const VehicleList: React.FC = () => {
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {/* Filter Toggle with Badge */}
             <FilterPanel
               filters={filters}
@@ -509,8 +509,8 @@ export const VehicleList: React.FC = () => {
               showCompanyFilter={user?.companyId === 'all'}
             />
 
-            {/* View Toggle */}
-            <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+            {/* View Toggle - Hidden on mobile */}
+            <div className="hidden sm:flex border border-gray-300 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('grid')}
                 className={clsx(
@@ -732,7 +732,7 @@ export const VehicleList: React.FC = () => {
         </div>
       ) : viewMode === 'grid' ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}

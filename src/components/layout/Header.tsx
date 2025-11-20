@@ -57,29 +57,29 @@ export const Header: React.FC = () => {
 
   return (
     <header className="border-b border-gray-200 shadow-sm fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: theme?.backgroundPrimaryColor || '#FFFFFF' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Left side - Logo and Report Title */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-shrink-0">
               {theme?.logoUrl ? (
                 <img
                   src={theme.logoUrl}
                   alt="Company Logo"
-                  className="h-8 w-auto object-contain"
+                  className="h-6 sm:h-8 w-auto object-contain"
                 />
               ) : (
                 <img
                   src="/logo_tchek-web.png"
                   alt="Tchek.ai Logo"
-                  className="h-8 w-auto object-contain"
+                  className="h-6 sm:h-8 w-auto object-contain"
                 />
               )}
             </div>
-            
-            {/* Report Title */}
+
+            {/* Report Title - Hidden on mobile */}
             {getReportTitle() && (
-              <div className="border-l border-gray-300 pl-6">
+              <div className="hidden md:block border-l border-gray-300 pl-6">
                 <h2 className="text-lg font-semibold text-gray-900">
                   {getReportTitle()}
                 </h2>
@@ -88,15 +88,15 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Language switcher */}
             <LanguageSwitcher />
 
             {/* Actions Dropdown - only show on vehicle report pages */}
             {isVehicleReportPage && (
-              <Menu as="div" className="relative">
+              <Menu as="div" className="relative hidden sm:block">
                 <Menu.Button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                  Actions
+                  <span className="hidden md:inline">Actions</span>
                   <ChevronDown className="w-4 h-4" />
                 </Menu.Button>
                 <Transition
@@ -152,8 +152,8 @@ export const Header: React.FC = () => {
               </Menu>
             )}
 
-            {/* Notifications */}
-            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            {/* Notifications - Hidden on small mobile */}
+            <button className="hidden sm:flex relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
@@ -172,7 +172,7 @@ export const Header: React.FC = () => {
                     <User className="w-4 h-4 text-gray-600" />
                   </div>
                 )}
-                <div className="text-left hidden sm:block">
+                <div className="text-left hidden md:block">
                   <p className="text-sm font-medium text-gray-900">{user?.name}</p>
                   <div className="text-xs text-gray-500">
                     <p className="capitalize">{user?.role}</p>

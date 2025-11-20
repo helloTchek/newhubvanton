@@ -408,9 +408,9 @@ export const VehicleReportView: React.FC = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
       {/* Header with Return Button */}
-      <div className="mb-6 relative z-10">
+      <div className="mb-4 sm:mb-6 relative z-10">
         <Link
           to="/vehicles"
           className="text-gray-600 hover:text-gray-900 flex items-center gap-1 text-sm transition-colors hover:underline font-medium inline-flex"
@@ -422,14 +422,14 @@ export const VehicleReportView: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <nav className="-mb-px flex space-x-8">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0">
+          <nav className="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={clsx(
-                  'py-2 px-1 border-b-2 font-medium text-sm transition-colors',
+                  'py-2 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap',
                   activeTab === tab.id
                     ? 'border-green-500 text-green-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -442,29 +442,32 @@ export const VehicleReportView: React.FC = () => {
           
           {/* Action Buttons - only show on estimations tab */}
           {activeTab === 'estimations' && (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
               {(report.vehicle.status === 'inspected' || report.vehicle.status === 'to_review') && (
                 <button
                   onClick={handleShareClick}
-                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 font-medium"
+                  className="bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
                 >
                   <Share2 className="w-4 h-4" />
-                  Share Report
+                  <span className="hidden sm:inline">Share Report</span>
+                  <span className="sm:hidden">Share</span>
                 </button>
               )}
               <button
                 onClick={handleDamageReviewClick}
-                className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2 font-medium"
+                className="bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
               >
                 <FileSearch className="w-4 h-4" />
-                Review Damages
+                <span className="hidden sm:inline">Review Damages</span>
+                <span className="sm:hidden">Review</span>
               </button>
               <button
                 onClick={handleValidateAllClick}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+                className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
               >
                 <CheckSquare className="w-4 h-4" />
-                Validate All Sections
+                <span className="hidden sm:inline">Validate All</span>
+                <span className="sm:hidden">Validate</span>
               </button>
             </div>
           )}
@@ -473,8 +476,8 @@ export const VehicleReportView: React.FC = () => {
 
       {/* Vehicle Info Card */}
       {activeTab === 'estimations' && (
-        <div 
-          className="bg-white rounded-lg border border-gray-200 p-6 cursor-pointer hover:bg-gray-50 hover:border-blue-300 transition-all duration-200"
+        <div
+          className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 cursor-pointer hover:bg-gray-50 hover:border-blue-300 transition-all duration-200"
           onClick={() => handleSectionClick('vehicle-info')}
         >
           <div className="flex items-center justify-between mb-4">
