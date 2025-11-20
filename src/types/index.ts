@@ -22,6 +22,7 @@ export interface Company {
 export interface Vehicle {
   id: string;
   registration: string;
+  vin?: string;
   make: string;
   model: string;
   year: number;

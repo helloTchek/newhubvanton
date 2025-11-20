@@ -49,6 +49,7 @@ export const VehicleList: React.FC = () => {
   const [visibleColumns, setVisibleColumns] = useState({
     image: true,
     registration: true,
+    vin: true,
     makeModel: true,
     company: true,
     status: true,
@@ -69,12 +70,14 @@ export const VehicleList: React.FC = () => {
   const [visibleCardFields, setVisibleCardFields] = useState({
     image: true,
     registration: true,
+    vin: true,
     makeModel: true,
+    age: true,
+    mileage: true,
     company: true,
     customerEmail: true,
     inspectionDate: true,
     inspectionId: true,
-    mileage: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -84,7 +87,7 @@ export const VehicleList: React.FC = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
   const [columnOrder, setColumnOrder] = useState<string[]>([
-    'image', 'registration', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ]);
@@ -385,6 +388,7 @@ export const VehicleList: React.FC = () => {
     const labels: Record<string, string> = {
       'image': 'Image',
       'registration': 'License Plate',
+      'vin': 'VIN Number',
       'makeModel': 'Brand & Model',
       'company': 'Company',
       'status': 'Status',
@@ -576,12 +580,14 @@ export const VehicleList: React.FC = () => {
                         {Object.entries({
                           image: 'Image',
                           registration: 'License Plate',
+                          vin: 'VIN Number',
                           makeModel: 'Brand & Model',
+                          age: 'Age',
+                          mileage: 'Mileage',
                           company: 'Company',
                           customerEmail: 'Customer Email',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
-                          mileage: 'Mileage',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
                           damageResults: 'Damage Results',
@@ -618,6 +624,7 @@ export const VehicleList: React.FC = () => {
                         {Object.entries({
                           image: 'Image',
                           registration: 'License Plate',
+                          vin: 'VIN Number',
                           makeModel: 'Brand & Model',
                           company: 'Company',
                           status: 'Status',

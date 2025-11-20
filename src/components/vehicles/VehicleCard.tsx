@@ -35,12 +35,14 @@ interface VehicleCardProps {
   visibleFields?: {
     image: boolean;
     registration: boolean;
+    vin: boolean;
     makeModel: boolean;
+    age: boolean;
+    mileage: boolean;
     company: boolean;
     customerEmail: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
-    mileage: boolean;
     repairCost: boolean;
     value: boolean;
     damageResults: boolean;
@@ -73,11 +75,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   visibleFields = {
     image: true,
     registration: true,
+    vin: true,
     makeModel: true,
+    age: true,
+    mileage: true,
     company: true,
     customerEmail: true,
     inspectionDate: true,
-    mileage: true,
+    inspectionId: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -326,23 +331,44 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Vehicle Info */}
         <div className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            {visibleFields.makeModel && (
+          {/* Vertical vehicle information */}
+          <div className="space-y-3 mb-4">
+            {visibleFields.registration && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {vehicle.make} {vehicle.model}
-                </h3>
-                <p className="text-sm text-gray-600">{vehicle.year}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">License Plate</p>
+                <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
               </div>
             )}
-            <div className="text-right">
-              {visibleFields.registration && (
-                <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
-              )}
-              {visibleFields.mileage && (
-                <p className="text-sm text-gray-500">{vehicle.mileage.toLocaleString()} km</p>
-              )}
-            </div>
+
+            {visibleFields.vin && vehicle.vin && (
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">VIN Number</p>
+                <p className="text-sm font-mono text-gray-900">{vehicle.vin}</p>
+              </div>
+            )}
+
+            {visibleFields.makeModel && (
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Brand & Model</p>
+                <p className="text-base font-semibold text-gray-900">
+                  {vehicle.make} {vehicle.model}
+                </p>
+              </div>
+            )}
+
+            {visibleFields.age && (
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Age</p>
+                <p className="text-sm text-gray-900">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
+              </div>
+            )}
+
+            {visibleFields.mileage && (
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Mileage</p>
+                <p className="text-sm text-gray-900">{vehicle.mileage.toLocaleString()} km</p>
+              </div>
+            )}
           </div>
 
           {/* Tags Section */}

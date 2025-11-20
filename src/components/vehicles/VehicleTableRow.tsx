@@ -34,6 +34,7 @@ interface VehicleTableRowProps {
   visibleColumns?: {
     image: boolean;
     registration: boolean;
+    vin: boolean;
     makeModel: boolean;
     company: boolean;
     status: boolean;
@@ -67,13 +68,14 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelected = false,
   onSelectToggle,
   columnOrder = [
-    'image', 'registration', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
   visibleColumns = {
     image: true,
     registration: true,
+    vin: true,
     makeModel: true,
     company: true,
     status: true,
@@ -207,6 +209,15 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           <td key={columnId} className="px-6 py-4 whitespace-nowrap">
             <div className="text-sm font-medium text-gray-900">
               {vehicle.registration}
+            </div>
+          </td>
+        );
+
+      case 'vin':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-mono text-gray-900">
+              {vehicle.vin || '-'}
             </div>
           </td>
         );
