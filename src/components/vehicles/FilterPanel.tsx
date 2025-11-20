@@ -199,7 +199,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     switch (filterId) {
       case 'inspectionType':
         return (
-          <div key={filterId} className="flex-1 min-w-[200px]" ref={inspectionTypeRef}>
+          <div key={filterId} className="w-full" ref={inspectionTypeRef}>
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <FileCheck className="w-3 h-3 text-gray-500" />
               Inspection Type
@@ -262,7 +262,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'status':
         return (
-          <div key={filterId} className="flex-1 min-w-[250px]" ref={statusRef}>
+          <div key={filterId} className="w-full" ref={statusRef}>
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-gray-500" />
               Status
@@ -325,7 +325,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'tags':
         return (
-          <div key={filterId} className="flex-1 min-w-[200px]">
+          <div key={filterId} className="w-full col-span-full">
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1 flex items-center gap-1">
               <Tag className="w-3 h-3 text-gray-500" />
               Tags
@@ -364,7 +364,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'dateRange':
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-400" />
               Date Range
@@ -399,7 +399,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'company':
         if (!showCompanyFilter) return null;
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-gray-400" />
               Company
@@ -421,7 +421,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'customerEmail':
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Mail className="w-4 h-4 text-gray-400" />
               Customer Email
@@ -438,7 +438,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'customerPhone':
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Phone className="w-4 h-4 text-gray-400" />
               Customer Phone
@@ -455,7 +455,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'repairCost':
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-gray-400" />
               Repair Cost Range
@@ -513,7 +513,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'mileage':
         return (
-          <div key={filterId}>
+          <div key={filterId} className="w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Gauge className="w-4 h-4 text-gray-400" />
               Mileage Range (km)
@@ -577,8 +577,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   return (
     <div>
       <div className="px-4 pb-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium text-sm"
@@ -592,28 +592,28 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               )}
             </button>
 
-
             {isExpanded && (
               <button
                 onClick={() => setIsConfiguring(!isConfiguring)}
                 className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
               >
                 <Settings className="w-4 h-4" />
-                <span>Configure</span>
+                <span className="hidden sm:inline">Configure</span>
               </button>
             )}
-          </div>
 
-          <div className="flex items-center gap-3">
             {hasActiveFilters && (
               <button
                 onClick={clearAllFilters}
                 className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
               >
                 <X className="w-3 h-3" />
-                Clear all
+                <span className="hidden sm:inline">Clear all</span>
               </button>
             )}
+          </div>
+
+          <div className="flex items-center gap-3">
             {rightContent}
           </div>
         </div>
@@ -653,7 +653,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           <div className="pt-3 border-t border-gray-200">
             {/* All active filters */}
             {activeFilters.length > 0 && (
-              <div className="flex gap-3 flex-wrap bg-gradient-to-r from-blue-50 to-gray-50 p-3 rounded-lg border border-blue-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 bg-gradient-to-r from-blue-50 to-gray-50 p-3 rounded-lg border border-blue-100">
                 {activeFilters.map(filterId => renderFilter(filterId))}
               </div>
             )}

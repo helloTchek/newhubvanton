@@ -486,9 +486,10 @@ export const VehicleList: React.FC = () => {
     <div className="p-6 space-y-6">
       {/* Unified Search, Sort & Filter Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        {/* Top Row: Search, Sort, View Toggle, Select */}
+        {/* Top Row: Search, Sort, View Toggle, Columns, Select */}
         <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center gap-3">
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex items-center gap-3">
             {/* Search */}
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -497,17 +498,16 @@ export const VehicleList: React.FC = () => {
                 placeholder="Search by registration, make, model, VIN, customer..."
                 value={filters.query}
                 onChange={(e) => updateFilters({ query: e.target.value })}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
             {/* Sort */}
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-4 h-4 text-gray-400" />
               <select
                 value={filters.sortBy}
                 onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
-                className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white min-w-[140px]"
+                className="px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white min-w-[160px]"
               >
                 <option value="date">Date (newest)</option>
                 <option value="registration">Registration</option>
@@ -519,52 +519,49 @@ export const VehicleList: React.FC = () => {
               </select>
               <button
                 onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
-                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 title={filters.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
               >
-                {filters.sortOrder === 'desc' ? '↓' : '↑'}
+                {filters.sortOrder === 'desc' ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
               </button>
             </div>
 
             {/* View Toggle */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">View:</span>
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={clsx(
-                    'p-2 transition-colors',
-                    viewMode === 'grid'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-600 hover:bg-gray-50'
-                  )}
-                  title="Grid view"
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={clsx(
-                    'p-2 transition-colors',
-                    viewMode === 'list'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-600 hover:bg-gray-50'
-                  )}
-                  title="List view"
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
+            <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={clsx(
+                  'p-2.5 transition-colors',
+                  viewMode === 'grid'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                )}
+                title="Grid view"
+              >
+                <Grid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={clsx(
+                  'p-2.5 transition-colors',
+                  viewMode === 'list'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                )}
+                title="List view"
+              >
+                <List className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Field/Column Selector */}
             <div className="relative">
               <button
                 onClick={() => viewMode === 'grid' ? setShowCardFieldSelector(!showCardFieldSelector) : setShowColumnSelector(!showColumnSelector)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
+                className="flex items-center gap-2 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
               >
                 <Columns3 className="w-4 h-4" />
-                <span>{viewMode === 'grid' ? 'Fields' : 'Columns'}</span>
+                <span className="hidden xl:inline">Columns</span>
               </button>
 
               {viewMode === 'grid' && showCardFieldSelector && (
@@ -573,7 +570,7 @@ export const VehicleList: React.FC = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setShowCardFieldSelector(false)}
                   />
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
                       <div className="space-y-2">
@@ -617,7 +614,7 @@ export const VehicleList: React.FC = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setShowColumnSelector(false)}
                   />
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
                       <div className="space-y-2">
@@ -660,6 +657,71 @@ export const VehicleList: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Mobile Layout */}
+          <div className="lg:hidden space-y-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search vehicles..."
+                value={filters.query}
+                onChange={(e) => updateFilters({ query: e.target.value })}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              />
+            </div>
+
+            {/* Sort & View Controls */}
+            <div className="flex items-center gap-2">
+              <select
+                value={filters.sortBy}
+                onChange={(e) => updateFilters({ sortBy: e.target.value as SortField })}
+                className="flex-1 px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+              >
+                <option value="date">Date (newest)</option>
+                <option value="registration">Registration</option>
+                <option value="make">Make & Model</option>
+                <option value="value">Est. Value</option>
+                <option value="repairCost">Repair Cost</option>
+                <option value="mileage">Mileage</option>
+                <option value="status">Status</option>
+              </select>
+              <button
+                onClick={() => updateFilters({ sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })}
+                className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                title={filters.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
+              >
+                {filters.sortOrder === 'desc' ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
+              </button>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={clsx(
+                    'p-2.5 transition-colors',
+                    viewMode === 'grid'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-600 hover:bg-gray-50'
+                  )}
+                  title="Grid view"
+                >
+                  <Grid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={clsx(
+                    'p-2.5 transition-colors',
+                    viewMode === 'list'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-600 hover:bg-gray-50'
+                  )}
+                  title="List view"
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Filters Section */}
@@ -681,12 +743,12 @@ export const VehicleList: React.FC = () => {
               {isSelectionMode ? (
                 <>
                   <X className="w-4 h-4" />
-                  <span>Cancel</span>
+                  <span className="hidden sm:inline">Cancel</span>
                 </>
               ) : (
                 <>
                   <CheckSquare className="w-4 h-4" />
-                  <span>Select</span>
+                  <span className="hidden sm:inline">Select</span>
                 </>
               )}
             </button>
