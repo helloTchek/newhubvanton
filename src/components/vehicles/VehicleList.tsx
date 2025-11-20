@@ -782,9 +782,6 @@ export const VehicleList: React.FC = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="sticky left-0 z-20 bg-gray-50 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">
-                    Actions
-                  </th>
                   {isSelectionMode && (
                     <th className="px-6 py-3">
                       <input
@@ -801,6 +798,8 @@ export const VehicleList: React.FC = () => {
                     const isCentered = ['carBody', 'rim', 'glass', 'interior', 'tires', 'dashboard', 'declarations'].includes(columnId);
                     return renderColumnHeader(columnId, isCentered ? 'center' : 'left');
                   })}
+                  <th className="sticky right-0 z-20 bg-gray-50 w-16 border-l border-gray-200">
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">

@@ -461,21 +461,35 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       )}
       onClick={handleRowClick}
     >
+      {isSelectionMode && (
+        <td
+          className="px-6 py-4 whitespace-nowrap"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleCheckboxClick}
+            className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+          />
+        </td>
+      )}
+      {columnOrder.map(columnId => renderCell(columnId))}
       <td className={clsx(
-        "sticky left-0 z-10 px-6 py-4 whitespace-nowrap text-right text-sm font-medium border-r border-gray-200",
+        "sticky right-0 z-10 px-3 py-4 whitespace-nowrap text-center border-l border-gray-200",
         isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
       )}>
         <div className="relative" ref={actionsMenuRef}>
           <button
             onClick={handleActionsClick}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             aria-label="Actions"
           >
-            <MoreVertical className="h-5 w-5 text-gray-400" />
+            <MoreVertical className="h-4 w-4 text-gray-400" />
           </button>
 
           {showActionsMenu && (
-            <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+            <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
               <div className="py-1" role="menu">
                 <button
                   onClick={handleDownloadReport}
@@ -516,20 +530,6 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           )}
         </div>
       </td>
-      {isSelectionMode && (
-        <td
-          className="px-6 py-4 whitespace-nowrap"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={handleCheckboxClick}
-            className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-          />
-        </td>
-      )}
-      {columnOrder.map(columnId => renderCell(columnId))}
     </tr>
   );
 };
