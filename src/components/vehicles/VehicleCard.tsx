@@ -33,6 +33,9 @@ interface VehicleCardProps {
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
   visibleFields?: {
+    image: boolean;
+    registration: boolean;
+    makeModel: boolean;
     company: boolean;
     customerEmail: boolean;
     inspectionDate: boolean;
@@ -68,13 +71,17 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   isSelected = false,
   onSelectToggle,
   visibleFields = {
+    image: true,
+    registration: true,
+    makeModel: true,
     company: true,
     customerEmail: true,
     inspectionDate: true,
     mileage: true,
     repairCost: true,
     value: true,
-    damageResults: true
+    damageResults: true,
+    tags: true
   }
 }) => {
   const { t } = useTranslation('vehicles');
@@ -238,92 +245,100 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
         )}
         {/* Vehicle Image or Placeholder */}
-        {shouldShowImage ? (
-          <div className="aspect-video relative overflow-hidden rounded-t-xl group">
-            <img
-              src={images[currentImageIndex]}
-              alt={`${vehicle.make} ${vehicle.model}`}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute top-3 right-3 flex flex-col gap-2">
-              <StatusBadge status={vehicle.status} />
-              {vehicle.sharedReport && (
-                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                  <Share2 className="w-3 h-3" />
-                  <span>{t('share.sharedBadge')}</span>
+        {visibleFields.image && (
+          <>
+            {shouldShowImage ? (
+              <div className="aspect-video relative overflow-hidden rounded-t-xl group">
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`${vehicle.make} ${vehicle.model}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 flex flex-col gap-2">
+                  <StatusBadge status={vehicle.status} />
+                  {vehicle.sharedReport && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                      <Share2 className="w-3 h-3" />
+                      <span>{t('share.sharedBadge')}</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {hasMultipleImages && (
-              <>
-                <button
-                  onClick={handlePreviousImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft className="w-5 h-5 text-gray-800" />
-                </button>
-                <button
-                  onClick={handleNextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="w-5 h-5 text-gray-800" />
-                </button>
-
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {images.map((_, index) => (
+                {hasMultipleImages && (
+                  <>
                     <button
-                      key={index}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentImageIndex(index);
-                      }}
-                      className={clsx(
-                        'w-2 h-2 rounded-full transition-all',
-                        index === currentImageIndex
-                          ? 'bg-white w-6'
-                          : 'bg-white/60 hover:bg-white/80'
-                      )}
-                      aria-label={`Go to image ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                <Bell className="w-8 h-8 text-gray-400" />
+                      onClick={handlePreviousImage}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gray-800" />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-800" />
+                    </button>
+
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                      {images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(index);
+                          }}
+                          className={clsx(
+                            'w-2 h-2 rounded-full transition-all',
+                            index === currentImageIndex
+                              ? 'bg-white w-6'
+                              : 'bg-white/60 hover:bg-white/80'
+                          )}
+                          aria-label={`Go to image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
-              <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
-            </div>
-            <div className="absolute top-3 right-3 flex flex-col gap-2">
-              <StatusBadge status={vehicle.status} />
-              {vehicle.sharedReport && (
-                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                  <Share2 className="w-3 h-3" />
-                  <span>{t('share.sharedBadge')}</span>
+            ) : (
+              <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                    <Bell className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
                 </div>
-              )}
-            </div>
-          </div>
+                <div className="absolute top-3 right-3 flex flex-col gap-2">
+                  <StatusBadge status={vehicle.status} />
+                  {vehicle.sharedReport && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                      <Share2 className="w-3 h-3" />
+                      <span>{t('share.sharedBadge')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Vehicle Info */}
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                {vehicle.make} {vehicle.model}
-              </h3>
-              <p className="text-sm text-gray-600">{vehicle.year}</p>
-            </div>
+            {visibleFields.makeModel && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {vehicle.make} {vehicle.model}
+                </h3>
+                <p className="text-sm text-gray-600">{vehicle.year}</p>
+              </div>
+            )}
             <div className="text-right">
-              <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
+              {visibleFields.registration && (
+                <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
+              )}
               {visibleFields.mileage && (
                 <p className="text-sm text-gray-500">{vehicle.mileage.toLocaleString()} km</p>
               )}

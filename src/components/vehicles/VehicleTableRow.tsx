@@ -32,7 +32,9 @@ interface VehicleTableRowProps {
   onSelectToggle?: (vehicleId: string) => void;
   columnOrder?: string[];
   visibleColumns?: {
-    vehicle: boolean;
+    image: boolean;
+    registration: boolean;
+    makeModel: boolean;
     company: boolean;
     status: boolean;
     inspectionDate: boolean;
@@ -65,12 +67,14 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelected = false,
   onSelectToggle,
   columnOrder = [
-    'vehicle', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
   visibleColumns = {
-    vehicle: true,
+    image: true,
+    registration: true,
+    makeModel: true,
     company: true,
     status: true,
     inspectionDate: true,
@@ -181,29 +185,40 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     if (!visibleColumns[columnId as keyof typeof visibleColumns]) return null;
 
     switch (columnId) {
-      case 'vehicle':
+      case 'image':
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap">
-            <div className="flex items-center">
-              {shouldShowImage ? (
-                <img
-                  className="h-12 w-20 rounded-lg object-cover"
-                  src={vehicle.imageUrl}
-                  alt={`${vehicle.make} ${vehicle.model}`}
-                />
-              ) : (
-                <div className="h-12 w-20 rounded-lg bg-gray-100 flex items-center justify-center">
-                  <Bell className="w-5 h-5 text-gray-400" />
-                </div>
-              )}
-              <div className="ml-4">
-                <div className="text-sm font-medium text-gray-900">
-                  {vehicle.make} {vehicle.model}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {vehicle.registration} • {vehicle.year}
-                </div>
+            {shouldShowImage ? (
+              <img
+                className="h-12 w-20 rounded-lg object-cover"
+                src={vehicle.imageUrl}
+                alt={`${vehicle.make} ${vehicle.model}`}
+              />
+            ) : (
+              <div className="h-12 w-20 rounded-lg bg-gray-100 flex items-center justify-center">
+                <Bell className="w-5 h-5 text-gray-400" />
               </div>
+            )}
+          </td>
+        );
+
+      case 'registration':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-medium text-gray-900">
+              {vehicle.registration}
+            </div>
+          </td>
+        );
+
+      case 'makeModel':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-medium text-gray-900">
+              {vehicle.make} {vehicle.model}
+            </div>
+            <div className="text-sm text-gray-500">
+              {vehicle.year}
             </div>
           </td>
         );

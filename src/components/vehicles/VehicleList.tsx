@@ -47,7 +47,9 @@ export const VehicleList: React.FC = () => {
   const [isBulkChaseUpModalOpen, setIsBulkChaseUpModalOpen] = useState(false);
   const [isBulkTagModalOpen, setIsBulkTagModalOpen] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
-    vehicle: true,
+    image: true,
+    registration: true,
+    makeModel: true,
     company: true,
     status: true,
     inspectionDate: true,
@@ -65,6 +67,9 @@ export const VehicleList: React.FC = () => {
   });
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const [visibleCardFields, setVisibleCardFields] = useState({
+    image: true,
+    registration: true,
+    makeModel: true,
     company: true,
     customerEmail: true,
     inspectionDate: true,
@@ -79,7 +84,7 @@ export const VehicleList: React.FC = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
   const [columnOrder, setColumnOrder] = useState<string[]>([
-    'vehicle', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ]);
@@ -337,7 +342,8 @@ export const VehicleList: React.FC = () => {
 
   const getSortableField = (columnId: string): SortField | null => {
     const sortableMap: Record<string, SortField> = {
-      'vehicle': 'registration',
+      'registration': 'registration',
+      'makeModel': 'make',
       'inspectionDate': 'date',
       'mileage': 'mileage',
       'value': 'value',
@@ -377,7 +383,9 @@ export const VehicleList: React.FC = () => {
 
   const getColumnLabel = (columnId: string): string => {
     const labels: Record<string, string> = {
-      'vehicle': 'Vehicle',
+      'image': 'Image',
+      'registration': 'License Plate',
+      'makeModel': 'Brand & Model',
       'company': 'Company',
       'status': 'Status',
       'inspectionDate': 'Inspection Date',
@@ -566,6 +574,9 @@ export const VehicleList: React.FC = () => {
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
                       <div className="space-y-2">
                         {Object.entries({
+                          image: 'Image',
+                          registration: 'License Plate',
+                          makeModel: 'Brand & Model',
                           company: 'Company',
                           customerEmail: 'Customer Email',
                           inspectionDate: 'Inspection Date',
@@ -605,7 +616,9 @@ export const VehicleList: React.FC = () => {
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
                       <div className="space-y-2">
                         {Object.entries({
-                          vehicle: 'Vehicle',
+                          image: 'Image',
+                          registration: 'License Plate',
+                          makeModel: 'Brand & Model',
                           company: 'Company',
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
