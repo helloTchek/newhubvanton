@@ -493,7 +493,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </button>
 
           {showActionsMenu && (
-            <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
+            <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
               <div className="py-1" role="menu">
                 <div className="relative"
                   onMouseEnter={() => setDownloadSubmenuOpen(true)}
@@ -507,10 +507,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                       <Download className="h-4 w-4" />
                       Download Report
                     </div>
-                    <span className="text-gray-400">›</span>
+                    <span className="text-gray-400">‹</span>
                   </button>
                   {downloadSubmenuOpen && (
-                    <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
+                    <div className="absolute right-full top-0 mr-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
                       <button
                         onClick={(e) => handleDownloadReport(e, true)}
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -538,10 +538,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                       <ExternalLink className="h-4 w-4" />
                       Open URL Report
                     </div>
-                    <span className="text-gray-400">›</span>
+                    <span className="text-gray-400">‹</span>
                   </button>
                   {openUrlSubmenuOpen && (
-                    <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
+                    <div className="absolute right-full top-0 mr-1 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
                       <button
                         onClick={(e) => handleOpenUrlReport(e, true)}
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"

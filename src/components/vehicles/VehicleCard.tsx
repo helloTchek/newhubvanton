@@ -506,7 +506,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     <MoreVertical className="w-5 h-5" />
                   </button>
                   {isChaseUpActionMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                    <div className="absolute right-0 bottom-full mb-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                       <div className="relative"
                         onMouseEnter={() => setDownloadSubmenuOpen('chase')}
                         onMouseLeave={() => setDownloadSubmenuOpen(null)}
@@ -521,7 +521,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                           <span className="text-gray-400">›</span>
                         </button>
                         {downloadSubmenuOpen === 'chase' && (
-                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                             <button
                               onClick={(e) => handleDownloadReport(e, true, true)}
                               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -551,7 +551,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                           <span className="text-gray-400">›</span>
                         </button>
                         {openUrlSubmenuOpen === 'chase' && (
-                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                          <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                             <button
                               onClick={(e) => handleOpenUrlReport(e, true, true)}
                               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -608,7 +608,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                         <MoreVertical className="w-5 h-5" />
                       </button>
                       {isShareActionMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                        <div className="absolute right-0 bottom-full mb-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                           <div className="relative"
                             onMouseEnter={() => setDownloadSubmenuOpen('share')}
                             onMouseLeave={() => setDownloadSubmenuOpen(null)}
@@ -623,7 +623,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                               <span className="text-gray-400">›</span>
                             </button>
                             {downloadSubmenuOpen === 'share' && (
-                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                                 <button
                                   onClick={(e) => handleDownloadReport(e, true, false)}
                                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -653,7 +653,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                               <span className="text-gray-400">›</span>
                             </button>
                             {openUrlSubmenuOpen === 'share' && (
-                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                              <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
                                 <button
                                   onClick={(e) => handleOpenUrlReport(e, true, false)}
                                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
