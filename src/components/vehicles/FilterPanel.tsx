@@ -202,8 +202,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'inspectionType':
         return (
           <div key={filterId} ref={inspectionTypeRef}>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
-              <FileCheck className="w-3.5 h-3.5 text-gray-500" />
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
+              <FileCheck className="w-4 h-4 text-gray-500" />
               Inspection Type
             </label>
             <div className="relative">
@@ -265,8 +265,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'status':
         return (
           <div key={filterId} ref={statusRef}>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-gray-500" />
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-gray-500" />
               Status
             </label>
             <div className="relative">
@@ -328,8 +328,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'tags':
         return (
           <div key={filterId} className="col-span-full">
-            <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1">
-              <Tag className="w-3.5 h-3.5 text-gray-500" />
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
+              <Tag className="w-4 h-4 text-gray-500" />
               Tags
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -617,7 +617,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               setIsConfiguring(false);
             }}
           />
-          <div className="absolute top-full left-0 mt-2 right-0 bg-white rounded-lg shadow-xl border border-gray-200 z-20">
+          <div className="absolute top-full right-0 mt-2 w-[800px] max-w-[90vw] bg-white rounded-lg shadow-xl border border-gray-200 z-20">
             <div className="p-5">
               {/* Header */}
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
@@ -681,7 +681,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
               {/* Filter Fields */}
               {!isConfiguring && activeFilters.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-h-96 overflow-y-auto pr-2">
+                <div className="grid grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2">
                   {activeFilters.map(filterId => renderFilter(filterId))}
                 </div>
               )}
