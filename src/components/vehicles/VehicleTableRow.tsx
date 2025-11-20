@@ -98,10 +98,12 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Not inspected';
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
