@@ -332,24 +332,21 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         {/* Vehicle Info */}
         <div className="p-6">
           {/* Vertical vehicle information */}
-          <div className="space-y-3 mb-4">
+          <div className="space-y-2 mb-4">
             {visibleFields.registration && (
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">License Plate</p>
                 <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
               </div>
             )}
 
             {visibleFields.vin && vehicle.vin && (
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">VIN Number</p>
-                <p className="text-sm font-mono text-gray-900">{vehicle.vin}</p>
+                <p className="text-sm font-mono text-gray-700">{vehicle.vin}</p>
               </div>
             )}
 
             {visibleFields.makeModel && (
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Brand & Model</p>
                 <p className="text-base font-semibold text-gray-900">
                   {vehicle.make} {vehicle.model}
                 </p>
@@ -358,15 +355,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
             {visibleFields.age && (
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Age</p>
-                <p className="text-sm text-gray-900">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
+                <p className="text-sm text-gray-700">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
               </div>
             )}
 
             {visibleFields.mileage && (
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Mileage</p>
-                <p className="text-sm text-gray-900">{vehicle.mileage.toLocaleString()} km</p>
+                <p className="text-sm text-gray-700">{vehicle.mileage.toLocaleString()} km</p>
               </div>
             )}
           </div>
@@ -405,14 +400,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             {visibleFields.inspectionDate && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Calendar className="w-4 h-4" />
-                <span>Inspected: {formatDate(vehicle.inspectionDate)}</span>
+                <span>{formatDate(vehicle.inspectionDate)}</span>
               </div>
             )}
 
             {visibleFields.inspectionId && vehicle.reportId && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <FileText className="w-4 h-4" />
-                <span>ID: {vehicle.reportId}</span>
+                <span>{vehicle.reportId}</span>
               </div>
             )}
 
@@ -420,7 +415,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <div className="flex items-center gap-2 text-sm">
                 <DollarSign className="w-4 h-4 text-red-500" />
                 <span className="text-red-600 font-medium">
-                  Repair cost: {formatCurrency(vehicle.estimatedCost)}
+                  {formatCurrency(vehicle.estimatedCost)}
                 </span>
               </div>
             )}
