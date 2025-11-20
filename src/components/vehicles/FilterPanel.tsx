@@ -280,8 +280,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                   )}
                 </div>
               </button>
-              {showInspectionTypeDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-[60] max-h-64 overflow-y-auto">
+              {showInspectionTypeDropdown && inspectionTypeRef.current && (
+                <div
+                  className="fixed bg-white border border-gray-300 rounded-md shadow-lg z-[60] max-h-64 overflow-y-auto"
+                  style={{
+                    top: `${inspectionTypeRef.current.getBoundingClientRect().bottom + 4}px`,
+                    left: `${inspectionTypeRef.current.getBoundingClientRect().left}px`,
+                    width: `${inspectionTypeRef.current.getBoundingClientRect().width}px`,
+                  }}
+                >
                   {inspectionTypeOptions.filter(opt => opt.value !== 'all').map(option => {
                     const isSelected = tempInspectionTypeIds.includes(option.value as InspectionType);
                     return (
@@ -361,8 +368,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                   )}
                 </div>
               </button>
-              {showStatusDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-[60] max-h-64 overflow-y-auto">
+              {showStatusDropdown && statusRef.current && (
+                <div
+                  className="fixed bg-white border border-gray-300 rounded-md shadow-lg z-[60] max-h-64 overflow-y-auto"
+                  style={{
+                    top: `${statusRef.current.getBoundingClientRect().bottom + 4}px`,
+                    left: `${statusRef.current.getBoundingClientRect().left}px`,
+                    width: `${statusRef.current.getBoundingClientRect().width}px`,
+                  }}
+                >
                   {statusOptions.filter(opt => opt.value !== 'all').map(option => {
                     const isSelected = tempStatusIds.includes(option.value as VehicleStatus);
                     return (
@@ -689,14 +703,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             }}
           />
           <div
-            className="fixed w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-visible"
+            className="fixed w-[900px] bg-white rounded-lg shadow-xl border border-gray-200 z-50"
             style={{
               top: filterButtonRef.current ? `${filterButtonRef.current.getBoundingClientRect().bottom + 8}px` : '0',
               right: '1.5rem',
               maxWidth: 'calc(100vw - 3rem)'
             }}
           >
-            <div className="p-6 overflow-visible">
+            <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-3">
@@ -759,7 +773,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
               {/* Filter Fields */}
               {!isConfiguring && activeFilters.length > 0 && (
-                <div className="grid grid-cols-3 gap-5 max-h-[520px] overflow-y-auto pr-2 pb-48">
+                <div className="grid grid-cols-3 gap-5 max-h-[520px] overflow-y-auto pr-2">
                   {activeFilters.map(filterId => renderFilter(filterId))}
                 </div>
               )}
