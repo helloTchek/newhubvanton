@@ -509,8 +509,8 @@ export const VehicleList: React.FC = () => {
               showCompanyFilter={user?.companyId === 'all'}
             />
 
-            {/* View Toggle - Hidden on mobile */}
-            <div className="hidden sm:flex border border-gray-300 rounded-lg overflow-hidden">
+            {/* View Toggle */}
+            <div className="flex border border-gray-300 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('grid')}
                 className={clsx(
@@ -537,8 +537,8 @@ export const VehicleList: React.FC = () => {
               </button>
             </div>
 
-            {/* Columns Selector - Desktop Only */}
-            <div className="hidden lg:block relative">
+            {/* Columns Selector */}
+            <div className="relative">
               <button
                 onClick={() => viewMode === 'grid' ? setShowCardFieldSelector(!showCardFieldSelector) : setShowColumnSelector(!showColumnSelector)}
                 className="p-2 text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
