@@ -110,6 +110,11 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const removeTab = useCallback((tabId: string) => {
     setTabs(prev => {
+      // Don't allow closing the last tab
+      if (prev.length <= 1) {
+        return prev;
+      }
+
       const newTabs = prev.filter(t => t.id !== tabId);
 
       if (activeTabId === tabId) {
@@ -141,14 +146,26 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const closeOtherTabs = useCallback((tabId: string) => {
-    setTabs(prev => prev.filter(t => t.id === tabId || t.isPinned));
+    setTabs(prev => {
+      const newTabs = prev.filter(t => t.id === tabId || t.isPinned);
+      // Ensure at least one tab remains
+      return newTabs.length > 0 ? newTabs : prev;
+    });
     setActiveTabId(tabId);
   }, []);
 
   const closeAllTabs = useCallback(() => {
-    setTabs([]);
-    setActiveTabId(null);
-    navigate('/vehicles');
+    // Don't allow closing all tabs - keep at least one
+    setTabs(prev => {
+      if (prev.length <= 1) {
+        return prev;
+      }
+      // Keep the first tab
+      const firstTab = prev[0];
+      setActiveTabId(firstTab.id);
+      navigate(firstTab.path);
+      return [firstTab];
+    });
   }, [navigate]);
 
   const renameTab = useCallback((tabId: string, newTitle: string) => {

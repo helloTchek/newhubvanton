@@ -141,18 +141,20 @@ export const TabBar: React.FC = () => {
                   {tab.title}
                 </span>
               )}
-              <button
-                onClick={(e) => handleCloseTab(e, tab.id)}
-                className={clsx(
-                  'flex-shrink-0 p-1 rounded-full transition-all',
-                  activeTabId === tab.id
-                    ? 'opacity-70 hover:opacity-100 hover:bg-gray-200'
-                    : 'opacity-0 group-hover:opacity-70 group-hover:hover:opacity-100 hover:bg-gray-200'
-                )}
-                aria-label="Close tab"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
+              {tabs.length > 1 && (
+                <button
+                  onClick={(e) => handleCloseTab(e, tab.id)}
+                  className={clsx(
+                    'flex-shrink-0 p-1 rounded-full transition-all',
+                    activeTabId === tab.id
+                      ? 'opacity-70 hover:opacity-100 hover:bg-gray-200'
+                      : 'opacity-0 group-hover:opacity-70 group-hover:hover:opacity-100 hover:bg-gray-200'
+                  )}
+                  aria-label="Close tab"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -186,33 +188,39 @@ export const TabBar: React.FC = () => {
             Rename
           </button>
           <div className="border-t border-gray-100 my-1"></div>
-          <button
-            onClick={() => {
-              removeTab(contextMenu.tabId);
-              handleCloseContextMenu();
-            }}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-          >
-            Close
-          </button>
-          <button
-            onClick={() => {
-              closeOtherTabs(contextMenu.tabId);
-              handleCloseContextMenu();
-            }}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-          >
-            Close other tabs
-          </button>
-          <button
-            onClick={() => {
-              closeAllTabs();
-              handleCloseContextMenu();
-            }}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-          >
-            Close all tabs
-          </button>
+          {tabs.length > 1 && (
+            <button
+              onClick={() => {
+                removeTab(contextMenu.tabId);
+                handleCloseContextMenu();
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Close
+            </button>
+          )}
+          {tabs.length > 1 && (
+            <button
+              onClick={() => {
+                closeOtherTabs(contextMenu.tabId);
+                handleCloseContextMenu();
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Close other tabs
+            </button>
+          )}
+          {tabs.length > 1 && (
+            <button
+              onClick={() => {
+                closeAllTabs();
+                handleCloseContextMenu();
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Close all tabs
+            </button>
+          )}
         </div>
       )}
     </>
