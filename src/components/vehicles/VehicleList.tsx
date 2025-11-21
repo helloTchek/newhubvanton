@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo } from 'react';
 import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
@@ -39,6 +39,7 @@ export const VehicleList: React.FC = () => {
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const isLoadingTabStateRef = React.useRef(false);
   const previousTabIdRef = React.useRef<string | null>(null);
+  const [isTabSwitching, setIsTabSwitching] = useState(false);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -211,6 +212,7 @@ export const VehicleList: React.FC = () => {
       if (previousTabIdRef.current !== activeTabId) {
         previousTabIdRef.current = activeTabId;
         isLoadingTabStateRef.current = true;
+        setIsTabSwitching(true);
 
         const tabState = getTabState(activeTabId);
 
@@ -239,9 +241,10 @@ export const VehicleList: React.FC = () => {
           setViewMode('grid');
         }
 
-        setTimeout(() => {
+        requestAnimationFrame(() => {
+          setIsTabSwitching(false);
           isLoadingTabStateRef.current = false;
-        }, 100);
+        });
       }
     }
   }, [activeTabId, preferencesLoaded, getTabState, user?.companyId]);
@@ -565,13 +568,15 @@ export const VehicleList: React.FC = () => {
           {/* Right Controls */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Filter Toggle with Badge */}
-            <FilterPanel
-              key={activeTabId}
-              filters={filters}
-              onFiltersChange={updateFilters}
-              companies={companies}
-              showCompanyFilter={user?.companyId === 'all'}
-            />
+            {!isTabSwitching && (
+              <FilterPanel
+                key={activeTabId}
+                filters={filters}
+                onFiltersChange={updateFilters}
+                companies={companies}
+                showCompanyFilter={user?.companyId === 'all'}
+              />
+            )}
 
             {/* View Toggle */}
             <div className="flex border border-gray-300 rounded-lg overflow-hidden">
