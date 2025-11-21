@@ -31,12 +31,14 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
 
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
-  const { addTab, activeTabId, getTabFilters, setTabFilters } = useTabs();
+  const { addTab, activeTabId, getTabState, setTabState } = useTabs();
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<LoadingState>({ isLoading: true, error: null });
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+  const isLoadingTabStateRef = React.useRef(false);
+  const previousTabIdRef = React.useRef<string | null>(null);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -205,22 +207,34 @@ export const VehicleList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (activeTabId && preferencesLoaded) {
-      const tabFilters = getTabFilters(activeTabId);
-      if (tabFilters) {
-        setFilters(tabFilters);
+    if (activeTabId && preferencesLoaded && previousTabIdRef.current !== activeTabId) {
+      previousTabIdRef.current = activeTabId;
+      isLoadingTabStateRef.current = true;
+
+      const tabState = getTabState(activeTabId);
+      if (tabState) {
+        if (tabState.filters) {
+          setFilters(tabState.filters);
+        }
+        if (tabState.viewMode !== undefined) {
+          setViewMode(tabState.viewMode);
+        }
       }
+
+      setTimeout(() => {
+        isLoadingTabStateRef.current = false;
+      }, 100);
     }
-  }, [activeTabId, preferencesLoaded, getTabFilters]);
+  }, [activeTabId, preferencesLoaded, getTabState]);
 
   useEffect(() => {
-    if (activeTabId && preferencesLoaded) {
+    if (activeTabId && preferencesLoaded && !isLoadingTabStateRef.current) {
       const saveTimer = setTimeout(() => {
-        setTabFilters(activeTabId, filters);
+        setTabState(activeTabId, { filters, viewMode });
       }, 500);
       return () => clearTimeout(saveTimer);
     }
-  }, [filters, activeTabId, preferencesLoaded, setTabFilters]);
+  }, [filters, viewMode, activeTabId, preferencesLoaded, setTabState]);
 
   useEffect(() => {
     if (!preferencesLoaded) return;

@@ -11,6 +11,7 @@ export interface Tab {
   isPinned?: boolean;
   iconType?: TabIconType;
   filters?: SearchFilters;
+  viewMode?: 'grid' | 'list';
 }
 
 interface TabContextType {
@@ -23,8 +24,8 @@ interface TabContextType {
   closeOtherTabs: (tabId: string) => void;
   closeAllTabs: () => void;
   renameTab: (tabId: string, newTitle: string) => void;
-  getTabFilters: (tabId: string) => SearchFilters | undefined;
-  setTabFilters: (tabId: string, filters: SearchFilters) => void;
+  getTabState: (tabId: string) => { filters?: SearchFilters; viewMode?: 'grid' | 'list' } | undefined;
+  setTabState: (tabId: string, state: { filters?: SearchFilters; viewMode?: 'grid' | 'list' }) => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
@@ -154,13 +155,17 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, title: newTitle } : t));
   }, []);
 
-  const getTabFilters = useCallback((tabId: string) => {
+  const getTabState = useCallback((tabId: string) => {
     const tab = tabs.find(t => t.id === tabId);
-    return tab?.filters;
+    if (!tab) return undefined;
+    return {
+      filters: tab.filters,
+      viewMode: tab.viewMode,
+    };
   }, [tabs]);
 
-  const setTabFilters = useCallback((tabId: string, filters: SearchFilters) => {
-    setTabs(prev => prev.map(t => t.id === tabId ? { ...t, filters } : t));
+  const setTabState = useCallback((tabId: string, state: { filters?: SearchFilters; viewMode?: 'grid' | 'list' }) => {
+    setTabs(prev => prev.map(t => t.id === tabId ? { ...t, ...state } : t));
   }, []);
 
   useEffect(() => {
@@ -203,8 +208,8 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         closeOtherTabs,
         closeAllTabs,
         renameTab,
-        getTabFilters,
-        setTabFilters,
+        getTabState,
+        setTabState,
       }}
     >
       {children}
