@@ -31,7 +31,7 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
 
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
-  const { addTab } = useTabs();
+  const { addTab, activeTabId, getTabFilters, setTabFilters } = useTabs();
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -195,12 +195,32 @@ export const VehicleList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    addTab({
-      title: 'All Vehicles',
-      path: '/vehicles',
-      icon: <Grid className="w-4 h-4" />,
-    });
+    if (!activeTabId) {
+      addTab({
+        title: 'All Vehicles',
+        path: '/vehicles',
+        icon: <Grid className="w-4 h-4" />,
+      });
+    }
   }, []);
+
+  useEffect(() => {
+    if (activeTabId && preferencesLoaded) {
+      const tabFilters = getTabFilters(activeTabId);
+      if (tabFilters) {
+        setFilters(tabFilters);
+      }
+    }
+  }, [activeTabId, preferencesLoaded, getTabFilters]);
+
+  useEffect(() => {
+    if (activeTabId && preferencesLoaded) {
+      const saveTimer = setTimeout(() => {
+        setTabFilters(activeTabId, filters);
+      }, 500);
+      return () => clearTimeout(saveTimer);
+    }
+  }, [filters, activeTabId, preferencesLoaded, setTabFilters]);
 
   useEffect(() => {
     if (!preferencesLoaded) return;

@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { X, Plus, MoreVertical } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Plus, Edit2 } from 'lucide-react';
 import { useTabs } from '../../contexts/TabContext';
+import { Grid } from 'lucide-react';
 import clsx from 'clsx';
 
 export const TabBar: React.FC = () => {
-  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs } = useTabs();
+  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab } = useTabs();
   const [contextMenu, setContextMenu] = useState<{ tabId: string; x: number; y: number } | null>(null);
+  const [renamingTabId, setRenamingTabId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
   const contextMenuRef = useRef<HTMLDivElement>(null);
+  const renameInputRef = useRef<HTMLInputElement>(null);
 
   const handleTabClick = (tabId: string) => {
     switchTab(tabId);
@@ -21,7 +25,27 @@ export const TabBar: React.FC = () => {
     addTab({
       title: 'All Vehicles',
       path: '/vehicles',
+      icon: <Grid className="w-4 h-4" />,
     });
+  };
+
+  const handleStartRename = (tabId: string, currentTitle: string) => {
+    setRenamingTabId(tabId);
+    setRenameValue(currentTitle);
+    handleCloseContextMenu();
+  };
+
+  const handleFinishRename = (tabId: string) => {
+    if (renameValue.trim()) {
+      renameTab(tabId, renameValue.trim());
+    }
+    setRenamingTabId(null);
+    setRenameValue('');
+  };
+
+  const handleCancelRename = () => {
+    setRenamingTabId(null);
+    setRenameValue('');
   };
 
   const handleContextMenu = (e: React.MouseEvent, tabId: string) => {
@@ -33,7 +57,7 @@ export const TabBar: React.FC = () => {
     setContextMenu(null);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (contextMenuRef.current && !contextMenuRef.current.contains(e.target as Node)) {
         setContextMenu(null);
@@ -45,6 +69,13 @@ export const TabBar: React.FC = () => {
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [contextMenu]);
+
+  useEffect(() => {
+    if (renamingTabId && renameInputRef.current) {
+      renameInputRef.current.focus();
+      renameInputRef.current.select();
+    }
+  }, [renamingTabId]);
 
   if (tabs.length === 0) {
     return null;
@@ -77,9 +108,29 @@ export const TabBar: React.FC = () => {
                   {tab.icon}
                 </span>
               )}
-              <span className="text-sm font-normal truncate flex-1 min-w-0">
-                {tab.title}
-              </span>
+              {renamingTabId === tab.id ? (
+                <input
+                  ref={renameInputRef}
+                  type="text"
+                  value={renameValue}
+                  onChange={(e) => setRenameValue(e.target.value)}
+                  onBlur={() => handleFinishRename(tab.id)}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === 'Enter') {
+                      handleFinishRename(tab.id);
+                    } else if (e.key === 'Escape') {
+                      handleCancelRename();
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-sm font-normal flex-1 min-w-0 bg-white border border-blue-500 rounded px-1 py-0.5 outline-none"
+                />
+              ) : (
+                <span className="text-sm font-normal truncate flex-1 min-w-0">
+                  {tab.title}
+                </span>
+              )}
               <button
                 onClick={(e) => handleCloseTab(e, tab.id)}
                 className={clsx(
@@ -112,6 +163,19 @@ export const TabBar: React.FC = () => {
           className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px]"
           style={{ top: contextMenu.y, left: contextMenu.x }}
         >
+          <button
+            onClick={() => {
+              const tab = tabs.find(t => t.id === contextMenu.tabId);
+              if (tab) {
+                handleStartRename(contextMenu.tabId, tab.title);
+              }
+            }}
+            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+            Rename
+          </button>
+          <div className="border-t border-gray-100 my-1"></div>
           <button
             onClick={() => {
               removeTab(contextMenu.tabId);

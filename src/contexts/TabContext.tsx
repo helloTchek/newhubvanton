@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { SearchFilters } from '../types';
 
 export interface Tab {
   id: string;
@@ -7,6 +8,7 @@ export interface Tab {
   path: string;
   isPinned?: boolean;
   icon?: React.ReactNode;
+  filters?: SearchFilters;
 }
 
 interface TabContextType {
@@ -18,6 +20,9 @@ interface TabContextType {
   updateTab: (tabId: string, updates: Partial<Tab>) => void;
   closeOtherTabs: (tabId: string) => void;
   closeAllTabs: () => void;
+  renameTab: (tabId: string, newTitle: string) => void;
+  getTabFilters: (tabId: string) => SearchFilters | undefined;
+  setTabFilters: (tabId: string, filters: SearchFilters) => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
@@ -68,6 +73,19 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [location.pathname, activeTabId, tabs]);
 
   const addTab = useCallback((tab: Omit<Tab, 'id'>) => {
+    if (tab.path === '/vehicles') {
+      const newTabId = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const newTab: Tab = {
+        ...tab,
+        id: newTabId,
+      };
+
+      setTabs(prev => [...prev, newTab]);
+      setActiveTabId(newTabId);
+      navigate(tab.path);
+      return newTabId;
+    }
+
     const existingTab = tabs.find(t => t.path === tab.path);
     if (existingTab) {
       setActiveTabId(existingTab.id);
@@ -130,6 +148,19 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     navigate('/vehicles');
   }, [navigate]);
 
+  const renameTab = useCallback((tabId: string, newTitle: string) => {
+    setTabs(prev => prev.map(t => t.id === tabId ? { ...t, title: newTitle } : t));
+  }, []);
+
+  const getTabFilters = useCallback((tabId: string) => {
+    const tab = tabs.find(t => t.id === tabId);
+    return tab?.filters;
+  }, [tabs]);
+
+  const setTabFilters = useCallback((tabId: string, filters: SearchFilters) => {
+    setTabs(prev => prev.map(t => t.id === tabId ? { ...t, filters } : t));
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'w') {
@@ -169,6 +200,9 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateTab,
         closeOtherTabs,
         closeAllTabs,
+        renameTab,
+        getTabFilters,
+        setTabFilters,
       }}
     >
       {children}
