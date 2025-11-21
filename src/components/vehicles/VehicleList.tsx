@@ -207,25 +207,44 @@ export const VehicleList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (activeTabId && preferencesLoaded && previousTabIdRef.current !== activeTabId) {
-      previousTabIdRef.current = activeTabId;
-      isLoadingTabStateRef.current = true;
+    if (activeTabId && preferencesLoaded) {
+      if (previousTabIdRef.current !== activeTabId) {
+        previousTabIdRef.current = activeTabId;
+        isLoadingTabStateRef.current = true;
 
-      const tabState = getTabState(activeTabId);
-      if (tabState) {
-        if (tabState.filters) {
+        const tabState = getTabState(activeTabId);
+
+        if (tabState && tabState.filters) {
           setFilters(tabState.filters);
+        } else {
+          setFilters({
+            query: '',
+            status: 'all',
+            companyId: user?.companyId || 'all',
+            inspectionType: 'all',
+            dateRange: undefined,
+            userId: 'all',
+            customerEmail: '',
+            customerPhone: '',
+            sortBy: 'date',
+            sortOrder: 'desc',
+            page: 1,
+            pageSize: 20
+          });
         }
-        if (tabState.viewMode !== undefined) {
-          setViewMode(tabState.viewMode);
-        }
-      }
 
-      setTimeout(() => {
-        isLoadingTabStateRef.current = false;
-      }, 100);
+        if (tabState && tabState.viewMode !== undefined) {
+          setViewMode(tabState.viewMode);
+        } else {
+          setViewMode('grid');
+        }
+
+        setTimeout(() => {
+          isLoadingTabStateRef.current = false;
+        }, 100);
+      }
     }
-  }, [activeTabId, preferencesLoaded, getTabState]);
+  }, [activeTabId, preferencesLoaded, getTabState, user?.companyId]);
 
   useEffect(() => {
     if (activeTabId && preferencesLoaded && !isLoadingTabStateRef.current) {
