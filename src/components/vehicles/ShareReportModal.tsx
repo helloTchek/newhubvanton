@@ -10,6 +10,7 @@ interface ShareReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   onShare: (recipients: string[], message?: string) => Promise<void>;
+  onShareInternal?: () => Promise<void>;
   vehicleRegistration: string;
   shareStatus?: ShareStatus;
 }
@@ -18,6 +19,7 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
   isOpen,
   onClose,
   onShare,
+  onShareInternal,
   vehicleRegistration,
   shareStatus = 'needs_sharing',
 }) => {
@@ -26,6 +28,7 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
   const [currentEmail, setCurrentEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingInternal, setIsSubmittingInternal] = useState(false);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,8 +89,25 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
     }
   };
 
+  const handleInternalShare = async () => {
+    if (!onShareInternal) return;
+
+    setIsSubmittingInternal(true);
+
+    try {
+      await onShareInternal();
+      toast.success('Report marked as shared internally');
+      onClose();
+    } catch (error) {
+      toast.error('Failed to share report internally');
+      console.error('Internal share error:', error);
+    } finally {
+      setIsSubmittingInternal(false);
+    }
+  };
+
   const handleClose = () => {
-    if (!isSubmitting) {
+    if (!isSubmitting && !isSubmittingInternal) {
       setRecipients([]);
       setCurrentEmail('');
       setMessage('');
@@ -168,6 +188,35 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* Internal Share Button - Only show if callback provided */}
+                {onShareInternal && (
+                  <div className="mb-6">
+                    <button
+                      type="button"
+                      onClick={handleInternalShare}
+                      disabled={isSubmittingInternal || isSubmitting}
+                      className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+                    >
+                      {isSubmittingInternal ? 'Sharing...' : 'Share Updated Report (Internal Event)'}
+                    </button>
+                    <p className="text-xs text-gray-500 mt-2 text-center">
+                      This will create an internal event without sending emails
+                    </p>
+                  </div>
+                )}
+
+                {/* Divider */}
+                {onShareInternal && (
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-gray-500">or share via email</span>
+                    </div>
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-4">

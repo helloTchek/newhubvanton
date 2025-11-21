@@ -16,6 +16,8 @@ import { ShareReportModal } from './ShareReportModal';
 import { shareService } from '../../services/shareService';
 import { tagService } from '../../services/tagService';
 import { userPreferencesService } from '../../services/userPreferencesService';
+import { internalEventsService } from '../../services/internalEventsService';
+import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTabs } from '../../contexts/TabContext';
 import { useNavigate } from 'react-router-dom';
@@ -543,6 +545,43 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const handleShareInternal = async () => {
+    if (!vehicleToShare?.reportId) {
+      toast.error('No report selected');
+      return;
+    }
+
+    try {
+      const sharedAt = new Date().toISOString();
+
+      // Create internal event
+      await internalEventsService.createEvent({
+        eventType: 'report_shared_internal',
+        reportId: vehicleToShare.reportId,
+        vehicleId: vehicleToShare.id,
+        eventData: {
+          registration: vehicleToShare.registration,
+          sharedAt,
+        }
+      });
+
+      // Update the inspection report's last_shared_at timestamp directly
+      const { error: updateError } = await supabase
+        .from('inspection_reports')
+        .update({ last_shared_at: sharedAt })
+        .eq('id', vehicleToShare.reportId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to share report internally';
+      throw new Error(errorMessage);
+    }
+  };
+
   const getColumnLabel = (columnId: string): string => {
     const labels: Record<string, string> = {
       'image': 'Image',
@@ -990,6 +1029,7 @@ export const VehicleList: React.FC = () => {
             setVehicleToShare(null);
           }}
           onShare={handleShareSubmit}
+          onShareInternal={handleShareInternal}
           vehicleRegistration={vehicleToShare.registration}
           shareStatus={shareStatus}
         />
