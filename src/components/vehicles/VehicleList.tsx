@@ -41,6 +41,8 @@ export const VehicleList: React.FC = () => {
   const previousTabIdRef = React.useRef<string | null>(null);
   const [isTabSwitching, setIsTabSwitching] = useState(false);
   const [filterPanelKey, setFilterPanelKey] = useState(0);
+  // Cache vehicles per tab to avoid reloading when switching tabs
+  const vehicleCacheRef = React.useRef<Map<string, { vehicles: Vehicle[]; pagination: PaginationMetadata }>>(new Map());
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -134,12 +136,34 @@ export const VehicleList: React.FC = () => {
     };
   }, [activeTabId, tabs, user?.companyId]);
 
-  const loadVehicles = useCallback(async () => {
+  const loadVehicles = useCallback(async (skipCache = false) => {
+    if (!activeTabId) return;
+
+    // Create cache key from tab ID and current filters
+    const cacheKey = `${activeTabId}-${JSON.stringify(filters)}`;
+
+    // Check cache first (unless explicitly skipping)
+    if (!skipCache && vehicleCacheRef.current.has(cacheKey)) {
+      const cached = vehicleCacheRef.current.get(cacheKey)!;
+      console.log('VehicleList using cached data for:', cacheKey);
+      setVehicles(cached.vehicles);
+      setPagination(cached.pagination);
+      setLoading({ isLoading: false, error: null });
+      return;
+    }
+
     try {
       console.log('VehicleList loadVehicles called with filters:', filters);
       setLoading({ isLoading: true, error: null });
       const response = await vehicleService.getVehicles(filters);
       console.log('VehicleList received response:', { vehicleCount: response.data.length, pagination: response.pagination });
+
+      // Update cache
+      vehicleCacheRef.current.set(cacheKey, {
+        vehicles: response.data,
+        pagination: response.pagination || pagination
+      });
+
       setVehicles(response.data);
       if (response.pagination) {
         setPagination(response.pagination);
@@ -152,7 +176,7 @@ export const VehicleList: React.FC = () => {
     } finally {
       setLoading(prev => ({ ...prev, isLoading: false }));
     }
-  }, [filters]);
+  }, [filters, activeTabId, pagination]);
 
   const loadCompanies = async () => {
     try {
@@ -243,6 +267,15 @@ export const VehicleList: React.FC = () => {
           setViewMode('grid');
         }
 
+        // Load cached vehicles immediately if available
+        const cacheKey = `${activeTabId}-${JSON.stringify(filters)}`;
+        if (vehicleCacheRef.current.has(cacheKey)) {
+          const cached = vehicleCacheRef.current.get(cacheKey)!;
+          setVehicles(cached.vehicles);
+          setPagination(cached.pagination);
+          setLoading({ isLoading: false, error: null });
+        }
+
         // Increment key to force FilterPanel remount with correct props
         setTimeout(() => {
           setFilterPanelKey(prev => prev + 1);
@@ -251,7 +284,7 @@ export const VehicleList: React.FC = () => {
         }, 0);
       }
     }
-  }, [activeTabId, preferencesLoaded, getTabState]);
+  }, [activeTabId, preferencesLoaded, getTabState, filters]);
 
   useEffect(() => {
     if (activeTabId && preferencesLoaded && !isLoadingTabStateRef.current) {
@@ -290,7 +323,7 @@ export const VehicleList: React.FC = () => {
     try {
       await chaseUpService.sendChaseUp(vehicleId, method);
       toast.success(`Chase up ${method} sent successfully`);
-      await loadVehicles();
+      await loadVehicles(true);
     } catch (error: unknown) {
       toast.error(error.message || 'Failed to send chase up');
       throw error;
@@ -351,7 +384,7 @@ export const VehicleList: React.FC = () => {
       toast.success(`Bulk chase up ${method} sent to ${selectedVehicleIds.length} customer${selectedVehicleIds.length !== 1 ? 's' : ''}`);
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
-      await loadVehicles();
+      await loadVehicles(true);
     } catch (error: unknown) {
       toast.error(error.message || 'Failed to send bulk chase up');
       throw error;
@@ -368,7 +401,7 @@ export const VehicleList: React.FC = () => {
       toast.success(`${selectedVehicleIds.length} vehicles archived successfully`);
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
-      await loadVehicles();
+      await loadVehicles(true);
     } catch (error: unknown) {
       toast.error(error.message || 'Failed to archive vehicles');
     }
@@ -386,7 +419,7 @@ export const VehicleList: React.FC = () => {
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
       setIsBulkTagModalOpen(false);
-      await loadVehicles();
+      await loadVehicles(true);
     } catch (error: unknown) {
       toast.error(error.message || 'Failed to apply tag');
       throw error;
@@ -456,7 +489,7 @@ export const VehicleList: React.FC = () => {
         sharedTo: recipients,
         message
       });
-      await loadVehicles();
+      await loadVehicles(true);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to share report';
       throw new Error(errorMessage);
