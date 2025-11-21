@@ -37,6 +37,7 @@ interface VehicleTableRowProps {
     vin: boolean;
     makeModel: boolean;
     company: boolean;
+    customerEmail: boolean;
     status: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
@@ -68,7 +69,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelected = false,
   onSelectToggle,
   columnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
@@ -78,6 +79,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     vin: true,
     makeModel: true,
     company: true,
+    customerEmail: true,
     status: true,
     inspectionDate: true,
     inspectionId: true,
@@ -240,7 +242,13 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap">
             <div className="text-sm text-gray-900">{vehicle.companyName}</div>
-            <div className="text-sm text-gray-500">{vehicle.customerEmail}</div>
+          </td>
+        );
+
+      case 'customerEmail':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">{vehicle.customerEmail || '-'}</div>
           </td>
         );
 

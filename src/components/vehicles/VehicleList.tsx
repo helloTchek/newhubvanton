@@ -70,6 +70,7 @@ export const VehicleList: React.FC = () => {
     vin: true,
     makeModel: true,
     company: true,
+    customerEmail: true,
     status: true,
     inspectionDate: true,
     inspectionId: true,
@@ -103,7 +104,7 @@ export const VehicleList: React.FC = () => {
   };
 
   const defaultColumnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
@@ -610,6 +611,7 @@ export const VehicleList: React.FC = () => {
       'vin': 'VIN Number',
       'makeModel': 'Brand & Model',
       'company': 'Company',
+      'customerEmail': 'Customer Email',
       'status': 'Status',
       'inspectionDate': 'Inspection Date',
       'inspectionId': 'Inspection ID',
@@ -829,6 +831,7 @@ export const VehicleList: React.FC = () => {
                           vin: 'VIN Number',
                           makeModel: 'Brand & Model',
                           company: 'Company',
+                          customerEmail: 'Customer Email',
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
