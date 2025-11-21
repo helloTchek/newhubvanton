@@ -54,7 +54,14 @@ export const VehicleList: React.FC = () => {
   const [selectedVehicleIds, setSelectedVehicleIds] = useState<string[]>([]);
   const [isBulkChaseUpModalOpen, setIsBulkChaseUpModalOpen] = useState(false);
   const [isBulkTagModalOpen, setIsBulkTagModalOpen] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState({
+  const [showColumnSelector, setShowColumnSelector] = useState(false);
+  const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
+  const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
+
+  // Default values for view state
+  const defaultVisibleColumns = {
     image: true,
     registration: true,
     vin: true,
@@ -73,9 +80,9 @@ export const VehicleList: React.FC = () => {
     tires: true,
     dashboard: true,
     declarations: true
-  });
-  const [showColumnSelector, setShowColumnSelector] = useState(false);
-  const [visibleCardFields, setVisibleCardFields] = useState({
+  };
+
+  const defaultVisibleCardFields = {
     image: true,
     registration: true,
     vin: true,
@@ -90,16 +97,32 @@ export const VehicleList: React.FC = () => {
     value: true,
     damageResults: true,
     tags: true
-  });
-  const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
-  const [columnOrder, setColumnOrder] = useState<string[]>([
+  };
+
+  const defaultColumnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'status', 'inspectionDate', 'inspectionId',
     'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
-  ]);
-  const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
+  ];
+
+  // Derive column/field visibility from tab state
+  const visibleColumns = useMemo(() => {
+    if (!activeTabId) return defaultVisibleColumns;
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    return currentTab?.visibleColumns || defaultVisibleColumns;
+  }, [activeTabId, tabs]);
+
+  const visibleCardFields = useMemo(() => {
+    if (!activeTabId) return defaultVisibleCardFields;
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    return currentTab?.visibleCardFields || defaultVisibleCardFields;
+  }, [activeTabId, tabs]);
+
+  const columnOrder = useMemo(() => {
+    if (!activeTabId) return defaultColumnOrder;
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    return currentTab?.columnOrder || defaultColumnOrder;
+  }, [activeTabId, tabs]);
 
   // Derive filters directly from tab state to avoid stale values during tab switches
   const filters = useMemo(() => {
@@ -195,10 +218,8 @@ export const VehicleList: React.FC = () => {
 
       if (preferences) {
         setViewMode(preferences.viewMode);
-        setFilters(prev => ({ ...prev, ...preferences.filters }));
-        setColumnOrder(preferences.columnOrder);
-        setVisibleColumns(preferences.visibleColumns);
-        setVisibleCardFields(preferences.visibleCardFields);
+        // Note: filters, columnOrder, visibleColumns, visibleCardFields are now derived from tab state
+        // User preferences are loaded but overridden by tab-specific state
       }
     } catch (error) {
       console.error('Failed to load user preferences:', error);
@@ -352,6 +373,26 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const updateVisibleColumns = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
+    if (activeTabId) {
+      const updated = updater(visibleColumns);
+      setTabState(activeTabId, { visibleColumns: updated });
+    }
+  }, [activeTabId, visibleColumns, setTabState]);
+
+  const updateVisibleCardFields = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
+    if (activeTabId) {
+      const updated = updater(visibleCardFields);
+      setTabState(activeTabId, { visibleCardFields: updated });
+    }
+  }, [activeTabId, visibleCardFields, setTabState]);
+
+  const updateColumnOrder = useCallback((newOrder: string[]) => {
+    if (activeTabId) {
+      setTabState(activeTabId, { columnOrder: newOrder });
+    }
+  }, [activeTabId, setTabState]);
+
   const toggleSelectionMode = () => {
     setIsSelectionMode(!isSelectionMode);
     setSelectedVehicleIds([]);
@@ -440,7 +481,7 @@ export const VehicleList: React.FC = () => {
 
     newOrder.splice(draggedIndex, 1);
     newOrder.splice(targetIndex, 0, draggedColumn);
-    setColumnOrder(newOrder);
+    updateColumnOrder(newOrder);
   };
 
   const handleDragEnd = () => {
@@ -693,7 +734,7 @@ export const VehicleList: React.FC = () => {
                               type="checkbox"
                               checked={visibleCardFields[key as keyof typeof visibleCardFields]}
                               onChange={(e) =>
-                                setVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
+                                updateVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
                               }
                               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
@@ -741,7 +782,7 @@ export const VehicleList: React.FC = () => {
                               type="checkbox"
                               checked={visibleColumns[key as keyof typeof visibleColumns]}
                               onChange={(e) =>
-                                setVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))
+                                updateVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))
                               }
                               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />

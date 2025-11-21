@@ -4,6 +4,14 @@ import { SearchFilters } from '../types';
 
 export type TabIconType = 'grid' | 'car' | 'none';
 
+export interface TabViewState {
+  filters?: SearchFilters;
+  viewMode?: 'grid' | 'list';
+  columnOrder?: string[];
+  visibleColumns?: Record<string, boolean>;
+  visibleCardFields?: Record<string, boolean>;
+}
+
 export interface Tab {
   id: string;
   title: string;
@@ -12,6 +20,9 @@ export interface Tab {
   iconType?: TabIconType;
   filters?: SearchFilters;
   viewMode?: 'grid' | 'list';
+  columnOrder?: string[];
+  visibleColumns?: Record<string, boolean>;
+  visibleCardFields?: Record<string, boolean>;
 }
 
 interface TabContextType {
@@ -24,8 +35,8 @@ interface TabContextType {
   closeOtherTabs: (tabId: string) => void;
   closeAllTabs: () => void;
   renameTab: (tabId: string, newTitle: string) => void;
-  getTabState: (tabId: string) => { filters?: SearchFilters; viewMode?: 'grid' | 'list' } | undefined;
-  setTabState: (tabId: string, state: { filters?: SearchFilters; viewMode?: 'grid' | 'list' }) => void;
+  getTabState: (tabId: string) => TabViewState | undefined;
+  setTabState: (tabId: string, state: TabViewState) => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
@@ -172,16 +183,19 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, title: newTitle } : t));
   }, []);
 
-  const getTabState = useCallback((tabId: string) => {
+  const getTabState = useCallback((tabId: string): TabViewState | undefined => {
     const tab = tabs.find(t => t.id === tabId);
     if (!tab) return undefined;
     return {
       filters: tab.filters,
       viewMode: tab.viewMode,
+      columnOrder: tab.columnOrder,
+      visibleColumns: tab.visibleColumns,
+      visibleCardFields: tab.visibleCardFields,
     };
   }, [tabs]);
 
-  const setTabState = useCallback((tabId: string, state: { filters?: SearchFilters; viewMode?: 'grid' | 'list' }) => {
+  const setTabState = useCallback((tabId: string, state: TabViewState) => {
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, ...state } : t));
   }, []);
 
