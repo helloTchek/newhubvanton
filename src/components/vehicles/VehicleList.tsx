@@ -17,6 +17,7 @@ import { shareService } from '../../services/shareService';
 import { tagService } from '../../services/tagService';
 import { userPreferencesService } from '../../services/userPreferencesService';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTabs } from '../../contexts/TabContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
@@ -30,6 +31,7 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
 
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
+  const { addTab } = useTabs();
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -193,6 +195,14 @@ export const VehicleList: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    addTab({
+      title: 'All Vehicles',
+      path: '/vehicles',
+      icon: <Grid className="w-4 h-4" />,
+    });
+  }, []);
+
+  useEffect(() => {
     if (!preferencesLoaded) return;
 
     const debounceTimer = setTimeout(() => {
@@ -213,7 +223,11 @@ export const VehicleList: React.FC = () => {
   }, [viewMode, filters, columnOrder, visibleColumns, visibleCardFields, saveUserPreferences, preferencesLoaded]);
 
   const handleVehicleClick = (vehicle: Vehicle) => {
-    navigate(`/vehicles/${vehicle.id}/report`);
+    addTab({
+      title: vehicle.registration || vehicle.vin || 'Vehicle',
+      path: `/vehicles/${vehicle.id}/report`,
+      icon: <Car className="w-4 h-4" />,
+    });
   };
 
   const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms') => {

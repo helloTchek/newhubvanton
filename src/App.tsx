@@ -4,11 +4,13 @@ import { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { TabProvider } from './contexts/TabContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { LoginForm } from './components/auth/LoginForm';
 import { CompanySelection } from './components/companies/CompanySelection';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
+import { TabBar } from './components/layout/TabBar';
 import { VehicleList } from './components/vehicles/VehicleList';
 import { VehicleReportView } from './components/vehicles/VehicleReportView';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
@@ -70,12 +72,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <Sidebar />
-      <main className={clsx(
-        "pt-14 sm:pt-16 min-h-screen transition-all duration-300",
+      <div className={clsx(
+        "pt-14 sm:pt-16 transition-all duration-300",
         sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
       )}>
-        {children}
-      </main>
+        <TabBar />
+        <main className="min-h-screen">
+          {children}
+        </main>
+      </div>
     </div>
   );
 };
@@ -132,8 +137,9 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <Router>
-          <div className="App">
-            <Routes>
+            <TabProvider>
+              <div className="App">
+                <Routes>
               <Route path="/login" element={<LoginForm />} />
               <Route path="/*" element={
                 <ProtectedRoute>
@@ -193,8 +199,9 @@ function App() {
                 },
               }}
             />
-          </div>
-        </Router>
+              </div>
+            </TabProvider>
+          </Router>
         </ThemeProvider>
       </AuthProvider>
     </ErrorBoundary>
