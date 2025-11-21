@@ -199,7 +199,7 @@ export const VehicleList: React.FC = () => {
       addTab({
         title: 'All Vehicles',
         path: '/vehicles',
-        icon: <Grid className="w-4 h-4" />,
+        iconType: 'grid',
       });
     }
   }, []);
@@ -246,7 +246,7 @@ export const VehicleList: React.FC = () => {
     addTab({
       title: vehicle.registration || vehicle.vin || 'Vehicle',
       path: `/vehicles/${vehicle.id}/report`,
-      icon: <Car className="w-4 h-4" />,
+      iconType: 'car',
     });
   };
 

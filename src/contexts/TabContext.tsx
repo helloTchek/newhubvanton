@@ -2,12 +2,14 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SearchFilters } from '../types';
 
+export type TabIconType = 'grid' | 'car' | 'none';
+
 export interface Tab {
   id: string;
   title: string;
   path: string;
   isPinned?: boolean;
-  icon?: React.ReactNode;
+  iconType?: TabIconType;
   filters?: SearchFilters;
 }
 

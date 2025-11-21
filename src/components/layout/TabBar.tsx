@@ -1,8 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Plus, Edit2 } from 'lucide-react';
-import { useTabs } from '../../contexts/TabContext';
-import { Grid } from 'lucide-react';
+import { X, Plus, Edit2, Grid, Car } from 'lucide-react';
+import { useTabs, TabIconType } from '../../contexts/TabContext';
 import clsx from 'clsx';
+
+const getIconForType = (iconType?: TabIconType) => {
+  switch (iconType) {
+    case 'grid':
+      return <Grid className="w-4 h-4" />;
+    case 'car':
+      return <Car className="w-4 h-4" />;
+    default:
+      return null;
+  }
+};
 
 export const TabBar: React.FC = () => {
   const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab } = useTabs();
@@ -25,7 +35,7 @@ export const TabBar: React.FC = () => {
     addTab({
       title: 'All Vehicles',
       path: '/vehicles',
-      icon: <Grid className="w-4 h-4" />,
+      iconType: 'grid',
     });
   };
 
@@ -100,12 +110,12 @@ export const TabBar: React.FC = () => {
                 marginBottom: '-1px',
               }}
             >
-              {tab.icon && (
+              {tab.iconType && (
                 <span className={clsx(
                   'flex-shrink-0 transition-colors',
                   activeTabId === tab.id ? 'text-blue-600' : 'text-gray-500'
                 )}>
-                  {tab.icon}
+                  {getIconForType(tab.iconType)}
                 </span>
               )}
               {renamingTabId === tab.id ? (
