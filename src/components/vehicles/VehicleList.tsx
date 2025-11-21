@@ -329,6 +329,24 @@ export const VehicleList: React.FC = () => {
     return () => clearTimeout(debounceTimer);
   }, [filters, loadVehicles, preferencesLoaded]);
 
+  // Restore scroll position when returning to the list
+  useEffect(() => {
+    if (!loading.isLoading && vehicles.length > 0) {
+      const savedScrollPosition = sessionStorage.getItem('vehicleListScrollPosition');
+      if (savedScrollPosition) {
+        // Use requestAnimationFrame to ensure DOM is fully rendered
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: parseInt(savedScrollPosition, 10),
+            behavior: 'instant'
+          });
+          // Clear the saved position after restoring
+          sessionStorage.removeItem('vehicleListScrollPosition');
+        });
+      }
+    }
+  }, [loading.isLoading, vehicles.length]);
+
   useEffect(() => {
     if (!preferencesLoaded) return;
 
@@ -340,6 +358,9 @@ export const VehicleList: React.FC = () => {
   }, [viewMode, filters, columnOrder, visibleColumns, visibleCardFields, saveUserPreferences, preferencesLoaded]);
 
   const handleVehicleClick = (vehicle: Vehicle) => {
+    // Save current scroll position before navigating
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    sessionStorage.setItem('vehicleListScrollPosition', scrollPosition.toString());
     navigate(`/vehicles/${vehicle.id}/report`);
   };
 
