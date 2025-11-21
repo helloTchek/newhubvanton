@@ -570,6 +570,7 @@ export const VehicleList: React.FC = () => {
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Filter Toggle with Badge */}
             <FilterPanel
+              key={activeTabId}
               filters={filters}
               onFiltersChange={updateFilters}
               companies={companies}
