@@ -93,7 +93,7 @@ export const TabBar: React.FC = () => {
 
   return (
     <>
-      <div className="bg-gray-100 border-b border-gray-300 flex items-center px-2 overflow-x-auto scrollbar-hide">
+      <div className="hidden md:flex bg-gray-100 border-b border-gray-300 items-center px-2 overflow-x-auto scrollbar-hide">
         <div className="flex items-center gap-0.5 min-w-0 flex-1">
           {tabs.map((tab) => (
             <div
