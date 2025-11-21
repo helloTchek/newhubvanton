@@ -58,6 +58,7 @@ export const VehicleList: React.FC = () => {
   const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
+  const [shareStatus, setShareStatus] = useState<'never_shared' | 'up_to_date' | 'needs_sharing'>('needs_sharing');
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
 
   // Default values for view state
@@ -508,13 +509,18 @@ export const VehicleList: React.FC = () => {
     return sortableMap[columnId] || null;
   };
 
-  const handleShareReport = (vehicle: Vehicle) => {
+  const handleShareReport = async (vehicle: Vehicle) => {
     if (!vehicle.reportId) {
       toast.error('No report available to share');
       return;
     }
+
     setVehicleToShare(vehicle);
     setIsShareModalOpen(true);
+
+    // Fetch share status
+    const status = await shareService.getReportShareStatus(vehicle.reportId);
+    setShareStatus(status);
   };
 
   const handleShareSubmit = async (recipients: string[], message?: string) => {
@@ -985,6 +991,7 @@ export const VehicleList: React.FC = () => {
           }}
           onShare={handleShareSubmit}
           vehicleRegistration={vehicleToShare.registration}
+          shareStatus={shareStatus}
         />
       )}
     </div>

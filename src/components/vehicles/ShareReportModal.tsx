@@ -1,14 +1,17 @@
 import React, { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { X, Mail, Plus, Trash2 } from 'lucide-react';
+import { X, Mail, Plus, Trash2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+
+export type ShareStatus = 'never_shared' | 'up_to_date' | 'needs_sharing';
 
 interface ShareReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   onShare: (recipients: string[], message?: string) => Promise<void>;
   vehicleRegistration: string;
+  shareStatus?: ShareStatus;
 }
 
 export const ShareReportModal: React.FC<ShareReportModalProps> = ({
@@ -16,6 +19,7 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
   onClose,
   onShare,
   vehicleRegistration,
+  shareStatus = 'needs_sharing',
 }) => {
   const { t } = useTranslation('vehicles');
   const [recipients, setRecipients] = useState<string[]>([]);
@@ -131,10 +135,38 @@ export const ShareReportModal: React.FC<ShareReportModalProps> = ({
                   </button>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-4 space-y-3">
                   <p className="text-sm text-gray-600">
                     {vehicleRegistration}
                   </p>
+
+                  {/* Share Status Indicator */}
+                  {shareStatus === 'up_to_date' && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
+                      <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+                      <span className="text-sm text-green-700">
+                        Report is up to date
+                      </span>
+                    </div>
+                  )}
+
+                  {shareStatus === 'needs_sharing' && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                      <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                      <span className="text-sm text-amber-700">
+                        Report modified - needs sharing
+                      </span>
+                    </div>
+                  )}
+
+                  {shareStatus === 'never_shared' && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+                      <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <span className="text-sm text-blue-700">
+                        Report has never been shared
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <form onSubmit={handleSubmit}>

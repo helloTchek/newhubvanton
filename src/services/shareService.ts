@@ -17,6 +17,9 @@ class ShareService {
         throw new Error('User not authenticated');
       }
 
+      const sharedAt = new Date().toISOString();
+
+      // Insert shared report record
       const { data, error } = await supabase
         .from('shared_reports')
         .insert({
@@ -25,7 +28,7 @@ class ShareService {
           shared_by: user.id,
           shared_to: params.sharedTo,
           message: params.message || null,
-          shared_at: new Date().toISOString(),
+          shared_at: sharedAt,
         })
         .select(`
           *,
@@ -35,6 +38,17 @@ class ShareService {
 
       if (error) {
         throw error;
+      }
+
+      // Update the inspection report's last_shared_at timestamp
+      const { error: updateError } = await supabase
+        .from('inspection_reports')
+        .update({ last_shared_at: sharedAt })
+        .eq('id', params.reportId);
+
+      if (updateError) {
+        console.error('Failed to update last_shared_at:', updateError);
+        // Don't throw - the share was successful, this is just tracking
       }
 
       const sharedReport: SharedReport = {
@@ -139,6 +153,43 @@ class ShareService {
       const errorMessage = error instanceof Error ? error.message : 'Failed to get latest shared report';
       console.error('Get latest shared report error:', error);
       throw new Error(errorMessage);
+    }
+  }
+
+  /**
+   * Check if a report has been modified since it was last shared
+   * @returns 'never_shared' | 'up_to_date' | 'needs_sharing'
+   */
+  async getReportShareStatus(reportId: string): Promise<'never_shared' | 'up_to_date' | 'needs_sharing'> {
+    try {
+      const { data, error } = await supabase
+        .from('inspection_reports')
+        .select('last_shared_at, updated_at')
+        .eq('id', reportId)
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data) {
+        return 'never_shared';
+      }
+
+      // Never been shared
+      if (!data.last_shared_at) {
+        return 'never_shared';
+      }
+
+      // Compare timestamps
+      const lastShared = new Date(data.last_shared_at).getTime();
+      const lastUpdated = new Date(data.updated_at).getTime();
+
+      return lastUpdated > lastShared ? 'needs_sharing' : 'up_to_date';
+    } catch (error: unknown) {
+      console.error('Get report share status error:', error);
+      // Default to needs_sharing on error to be safe
+      return 'needs_sharing';
     }
   }
 }
