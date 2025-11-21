@@ -31,7 +31,7 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
 
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
-  const { addTab, activeTabId, getTabState, setTabState } = useTabs();
+  const { addTab, activeTabId, getTabState, setTabState, tabs } = useTabs();
   const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -98,20 +98,40 @@ export const VehicleList: React.FC = () => {
   ]);
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
 
-  const [filters, setFilters] = useState<SearchFilters>({
-    query: '',
-    status: 'all',
-    companyId: user?.companyId || 'all',
-    inspectionType: 'all',
-    dateRange: undefined,
-    userId: 'all',
-    customerEmail: '',
-    customerPhone: '',
-    sortBy: 'date',
-    sortOrder: 'desc',
-    page: 1,
-    pageSize: 20
-  });
+  // Derive filters directly from tab state to avoid stale values during tab switches
+  const filters = useMemo(() => {
+    if (!activeTabId) {
+      return {
+        query: '',
+        status: 'all' as const,
+        companyId: user?.companyId || 'all',
+        inspectionType: 'all' as const,
+        dateRange: undefined,
+        userId: 'all',
+        customerEmail: '',
+        customerPhone: '',
+        sortBy: 'date' as const,
+        sortOrder: 'desc' as const,
+        page: 1,
+        pageSize: 20
+      };
+    }
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    return currentTab?.filters || {
+      query: '',
+      status: 'all' as const,
+      companyId: user?.companyId || 'all',
+      inspectionType: 'all' as const,
+      dateRange: undefined,
+      userId: 'all',
+      customerEmail: '',
+      customerPhone: '',
+      sortBy: 'date' as const,
+      sortOrder: 'desc' as const,
+      page: 1,
+      pageSize: 20
+    };
+  }, [activeTabId, tabs, user?.companyId]);
 
   const loadVehicles = useCallback(async () => {
     try {
@@ -216,25 +236,6 @@ export const VehicleList: React.FC = () => {
 
         const tabState = getTabState(activeTabId);
 
-        if (tabState && tabState.filters) {
-          setFilters(tabState.filters);
-        } else {
-          setFilters({
-            query: '',
-            status: 'all',
-            companyId: user?.companyId || 'all',
-            inspectionType: 'all',
-            dateRange: undefined,
-            userId: 'all',
-            customerEmail: '',
-            customerPhone: '',
-            sortBy: 'date',
-            sortOrder: 'desc',
-            page: 1,
-            pageSize: 20
-          });
-        }
-
         if (tabState && tabState.viewMode !== undefined) {
           setViewMode(tabState.viewMode);
         } else {
@@ -247,16 +248,16 @@ export const VehicleList: React.FC = () => {
         });
       }
     }
-  }, [activeTabId, preferencesLoaded, getTabState, user?.companyId]);
+  }, [activeTabId, preferencesLoaded, getTabState]);
 
   useEffect(() => {
     if (activeTabId && preferencesLoaded && !isLoadingTabStateRef.current) {
       const saveTimer = setTimeout(() => {
-        setTabState(activeTabId, { filters, viewMode });
+        setTabState(activeTabId, { viewMode });
       }, 500);
       return () => clearTimeout(saveTimer);
     }
-  }, [filters, viewMode, activeTabId, preferencesLoaded, setTabState]);
+  }, [viewMode, activeTabId, preferencesLoaded, setTabState]);
 
   useEffect(() => {
     if (!preferencesLoaded) return;
@@ -294,16 +295,25 @@ export const VehicleList: React.FC = () => {
   };
 
   const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
-    setFilters(prev => ({ ...prev, ...newFilters, page: 1 }));
-  }, []);
+    if (activeTabId) {
+      const updatedFilters = { ...filters, ...newFilters, page: 1 };
+      setTabState(activeTabId, { filters: updatedFilters });
+    }
+  }, [activeTabId, filters, setTabState]);
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({ ...prev, page }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (activeTabId) {
+      const updatedFilters = { ...filters, page };
+      setTabState(activeTabId, { filters: updatedFilters });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handlePageSizeChange = (pageSize: number) => {
-    setFilters(prev => ({ ...prev, pageSize, page: 1 }));
+    if (activeTabId) {
+      const updatedFilters = { ...filters, pageSize, page: 1 };
+      setTabState(activeTabId, { filters: updatedFilters });
+    }
   };
 
   const toggleSelectionMode = () => {
