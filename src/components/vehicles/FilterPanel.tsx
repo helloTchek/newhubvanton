@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag } from 'lucide-react';
 import { SearchFilters, VehicleStatus, InspectionType, Company, FilterType, Tag as TagType } from '../../types';
 import { tagService } from '../../services/tagService';
@@ -64,7 +64,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [pendingFilters, setPendingFilters] = useState<SearchFilters>(filters);
 
   // Sync pending filters with actual filters when they change (e.g., tab switching)
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPendingFilters(filters);
   }, [filters]);
 

@@ -276,11 +276,7 @@ export const VehicleList: React.FC = () => {
   }, [viewMode, filters, columnOrder, visibleColumns, visibleCardFields, saveUserPreferences, preferencesLoaded]);
 
   const handleVehicleClick = (vehicle: Vehicle) => {
-    addTab({
-      title: vehicle.registration || vehicle.vin || 'Vehicle',
-      path: `/vehicles/${vehicle.id}/report`,
-      iconType: 'car',
-    });
+    navigate(`/vehicles/${vehicle.id}/report`);
   };
 
   const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms') => {
