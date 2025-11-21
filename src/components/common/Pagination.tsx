@@ -64,12 +64,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 bg-white border-t border-gray-200">
-      <div className="flex items-center gap-4 text-sm text-gray-700">
-        <span>
-          Showing <span className="font-medium">{startItem}</span> to{' '}
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-700">
+        <span className="text-center sm:text-left">
+          <span className="hidden sm:inline">Showing </span>
+          <span className="font-medium">{startItem}</span>-
           <span className="font-medium">{endItem}</span> of{' '}
-          <span className="font-medium">{totalItems}</span> results
+          <span className="font-medium">{totalItems}</span>
         </span>
 
         {showPageSizeSelector && onPageSizeChange && (
@@ -93,12 +94,12 @@ export const Pagination: React.FC<PaginationProps> = ({
         )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2">
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
           className={clsx(
-            'p-2 rounded-md transition-colors',
+            'p-2 rounded-md transition-colors hidden sm:flex',
             currentPage === 1
               ? 'text-gray-400 cursor-not-allowed'
               : 'text-gray-700 hover:bg-gray-100'
@@ -128,19 +129,24 @@ export const Pagination: React.FC<PaginationProps> = ({
               return (
                 <span
                   key={`ellipsis-${index}`}
-                  className="px-3 py-1 text-gray-500"
+                  className="px-2 sm:px-3 py-1 text-gray-500"
                 >
                   ...
                 </span>
               );
             }
 
+            const isFirstOrLast = page === 1 || page === totalPages;
+            const isCurrentOrAdjacent = Math.abs(page - currentPage) <= 1;
+            const shouldShowOnMobile = isCurrentOrAdjacent || (isFirstOrLast && totalPages <= 5);
+
             return (
               <button
                 key={page}
                 onClick={() => onPageChange(page)}
                 className={clsx(
-                  'px-3 py-1 rounded-md text-sm font-medium transition-colors',
+                  'px-2 sm:px-3 py-1 rounded-md text-sm font-medium transition-colors',
+                  !shouldShowOnMobile && 'hidden sm:inline-flex',
                   currentPage === page
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-700 hover:bg-gray-100'
@@ -170,7 +176,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
           className={clsx(
-            'p-2 rounded-md transition-colors',
+            'p-2 rounded-md transition-colors hidden sm:flex',
             currentPage === totalPages
               ? 'text-gray-400 cursor-not-allowed'
               : 'text-gray-700 hover:bg-gray-100'

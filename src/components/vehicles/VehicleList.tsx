@@ -553,7 +553,7 @@ export const VehicleList: React.FC = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setShowCardFieldSelector(false)}
                   />
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto">
+                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
                       <div className="space-y-2">
@@ -597,7 +597,7 @@ export const VehicleList: React.FC = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setShowColumnSelector(false)}
                   />
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto">
+                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
                       <div className="space-y-2">
@@ -668,9 +668,9 @@ export const VehicleList: React.FC = () => {
 
       {/* Bulk Actions Toolbar */}
       {isSelectionMode && selectedVehicleIds.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-3 sm:gap-4">
               <button
                 onClick={handleSelectAll}
                 className="text-sm font-medium text-blue-700 hover:text-blue-900"
@@ -682,20 +682,21 @@ export const VehicleList: React.FC = () => {
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => setIsBulkTagModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
                 <TagIcon className="w-4 h-4" />
-                <span>Apply Tag</span>
+                <span className="hidden sm:inline">Apply Tag</span>
+                <span className="sm:hidden">Tag</span>
               </button>
 
               <button
                 onClick={() => setIsBulkChaseUpModalOpen(true)}
                 disabled={!canChaseUpSelection()}
                 className={clsx(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium",
+                  "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm font-medium whitespace-nowrap",
                   canChaseUpSelection()
                     ? "bg-orange-600 text-white hover:bg-orange-700"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -703,12 +704,13 @@ export const VehicleList: React.FC = () => {
                 title={!canChaseUpSelection() ? "Some selected vehicles are not eligible for chase up" : "Send bulk chase up"}
               >
                 <Bell className="w-4 h-4" />
-                <span>Bulk Chase Up</span>
+                <span className="hidden sm:inline">Bulk Chase Up</span>
+                <span className="sm:hidden">Chase Up</span>
               </button>
 
               <button
                 onClick={handleBulkArchive}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
               >
                 <Archive className="w-4 h-4" />
                 <span>Archive</span>
