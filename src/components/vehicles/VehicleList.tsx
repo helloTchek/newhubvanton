@@ -40,6 +40,7 @@ export const VehicleList: React.FC = () => {
   const isLoadingTabStateRef = React.useRef(false);
   const previousTabIdRef = React.useRef<string | null>(null);
   const [isTabSwitching, setIsTabSwitching] = useState(false);
+  const [filterPanelKey, setFilterPanelKey] = useState(0);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -242,10 +243,12 @@ export const VehicleList: React.FC = () => {
           setViewMode('grid');
         }
 
-        requestAnimationFrame(() => {
+        // Increment key to force FilterPanel remount with correct props
+        setTimeout(() => {
+          setFilterPanelKey(prev => prev + 1);
           setIsTabSwitching(false);
           isLoadingTabStateRef.current = false;
-        });
+        }, 0);
       }
     }
   }, [activeTabId, preferencesLoaded, getTabState]);
@@ -578,9 +581,9 @@ export const VehicleList: React.FC = () => {
           {/* Right Controls */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Filter Toggle with Badge */}
-            {!isTabSwitching && (
+            {!isTabSwitching && activeTabId && (
               <FilterPanel
-                key={activeTabId}
+                key={filterPanelKey}
                 filters={filters}
                 onFiltersChange={updateFilters}
                 companies={companies}

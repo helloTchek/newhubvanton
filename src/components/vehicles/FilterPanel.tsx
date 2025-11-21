@@ -61,11 +61,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const statusRef = useRef<HTMLDivElement>(null);
 
   // Local filter state (pending changes)
-  const [pendingFilters, setPendingFilters] = useState<SearchFilters>(filters);
+  const [pendingFilters, setPendingFilters] = useState<SearchFilters>(() => filters);
 
   // Sync pending filters with actual filters when they change (e.g., tab switching)
   useLayoutEffect(() => {
     setPendingFilters(filters);
+    // Also reset expanded state when filters change externally to ensure clean UI
+    setIsExpanded(false);
   }, [filters]);
 
   useEffect(() => {
