@@ -157,7 +157,6 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const getTabState = useCallback((tabId: string) => {
     const tab = tabs.find(t => t.id === tabId);
-    console.log('🔍 getTabState called for tabId:', tabId, 'found tab:', tab);
     if (!tab) return undefined;
     return {
       filters: tab.filters,
@@ -166,12 +165,7 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [tabs]);
 
   const setTabState = useCallback((tabId: string, state: { filters?: SearchFilters; viewMode?: 'grid' | 'list' }) => {
-    console.log('💾 setTabState called for tabId:', tabId, 'with state:', state);
-    setTabs(prev => {
-      const updated = prev.map(t => t.id === tabId ? { ...t, ...state } : t);
-      console.log('📋 Updated tabs:', updated);
-      return updated;
-    });
+    setTabs(prev => prev.map(t => t.id === tabId ? { ...t, ...state } : t));
   }, []);
 
   useEffect(() => {

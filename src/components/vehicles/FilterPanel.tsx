@@ -63,12 +63,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   // Local filter state (pending changes)
   const [pendingFilters, setPendingFilters] = useState<SearchFilters>(filters);
 
-  // Sync pending filters with actual filters when modal opens
+  // Sync pending filters with actual filters when they change (e.g., tab switching)
   useEffect(() => {
-    if (isExpanded) {
-      setPendingFilters(filters);
-    }
-  }, [isExpanded, filters]);
+    setPendingFilters(filters);
+  }, [filters]);
 
   useEffect(() => {
     loadTags();

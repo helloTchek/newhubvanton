@@ -209,18 +209,14 @@ export const VehicleList: React.FC = () => {
   useEffect(() => {
     if (activeTabId && preferencesLoaded) {
       if (previousTabIdRef.current !== activeTabId) {
-        console.log('🔄 Tab changed from', previousTabIdRef.current, 'to', activeTabId);
         previousTabIdRef.current = activeTabId;
         isLoadingTabStateRef.current = true;
 
         const tabState = getTabState(activeTabId);
-        console.log('📋 Tab state for', activeTabId, ':', tabState);
 
         if (tabState && tabState.filters) {
-          console.log('✅ Restoring filters:', tabState.filters);
           setFilters(tabState.filters);
         } else {
-          console.log('⚠️ No saved filters, using defaults');
           setFilters({
             query: '',
             status: 'all',
@@ -253,7 +249,6 @@ export const VehicleList: React.FC = () => {
   useEffect(() => {
     if (activeTabId && preferencesLoaded && !isLoadingTabStateRef.current) {
       const saveTimer = setTimeout(() => {
-        console.log('💾 Saving tab state for', activeTabId, ':', { filters, viewMode });
         setTabState(activeTabId, { filters, viewMode });
       }, 500);
       return () => clearTimeout(saveTimer);
