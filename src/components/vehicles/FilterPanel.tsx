@@ -494,7 +494,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <select
               value={pendingFilters.companyId}
               onChange={(e) => updatePendingFilters({ companyId: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+              className="w-full px-3 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
             >
               <option value="all">All Companies</option>
               {companies.map((company) => (
@@ -508,7 +508,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       case 'customerEmail':
         return (
-          <div key={filterId} className="col-span-2">
+          <div key={filterId} className="sm:col-span-2 lg:col-span-3">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <Mail className="w-4 h-4 text-gray-400" />
               Customer Email
@@ -518,7 +518,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               placeholder="customer@example.com"
               value={pendingFilters.customerEmail || ''}
               onChange={(e) => updatePendingFilters({ customerEmail: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
             />
           </div>
         );
@@ -535,7 +535,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               placeholder="+1234567890"
               value={pendingFilters.customerPhone || ''}
               onChange={(e) => updatePendingFilters({ customerPhone: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
             />
           </div>
         );
@@ -569,7 +569,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     e.preventDefault();
                   }
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
               />
               <input
                 type="number"
@@ -592,7 +592,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     e.preventDefault();
                   }
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
           </div>
@@ -627,7 +627,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     e.preventDefault();
                   }
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
               />
               <input
                 type="number"
@@ -650,7 +650,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     e.preventDefault();
                   }
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
           </div>
