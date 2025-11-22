@@ -466,7 +466,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     end: pendingFilters.dateRange?.end || ''
                   }
                 })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <input
                 type="date"
@@ -477,7 +477,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     end: e.target.value
                   }
                 })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
