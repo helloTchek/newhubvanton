@@ -486,7 +486,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <div className="flex gap-2">
                 <button
                   onClick={handleChaseUpClick}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors font-medium"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors font-medium text-sm"
                 >
                   <Bell className="w-4 h-4" />
                   <span>Chase Up?</span>
