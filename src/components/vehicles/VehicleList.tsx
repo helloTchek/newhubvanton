@@ -416,11 +416,20 @@ export const VehicleList: React.FC = () => {
   };
 
   const updateVisibleColumns = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
-    if (!activeTabId) return;
+    if (!activeTabId) {
+      console.log('[updateVisibleColumns] No activeTabId');
+      return;
+    }
 
     const currentTab = tabs.find(t => t.id === activeTabId);
     const currentColumns = currentTab?.visibleColumns || defaultVisibleColumns;
     const updated = updater(currentColumns);
+    console.log('[updateVisibleColumns]', {
+      activeTabId,
+      currentColumns,
+      updated,
+      hasChanged: JSON.stringify(currentColumns) !== JSON.stringify(updated)
+    });
     setTabState(activeTabId, { visibleColumns: updated });
   }, [activeTabId, tabs, setTabState]);
 
