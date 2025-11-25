@@ -72,22 +72,21 @@ export const VehicleList: React.FC = () => {
     registration: true,
     vin: true,
     makeModel: true,
-    company: false,
-    customerEmail: false,
+    company: true,
+    customerEmail: true,
     status: true,
     inspectionDate: true,
-    inspectionId: false,
-    mileage: false,
-    repairCost: false,
-    value: false,
-    tags: false,
-    carBody: false,
-    rim: false,
-    glass: false,
-    interior: false,
-    tires: false,
-    dashboard: false,
-    declarations: false
+    inspectionId: true,
+    mileage: true,
+    value: true,
+    tags: true,
+    carBody: true,
+    rim: true,
+    glass: true,
+    interior: true,
+    tires: true,
+    dashboard: true,
+    declarations: true
   };
 
   const defaultVisibleCardFields = {
@@ -109,7 +108,7 @@ export const VehicleList: React.FC = () => {
 
   const defaultColumnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
-    'mileage', 'repairCost', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
 
@@ -135,7 +134,6 @@ export const VehicleList: React.FC = () => {
   // Derive filters directly from tab state to avoid stale values during tab switches
   const filters = useMemo(() => {
     if (!activeTabId) {
-      console.log('[VehicleList] No active tab, using default filters');
       return {
         query: '',
         status: 'all' as const,
@@ -152,8 +150,7 @@ export const VehicleList: React.FC = () => {
       };
     }
     const currentTab = tabs.find(t => t.id === activeTabId);
-    console.log('[VehicleList] Active tab:', activeTabId, 'Tab filters:', currentTab?.filters);
-    const resultFilters = currentTab?.filters || {
+    return currentTab?.filters || {
       query: '',
       status: 'all' as const,
       companyId: user?.companyId || 'all',
@@ -167,8 +164,6 @@ export const VehicleList: React.FC = () => {
       page: 1,
       pageSize: 20
     };
-    console.log('[VehicleList] Using filters:', resultFilters);
-    return resultFilters;
   }, [activeTabId, tabs, user?.companyId]);
 
   const loadVehicles = useCallback(async (skipCache = false) => {
@@ -416,22 +411,18 @@ export const VehicleList: React.FC = () => {
   };
 
   const updateVisibleColumns = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
-    if (!activeTabId) return;
-
-    const currentTab = tabs.find(t => t.id === activeTabId);
-    const currentColumns = currentTab?.visibleColumns || defaultVisibleColumns;
-    const updated = updater(currentColumns);
-    setTabState(activeTabId, { visibleColumns: updated });
-  }, [activeTabId, tabs, setTabState]);
+    if (activeTabId) {
+      const updated = updater(visibleColumns);
+      setTabState(activeTabId, { visibleColumns: updated });
+    }
+  }, [activeTabId, visibleColumns, setTabState]);
 
   const updateVisibleCardFields = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
-    if (!activeTabId) return;
-
-    const currentTab = tabs.find(t => t.id === activeTabId);
-    const currentFields = currentTab?.visibleCardFields || defaultVisibleCardFields;
-    const updated = updater(currentFields);
-    setTabState(activeTabId, { visibleCardFields: updated });
-  }, [activeTabId, tabs, setTabState]);
+    if (activeTabId) {
+      const updated = updater(visibleCardFields);
+      setTabState(activeTabId, { visibleCardFields: updated });
+    }
+  }, [activeTabId, visibleCardFields, setTabState]);
 
   const updateColumnOrder = useCallback((newOrder: string[]) => {
     if (activeTabId) {
@@ -548,7 +539,6 @@ export const VehicleList: React.FC = () => {
       'makeModel': 'make',
       'inspectionDate': 'date',
       'mileage': 'mileage',
-      'repairCost': 'repairCost',
       'value': 'value',
       'status': 'status'
     };
@@ -638,7 +628,6 @@ export const VehicleList: React.FC = () => {
       'inspectionDate': 'Inspection Date',
       'inspectionId': 'Inspection ID',
       'mileage': 'Mileage',
-      'repairCost': 'Repair Cost',
       'value': 'Value',
       'tags': 'Tags',
       'carBody': 'Car Body',
@@ -859,7 +848,6 @@ export const VehicleList: React.FC = () => {
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
                           mileage: 'Mileage',
-                          repairCost: 'Repair Cost',
                           value: 'Value',
                           tags: 'Tags',
                           carBody: 'Car Body',

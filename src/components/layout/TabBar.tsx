@@ -15,7 +15,7 @@ const getIconForType = (iconType?: TabIconType) => {
 };
 
 export const TabBar: React.FC = () => {
-  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab, resetToDefaultTabs } = useTabs();
+  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab } = useTabs();
   const [contextMenu, setContextMenu] = useState<{ tabId: string; x: number; y: number } | null>(null);
   const [renamingTabId, setRenamingTabId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -221,18 +221,6 @@ export const TabBar: React.FC = () => {
               Close all tabs
             </button>
           )}
-          <div className="border-t border-gray-100 my-1"></div>
-          <button
-            onClick={() => {
-              if (confirm('Reset all tabs to default configuration? This will replace all existing tabs.')) {
-                resetToDefaultTabs();
-                handleCloseContextMenu();
-              }
-            }}
-            className="w-full px-4 py-2 text-left text-sm text-orange-600 hover:bg-orange-50"
-          >
-            Reset to Defaults
-          </button>
         </div>
       )}
     </>

@@ -37,258 +37,29 @@ interface TabContextType {
   renameTab: (tabId: string, newTitle: string) => void;
   getTabState: (tabId: string) => TabViewState | undefined;
   setTabState: (tabId: string, state: TabViewState) => void;
-  resetToDefaultTabs: () => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
 
 const TAB_STORAGE_KEY = 'vehicleDashboardTabs';
 const ACTIVE_TAB_STORAGE_KEY = 'vehicleDashboardActiveTab';
-const TABS_INITIALIZED_KEY = 'vehicleDashboardTabsInitialized';
-
-const createDefaultTabs = (): Tab[] => {
-  const baseTime = Date.now();
-
-  return [
-    {
-      id: `tab-${baseTime}-1`,
-      title: 'Inspected Vehicles',
-      path: '/vehicles',
-      iconType: 'grid' as TabIconType,
-      viewMode: 'grid',
-      visibleCardFields: {
-        image: true,
-        registration: true,
-        vin: false,
-        makeModel: false,
-        age: false,
-        mileage: false,
-        company: false,
-        customerEmail: false,
-        inspectionDate: true,
-        inspectionId: false,
-        repairCost: false,
-        value: false,
-        damageResults: false,
-        tags: false
-      },
-      filters: {
-        query: '',
-        status: 'all',
-        companyId: 'all',
-        inspectionType: 'all',
-        dateRange: undefined,
-        userId: 'all',
-        customerEmail: '',
-        customerPhone: '',
-        sortBy: 'date',
-        sortOrder: 'desc',
-        page: 1,
-        pageSize: 20,
-        statusIds: ['to_review', 'inspected']
-      }
-    },
-    {
-      id: `tab-${baseTime}-2`,
-      title: 'All Inspections',
-      path: '/vehicles',
-      iconType: 'none' as TabIconType,
-      viewMode: 'list',
-      columnOrder: ['image', 'registration', 'status', 'inspectionDate', 'mileage', 'repairCost', 'carBody', 'rim', 'interior', 'tires', 'dashboard'],
-      visibleColumns: {
-        image: true,
-        registration: true,
-        vin: false,
-        makeModel: false,
-        company: false,
-        customerEmail: false,
-        status: true,
-        inspectionDate: true,
-        inspectionId: false,
-        mileage: true,
-        repairCost: false,
-        value: false,
-        tags: false,
-        carBody: true,
-        rim: true,
-        glass: false,
-        interior: true,
-        tires: true,
-        dashboard: true,
-        declarations: false
-      },
-      filters: {
-        query: '',
-        status: 'all',
-        companyId: 'all',
-        inspectionType: 'all',
-        dateRange: undefined,
-        userId: 'all',
-        customerEmail: '',
-        customerPhone: '',
-        sortBy: 'date',
-        sortOrder: 'desc',
-        page: 1,
-        pageSize: 20,
-        statusIds: ['to_review', 'inspected']
-      }
-    },
-    {
-      id: `tab-${baseTime}-3`,
-      title: 'Repairs >1000€',
-      path: '/vehicles',
-      iconType: 'none' as TabIconType,
-      viewMode: 'list',
-      columnOrder: ['image', 'registration', 'status', 'inspectionDate', 'mileage', 'repairCost', 'carBody', 'rim', 'interior', 'tires', 'dashboard'],
-      visibleColumns: {
-        image: true,
-        registration: true,
-        vin: false,
-        makeModel: false,
-        company: false,
-        customerEmail: false,
-        status: true,
-        inspectionDate: true,
-        inspectionId: false,
-        mileage: true,
-        repairCost: true,
-        value: false,
-        tags: false,
-        carBody: true,
-        rim: true,
-        glass: false,
-        interior: true,
-        tires: true,
-        dashboard: true,
-        declarations: false
-      },
-      filters: {
-        query: '',
-        status: 'all',
-        companyId: 'all',
-        inspectionType: 'all',
-        dateRange: undefined,
-        userId: 'all',
-        customerEmail: '',
-        customerPhone: '',
-        sortBy: 'date',
-        sortOrder: 'desc',
-        page: 1,
-        pageSize: 20,
-        statusIds: ['to_review', 'inspected'],
-        repairCostRange: {
-          min: 1000
-        }
-      }
-    },
-    {
-      id: `tab-${baseTime}-4`,
-      title: 'Pending Inspections',
-      path: '/vehicles',
-      iconType: 'none' as TabIconType,
-      viewMode: 'list',
-      columnOrder: ['image', 'registration', 'status', 'inspectionDate', 'mileage', 'repairCost', 'carBody', 'rim', 'interior', 'tires', 'dashboard'],
-      visibleColumns: {
-        image: true,
-        registration: true,
-        vin: false,
-        makeModel: false,
-        company: false,
-        customerEmail: false,
-        status: true,
-        inspectionDate: true,
-        inspectionId: false,
-        mileage: true,
-        repairCost: false,
-        value: false,
-        tags: false,
-        carBody: true,
-        rim: true,
-        glass: false,
-        interior: true,
-        tires: true,
-        dashboard: true,
-        declarations: false
-      },
-      filters: {
-        query: '',
-        status: 'all',
-        companyId: 'all',
-        inspectionType: 'all',
-        dateRange: undefined,
-        userId: 'all',
-        customerEmail: '',
-        customerPhone: '',
-        sortBy: 'date',
-        sortOrder: 'desc',
-        page: 1,
-        pageSize: 20,
-        statusIds: ['link_sent', 'chased_up_1', 'chased_up_2', 'chased_up_manual', 'inspection_in_progress']
-      }
-    }
-  ];
-};
 
 export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [tabs, setTabs] = useState<Tab[]>(() => {
     const savedTabs = localStorage.getItem(TAB_STORAGE_KEY);
-    const isInitialized = localStorage.getItem(TABS_INITIALIZED_KEY);
-
-    console.log('[TabContext] Initializing tabs:', { savedTabs: !!savedTabs, isInitialized });
-
-    // If no tabs exist at all, create defaults
-    if (!savedTabs || savedTabs === '[]') {
-      console.log('[TabContext] No saved tabs, creating defaults');
-      const defaultTabs = createDefaultTabs();
-      localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-      return defaultTabs;
-    }
-
-    // If tabs exist, load them
-    if (savedTabs && isInitialized) {
-      try {
-        const parsedTabs = JSON.parse(savedTabs);
-        console.log('[TabContext] Loaded saved tabs:', parsedTabs.length, 'tabs');
-        return parsedTabs;
-      } catch (error) {
-        console.error('[TabContext] Failed to parse saved tabs, creating defaults:', error);
-        const defaultTabs = createDefaultTabs();
-        localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-        return defaultTabs;
-      }
-    }
-
-    // If tabs exist but not initialized flag (legacy state), use saved tabs
     if (savedTabs) {
       try {
-        const parsedTabs = JSON.parse(savedTabs);
-        console.log('[TabContext] Loading legacy tabs:', parsedTabs.length, 'tabs');
-        localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-        return parsedTabs;
-      } catch (error) {
-        console.error('[TabContext] Failed to parse legacy tabs, creating defaults:', error);
-        const defaultTabs = createDefaultTabs();
-        localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-        return defaultTabs;
+        return JSON.parse(savedTabs);
+      } catch {
+        return [];
       }
     }
-
-    console.log('[TabContext] Creating default tabs for first time');
-    const defaultTabs = createDefaultTabs();
-    localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-    return defaultTabs;
+    return [];
   });
   const [activeTabId, setActiveTabId] = useState<string | null>(() => {
-    const savedActiveTab = localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
-    if (savedActiveTab) {
-      console.log('[TabContext] Restored active tab:', savedActiveTab);
-      return savedActiveTab;
-    }
-    const firstTabId = tabs.length > 0 ? tabs[0].id : null;
-    console.log('[TabContext] Using first tab as active:', firstTabId);
-    return firstTabId;
+    return localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
   });
 
   useEffect(() => {
@@ -428,15 +199,6 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, ...state } : t));
   }, []);
 
-  const resetToDefaultTabs = useCallback(() => {
-    const defaultTabs = createDefaultTabs();
-    setTabs(defaultTabs);
-    setActiveTabId(defaultTabs[0].id);
-    navigate('/vehicles');
-    localStorage.removeItem(TABS_INITIALIZED_KEY);
-    localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
-  }, [navigate]);
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'w') {
@@ -479,7 +241,6 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         renameTab,
         getTabState,
         setTabState,
-        resetToDefaultTabs,
       }}
     >
       {children}
