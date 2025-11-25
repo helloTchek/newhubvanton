@@ -27,6 +27,7 @@ interface VehicleTableRowProps {
   vehicle: Vehicle;
   onClick?: () => void;
   onShareReport?: (vehicle: Vehicle) => void;
+  onChaseUp?: (vehicleId: string) => void;
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
@@ -65,6 +66,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   vehicle,
   onClick,
   onShareReport,
+  onChaseUp,
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
@@ -155,6 +157,14 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     e.stopPropagation();
     if (onShareReport) {
       onShareReport(vehicle);
+    }
+    setShowActionsMenu(false);
+  };
+
+  const handleChaseUpClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onChaseUp) {
+      onChaseUp(vehicle.id);
     }
     setShowActionsMenu(false);
   };
@@ -503,6 +513,37 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           {showActionsMenu && (
             <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
               <div className="py-1" role="menu">
+                {onChaseUp && (
+                  vehicle.status === 'link_sent' ||
+                  vehicle.status === 'chased_up_1' ||
+                  vehicle.status === 'chased_up_2' ||
+                  vehicle.status === 'inspection_in_progress'
+                ) && (
+                  <>
+                    <button
+                      onClick={handleChaseUpClick}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
+                      role="menuitem"
+                    >
+                      <Bell className="h-4 w-4 text-orange-600" />
+                      Chase Up Customer
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                  </>
+                )}
+                {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
+                  <>
+                    <button
+                      onClick={handleShareReport}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                      role="menuitem"
+                    >
+                      <Share2 className="h-4 w-4 text-blue-600" />
+                      Share Updated Report
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                  </>
+                )}
                 <button
                   onClick={(e) => handleDownloadReport(e, true)}
                   className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -536,19 +577,6 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                   <ExternalLink className="h-4 w-4" />
                   Open without repair costs
                 </button>
-                {(vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
-                  <>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleShareReport}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <Share2 className="h-4 w-4" />
-                      Share Report
-                    </button>
-                  </>
-                )}
                 <div className="border-t border-gray-100 my-1"></div>
                 <button
                   onClick={handleExportData}

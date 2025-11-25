@@ -11,6 +11,7 @@ import { VehicleCard } from './VehicleCard';
 import { VehicleTableRow } from './VehicleTableRow';
 import { FilterPanel } from './FilterPanel';
 import { BulkChaseUpModal } from './BulkChaseUpModal';
+import { ChaseUpModal } from './ChaseUpModal';
 import { BulkTagModal } from './BulkTagModal';
 import { ShareReportModal } from './ShareReportModal';
 import { shareService } from '../../services/shareService';
@@ -55,6 +56,8 @@ export const VehicleList: React.FC = () => {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedVehicleIds, setSelectedVehicleIds] = useState<string[]>([]);
   const [isBulkChaseUpModalOpen, setIsBulkChaseUpModalOpen] = useState(false);
+  const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
+  const [vehicleToChaseUp, setVehicleToChaseUp] = useState<Vehicle | null>(null);
   const [isBulkTagModalOpen, setIsBulkTagModalOpen] = useState(false);
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const [showCardFieldSelector, setShowCardFieldSelector] = useState(false);
@@ -363,6 +366,14 @@ export const VehicleList: React.FC = () => {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop;
     sessionStorage.setItem('vehicleListScrollPosition', scrollPosition.toString());
     navigate(`/vehicles/${vehicle.id}/report`);
+  };
+
+  const handleChaseUpClick = (vehicleId: string) => {
+    const vehicle = vehicles.find(v => v.id === vehicleId);
+    if (vehicle) {
+      setVehicleToChaseUp(vehicle);
+      setIsChaseUpModalOpen(true);
+    }
   };
 
   const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms', message?: string) => {
@@ -1009,6 +1020,7 @@ export const VehicleList: React.FC = () => {
                     vehicle={vehicle}
                     onClick={() => handleVehicleClick(vehicle)}
                     onShareReport={handleShareReport}
+                    onChaseUp={handleChaseUpClick}
                     isSelectionMode={isSelectionMode}
                     isSelected={selectedVehicleIds.includes(vehicle.id)}
                     onSelectToggle={handleSelectToggle}
@@ -1057,6 +1069,18 @@ export const VehicleList: React.FC = () => {
           onShareInternal={handleShareInternal}
           vehicleRegistration={vehicleToShare.registration}
           shareStatus={shareStatus}
+        />
+      )}
+
+      {vehicleToChaseUp && (
+        <ChaseUpModal
+          vehicle={vehicleToChaseUp}
+          isOpen={isChaseUpModalOpen}
+          onClose={() => {
+            setIsChaseUpModalOpen(false);
+            setVehicleToChaseUp(null);
+          }}
+          onChaseUp={handleChaseUp}
         />
       )}
     </div>
