@@ -36,6 +36,7 @@ interface TabContextType {
   closeAllTabs: () => void;
   renameTab: (tabId: string, newTitle: string) => void;
   duplicateTab: (tabId: string) => void;
+  reorderTabs: (fromIndex: number, toIndex: number) => void;
   getTabState: (tabId: string) => TabViewState | undefined;
   setTabState: (tabId: string, state: TabViewState) => void;
 }
@@ -224,6 +225,15 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, ...state } : t));
   }, []);
 
+  const reorderTabs = useCallback((fromIndex: number, toIndex: number) => {
+    setTabs(prev => {
+      const newTabs = [...prev];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+      newTabs.splice(toIndex, 0, movedTab);
+      return newTabs;
+    });
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'w') {
@@ -265,6 +275,7 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         closeAllTabs,
         renameTab,
         duplicateTab,
+        reorderTabs,
         getTabState,
         setTabState,
       }}

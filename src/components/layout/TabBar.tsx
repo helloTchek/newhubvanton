@@ -15,10 +15,12 @@ const getIconForType = (iconType?: TabIconType) => {
 };
 
 export const TabBar: React.FC = () => {
-  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab, duplicateTab } = useTabs();
+  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab, duplicateTab, reorderTabs } = useTabs();
   const [contextMenu, setContextMenu] = useState<{ tabId: string; x: number; y: number } | null>(null);
   const [renamingTabId, setRenamingTabId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
+  const [dragOverTabId, setDragOverTabId] = useState<string | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const renameInputRef = useRef<HTMLInputElement>(null);
 
@@ -87,6 +89,48 @@ export const TabBar: React.FC = () => {
     }
   }, [renamingTabId]);
 
+  const handleDragStart = (e: React.DragEvent, tabId: string) => {
+    setDraggedTabId(tabId);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', tabId);
+  };
+
+  const handleDragOver = (e: React.DragEvent, tabId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedTabId && draggedTabId !== tabId) {
+      setDragOverTabId(tabId);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setDragOverTabId(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetTabId: string) => {
+    e.preventDefault();
+    if (!draggedTabId || draggedTabId === targetTabId) {
+      setDraggedTabId(null);
+      setDragOverTabId(null);
+      return;
+    }
+
+    const fromIndex = tabs.findIndex(t => t.id === draggedTabId);
+    const toIndex = tabs.findIndex(t => t.id === targetTabId);
+
+    if (fromIndex !== -1 && toIndex !== -1) {
+      reorderTabs(fromIndex, toIndex);
+    }
+
+    setDraggedTabId(null);
+    setDragOverTabId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTabId(null);
+    setDragOverTabId(null);
+  };
+
   if (tabs.length === 0) {
     return null;
   }
@@ -98,13 +142,21 @@ export const TabBar: React.FC = () => {
           {tabs.map((tab) => (
             <div
               key={tab.id}
+              draggable={!renamingTabId}
               onClick={() => handleTabClick(tab.id)}
               onContextMenu={(e) => handleContextMenu(e, tab.id)}
+              onDragStart={(e) => handleDragStart(e, tab.id)}
+              onDragOver={(e) => handleDragOver(e, tab.id)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, tab.id)}
+              onDragEnd={handleDragEnd}
               className={clsx(
-                'group flex items-center gap-2 px-4 py-2.5 cursor-pointer transition-all min-w-0 max-w-[220px] relative',
+                'group flex items-center gap-2 px-4 py-2.5 cursor-move transition-all min-w-0 max-w-[220px] relative',
                 activeTabId === tab.id
                   ? 'bg-white text-gray-900 shadow-sm rounded-t-lg'
-                  : 'bg-transparent text-gray-700 hover:bg-white/50 rounded-t-lg'
+                  : 'bg-transparent text-gray-700 hover:bg-white/50 rounded-t-lg',
+                draggedTabId === tab.id && 'opacity-50',
+                dragOverTabId === tab.id && 'border-l-2 border-blue-500'
               )}
               style={{
                 marginBottom: '-1px',
