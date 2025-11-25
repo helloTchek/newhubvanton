@@ -157,6 +157,36 @@ class AuthService {
     }
   }
 
+  async resetPassword(email: string): Promise<void> {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Password reset failed';
+      throw new Error(errorMessage);
+    }
+  }
+
+  async updatePassword(newPassword: string): Promise<void> {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Password update failed';
+      throw new Error(errorMessage);
+    }
+  }
+
   async getCurrentUser(): Promise<User | null> {
     try {
       // Add timeout to getSession to prevent hanging

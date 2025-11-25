@@ -16,6 +16,7 @@ import { VehicleReportView } from './components/vehicles/VehicleReportView';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 import { DamageReviewPage } from './pages/DamageReviewPage';
 import DamageRecapPage from './pages/DamageRecapPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; requiresCompany?: boolean }> = ({
@@ -141,6 +142,7 @@ function App() {
               <div className="App">
                 <Routes>
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/*" element={
                 <ProtectedRoute>
                   <Routes>
