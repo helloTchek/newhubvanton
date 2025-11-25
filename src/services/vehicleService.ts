@@ -82,7 +82,7 @@ class VehicleService {
         .from('vehicles')
         .select(`
           *,
-          companies!inner(
+          companies(
             id,
             name,
             is_fast_track_disabled
@@ -280,7 +280,7 @@ class VehicleService {
         .from('vehicles')
         .select(`
           *,
-          companies!inner(
+          companies(
             id,
             name
           )
@@ -334,7 +334,7 @@ class VehicleService {
         .from('vehicles')
         .select(`
           *,
-          companies!inner(id, name)
+          companies(id, name)
         `)
         .eq('id', vehicleId)
         .maybeSingle();
