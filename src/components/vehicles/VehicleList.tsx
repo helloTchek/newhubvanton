@@ -70,23 +70,23 @@ export const VehicleList: React.FC = () => {
   const defaultVisibleColumns = {
     image: true,
     registration: true,
-    vin: false,
+    vin: true,
     makeModel: true,
-    company: false,
-    customerEmail: false,
+    company: true,
+    customerEmail: true,
     status: true,
     inspectionDate: true,
-    inspectionId: false,
-    mileage: false,
-    value: false,
-    tags: false,
-    carBody: false,
-    rim: false,
-    glass: false,
-    interior: false,
-    tires: false,
-    dashboard: false,
-    declarations: false
+    inspectionId: true,
+    mileage: true,
+    value: true,
+    tags: true,
+    carBody: true,
+    rim: true,
+    glass: true,
+    interior: true,
+    tires: true,
+    dashboard: true,
+    declarations: true
   };
 
   const defaultVisibleCardFields = {
@@ -812,7 +812,7 @@ export const VehicleList: React.FC = () => {
                           <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                             <input
                               type="checkbox"
-                              checked={visibleCardFields[key as keyof typeof visibleCardFields] ?? false}
+                              checked={visibleCardFields[key as keyof typeof visibleCardFields]}
                               onChange={(e) =>
                                 updateVisibleCardFields(prev => ({ ...prev, [key]: e.target.checked }))
                               }
@@ -861,7 +861,7 @@ export const VehicleList: React.FC = () => {
                           <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                             <input
                               type="checkbox"
-                              checked={visibleColumns[key as keyof typeof visibleColumns] ?? false}
+                              checked={visibleColumns[key as keyof typeof visibleColumns]}
                               onChange={(e) =>
                                 updateVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))
                               }
