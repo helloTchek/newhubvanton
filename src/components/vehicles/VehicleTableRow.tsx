@@ -317,6 +317,19 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </td>
         );
 
+      case 'repairCost':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm">
+            {vehicle.estimatedCost > 0 ? (
+              <span className="font-medium text-red-600">
+                {formatCurrency(vehicle.estimatedCost)}
+              </span>
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </td>
+        );
+
       case 'value':
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap">

@@ -108,7 +108,7 @@ export const VehicleList: React.FC = () => {
 
   const defaultColumnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
-    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'mileage', 'repairCost', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
 
@@ -543,6 +543,7 @@ export const VehicleList: React.FC = () => {
       'makeModel': 'make',
       'inspectionDate': 'date',
       'mileage': 'mileage',
+      'repairCost': 'repairCost',
       'value': 'value',
       'status': 'status'
     };
@@ -632,6 +633,7 @@ export const VehicleList: React.FC = () => {
       'inspectionDate': 'Inspection Date',
       'inspectionId': 'Inspection ID',
       'mileage': 'Mileage',
+      'repairCost': 'Repair Cost',
       'value': 'Value',
       'tags': 'Tags',
       'carBody': 'Car Body',
@@ -852,6 +854,7 @@ export const VehicleList: React.FC = () => {
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
                           mileage: 'Mileage',
+                          repairCost: 'Repair Cost',
                           value: 'Value',
                           tags: 'Tags',
                           carBody: 'Car Body',
