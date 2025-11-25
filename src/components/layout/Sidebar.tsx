@@ -67,16 +67,16 @@ export const Sidebar: React.FC = () => {
       {/* Mobile floating action menu */}
       <div ref={mobileMenuRef} className="lg:hidden fixed bottom-4 right-4 z-50">
         {isMobileOpen && (
-          <div className="absolute bottom-16 right-0 flex flex-col gap-3 mb-2">
+          <div className="absolute bottom-16 right-0 flex flex-col gap-3 mb-2 min-w-[200px]">
             <NavLink
               to="/vehicles"
               onClick={closeMobileSidebar}
-              className="flex items-center gap-3 group"
+              className="flex items-center justify-end gap-3 group"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
                 {t('navigation.vehicles')}
               </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
                 <Car className="w-5 h-5 text-white" />
               </div>
             </NavLink>
@@ -84,12 +84,12 @@ export const Sidebar: React.FC = () => {
             <NavLink
               to="/analytics"
               onClick={closeMobileSidebar}
-              className="flex items-center gap-3 group"
+              className="flex items-center justify-end gap-3 group"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
                 {t('navigation.analytics')}
               </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
             </NavLink>
@@ -97,12 +97,12 @@ export const Sidebar: React.FC = () => {
             <NavLink
               to="/companies"
               onClick={closeMobileSidebar}
-              className="flex items-center gap-3 group"
+              className="flex items-center justify-end gap-3 group"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
                 {t('navigation.companies')}
               </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
             </NavLink>
@@ -110,12 +110,12 @@ export const Sidebar: React.FC = () => {
             <NavLink
               to="/settings"
               onClick={closeMobileSidebar}
-              className="flex items-center gap-3 group"
+              className="flex items-center justify-end gap-3 group"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
                 {t('navigation.settings')}
               </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
                 <Settings className="w-5 h-5 text-white" />
               </div>
             </NavLink>
@@ -125,13 +125,13 @@ export const Sidebar: React.FC = () => {
                 closeMobileSidebar();
                 // TODO: Add new inspection logic
               }}
-              className="flex items-center gap-3 group"
+              className="flex items-center justify-end gap-3 group"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
                 {t('navigation.newInspection')}
               </span>
               <div
-                className="p-3 rounded-full shadow-lg transition-colors"
+                className="p-3 rounded-full shadow-lg transition-colors flex-shrink-0"
                 style={{ backgroundColor: theme?.primaryColor || '#10B981' }}
               >
                 <Plus className="w-5 h-5 text-white" />
