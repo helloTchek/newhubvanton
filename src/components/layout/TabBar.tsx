@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Plus, Edit2, Grid, Car } from 'lucide-react';
+import { X, Plus, Edit2, Grid, Car, Copy } from 'lucide-react';
 import { useTabs, TabIconType } from '../../contexts/TabContext';
 import clsx from 'clsx';
 
@@ -15,7 +15,7 @@ const getIconForType = (iconType?: TabIconType) => {
 };
 
 export const TabBar: React.FC = () => {
-  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab } = useTabs();
+  const { tabs, activeTabId, switchTab, removeTab, addTab, closeOtherTabs, closeAllTabs, renameTab, duplicateTab } = useTabs();
   const [contextMenu, setContextMenu] = useState<{ tabId: string; x: number; y: number } | null>(null);
   const [renamingTabId, setRenamingTabId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -186,6 +186,16 @@ export const TabBar: React.FC = () => {
           >
             <Edit2 className="w-3.5 h-3.5" />
             Rename
+          </button>
+          <button
+            onClick={() => {
+              duplicateTab(contextMenu.tabId);
+              handleCloseContextMenu();
+            }}
+            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+          >
+            <Copy className="w-3.5 h-3.5" />
+            Duplicate
           </button>
           <div className="border-t border-gray-100 my-1"></div>
           {tabs.length > 1 && (

@@ -35,6 +35,7 @@ interface TabContextType {
   closeOtherTabs: (tabId: string) => void;
   closeAllTabs: () => void;
   renameTab: (tabId: string, newTitle: string) => void;
+  duplicateTab: (tabId: string) => void;
   getTabState: (tabId: string) => TabViewState | undefined;
   setTabState: (tabId: string, state: TabViewState) => void;
 }
@@ -183,6 +184,30 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTabs(prev => prev.map(t => t.id === tabId ? { ...t, title: newTitle } : t));
   }, []);
 
+  const duplicateTab = useCallback((tabId: string) => {
+    const tabToDuplicate = tabs.find(t => t.id === tabId);
+    if (!tabToDuplicate) return;
+
+    const newTabId = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const newTab: Tab = {
+      ...tabToDuplicate,
+      id: newTabId,
+      title: `${tabToDuplicate.title} (Copy)`,
+      isPinned: false,
+    };
+
+    setTabs(prev => {
+      const insertIndex = prev.findIndex(t => t.id === tabId) + 1;
+      return [
+        ...prev.slice(0, insertIndex),
+        newTab,
+        ...prev.slice(insertIndex)
+      ];
+    });
+    setActiveTabId(newTabId);
+    navigate(newTab.path);
+  }, [tabs, navigate]);
+
   const getTabState = useCallback((tabId: string): TabViewState | undefined => {
     const tab = tabs.find(t => t.id === tabId);
     if (!tab) return undefined;
@@ -239,6 +264,7 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         closeOtherTabs,
         closeAllTabs,
         renameTab,
+        duplicateTab,
         getTabState,
         setTabState,
       }}
