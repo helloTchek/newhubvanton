@@ -180,7 +180,7 @@ export type VehicleStatus =
   | 'inspected'
   | 'to_review'
   | 'archived';
-export type InspectionType = 'api' | 'manual_upload' | 'webapp';
+export type InspectionType = 'api' | 'manual_upload' | 'remote_inspection' | 'onsite_inspection';
 export type InspectionStatus = 'passed' | 'minor_issues' | 'major_issues' | 'failed';
 export type ReportStatus = 'draft' | 'completed' | 'reviewed' | 'archived';
 export type UserRole = 'admin' | 'inspector' | 'manager' | 'viewer';

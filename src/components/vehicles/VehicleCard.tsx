@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight, FileCheck } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
 import { TagManager } from './TagManager';
+import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -43,6 +44,7 @@ interface VehicleCardProps {
     customerEmail: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
+    inspectionType: boolean;
     repairCost: boolean;
     value: boolean;
     damageResults: boolean;
@@ -83,6 +85,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     customerEmail: true,
     inspectionDate: true,
     inspectionId: true,
+    inspectionType: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -471,6 +474,18 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <FileText className="w-4 h-4" />
                 <span>{vehicle.reportId}</span>
+              </div>
+            )}
+
+            {visibleFields.inspectionType && vehicle.inspectionType && (
+              <div className="flex items-center gap-2 text-sm">
+                <FileCheck className="w-4 h-4 text-gray-500" />
+                <span className={clsx(
+                  'px-2 py-0.5 rounded-full text-xs font-medium',
+                  getInspectionTypeColor(vehicle.inspectionType)
+                )}>
+                  {getInspectionTypeLabel(vehicle.inspectionType)}
+                </span>
               </div>
             )}
 

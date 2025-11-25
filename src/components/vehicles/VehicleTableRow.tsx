@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink } from 'lucide-react';
+import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink, FileCheck } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { TagManager } from './TagManager';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
+import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import clsx from 'clsx';
 
 const WindshieldIcon = ({ className }: { className?: string }) => (
@@ -42,6 +43,7 @@ interface VehicleTableRowProps {
     status: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
+    inspectionType: boolean;
     mileage: boolean;
     value: boolean;
     repairCost: boolean;
@@ -72,7 +74,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelected = false,
   onSelectToggle,
   columnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
@@ -86,6 +88,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     status: true,
     inspectionDate: true,
     inspectionId: true,
+    inspectionType: true,
     mileage: true,
     value: true,
     repairCost: true,
@@ -335,6 +338,22 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               <div className="text-sm font-medium text-red-600">
                 {formatCurrency(vehicle.estimatedCost)}
               </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'inspectionType':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            {vehicle.inspectionType ? (
+              <span className={clsx(
+                'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                getInspectionTypeColor(vehicle.inspectionType)
+              )}>
+                {getInspectionTypeLabel(vehicle.inspectionType)}
+              </span>
             ) : (
               <span className="text-sm text-gray-400">-</span>
             )}

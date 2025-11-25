@@ -77,6 +77,7 @@ export const VehicleList: React.FC = () => {
     status: true,
     inspectionDate: true,
     inspectionId: true,
+    inspectionType: true,
     mileage: true,
     value: true,
     repairCost: true,
@@ -101,6 +102,7 @@ export const VehicleList: React.FC = () => {
     customerEmail: true,
     inspectionDate: true,
     inspectionId: true,
+    inspectionType: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -108,7 +110,7 @@ export const VehicleList: React.FC = () => {
   };
 
   const defaultColumnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
@@ -628,6 +630,7 @@ export const VehicleList: React.FC = () => {
       'status': 'Status',
       'inspectionDate': 'Inspection Date',
       'inspectionId': 'Inspection ID',
+      'inspectionType': 'Inspection Type',
       'mileage': 'Mileage',
       'value': 'Value',
       'repairCost': 'Repair Cost',
@@ -806,6 +809,7 @@ export const VehicleList: React.FC = () => {
                           customerEmail: 'Customer Email',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
+                          inspectionType: 'Inspection Type',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
                           damageResults: 'Damage Results',
@@ -849,6 +853,7 @@ export const VehicleList: React.FC = () => {
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
+                          inspectionType: 'Inspection Type',
                           mileage: 'Mileage',
                           value: 'Value',
                           repairCost: 'Repair Cost',

@@ -27,7 +27,8 @@ const inspectionTypeOptions: { value: InspectionType | 'all'; label: string }[] 
   { value: 'all', label: 'All Types' },
   { value: 'api', label: 'API' },
   { value: 'manual_upload', label: 'Manual Upload' },
-  { value: 'webapp', label: 'WebApp' }
+  { value: 'remote_inspection', label: 'Remote Inspection' },
+  { value: 'onsite_inspection', label: 'On-site Inspection' }
 ];
 
 const availableFilters: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
