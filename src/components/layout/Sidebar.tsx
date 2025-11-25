@@ -84,7 +84,7 @@ export const Sidebar: React.FC = () => {
                 <Camera className="w-6 h-6 text-gray-700" />
               </div>
               <span className="text-gray-900 text-sm font-medium flex-1 text-left">
-                {t('common.inspectionActions.startInstant')}
+                {t('inspectionActions.startInstant')}
               </span>
             </button>
 
@@ -99,7 +99,7 @@ export const Sidebar: React.FC = () => {
                 <Mail className="w-6 h-6 text-gray-700" />
               </div>
               <span className="text-gray-900 text-sm font-medium flex-1 text-left">
-                {t('common.inspectionActions.sendLink')}
+                {t('inspectionActions.sendLink')}
               </span>
             </button>
 
@@ -114,7 +114,7 @@ export const Sidebar: React.FC = () => {
                 <Upload className="w-6 h-6 text-gray-700" />
               </div>
               <span className="text-gray-900 text-sm font-medium flex-1 text-left">
-                {t('common.inspectionActions.uploadImages')}
+                {t('inspectionActions.uploadImages')}
               </span>
             </button>
           </div>
