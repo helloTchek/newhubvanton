@@ -72,21 +72,22 @@ export const VehicleList: React.FC = () => {
     registration: true,
     vin: true,
     makeModel: true,
-    company: true,
-    customerEmail: true,
+    company: false,
+    customerEmail: false,
     status: true,
     inspectionDate: true,
-    inspectionId: true,
-    mileage: true,
-    value: true,
-    tags: true,
-    carBody: true,
-    rim: true,
-    glass: true,
-    interior: true,
-    tires: true,
-    dashboard: true,
-    declarations: true
+    inspectionId: false,
+    mileage: false,
+    repairCost: false,
+    value: false,
+    tags: false,
+    carBody: false,
+    rim: false,
+    glass: false,
+    interior: false,
+    tires: false,
+    dashboard: false,
+    declarations: false
   };
 
   const defaultVisibleCardFields = {
@@ -116,9 +117,7 @@ export const VehicleList: React.FC = () => {
   const visibleColumns = useMemo(() => {
     if (!activeTabId) return defaultVisibleColumns;
     const currentTab = tabs.find(t => t.id === activeTabId);
-    const result = currentTab?.visibleColumns || defaultVisibleColumns;
-    console.log('[VehicleList] visibleColumns derived:', { activeTabId, hasVisibleColumns: !!currentTab?.visibleColumns, result });
-    return result;
+    return currentTab?.visibleColumns || defaultVisibleColumns;
   }, [activeTabId, tabs]);
 
   const visibleCardFields = useMemo(() => {
@@ -422,7 +421,6 @@ export const VehicleList: React.FC = () => {
     const currentTab = tabs.find(t => t.id === activeTabId);
     const currentColumns = currentTab?.visibleColumns || defaultVisibleColumns;
     const updated = updater(currentColumns);
-    console.log('[VehicleList] Updating visible columns:', { activeTabId, before: currentColumns, after: updated });
     setTabState(activeTabId, { visibleColumns: updated });
   }, [activeTabId, tabs, setTabState]);
 
