@@ -432,18 +432,25 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
           </div>
 
-          {/* Tags Section */}
-          {visibleFields.tags && vehicle.tags && vehicle.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {vehicle.tags.map(tag => (
-                <div
-                  key={tag.id}
-                  className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                  style={{ backgroundColor: tag.color }}
-                >
-                  {tag.name}
-                </div>
-              ))}
+          {/* Tags Section with Manager */}
+          {visibleFields.tags && (
+            <div className="flex flex-wrap items-center gap-1.5 mb-3" onClick={(e) => e.stopPropagation()}>
+              {vehicle.tags && vehicle.tags.length > 0 && (
+                vehicle.tags.map(tag => (
+                  <div
+                    key={tag.id}
+                    className="px-2 py-1 rounded-full text-xs font-medium text-white"
+                    style={{ backgroundColor: tag.color }}
+                  >
+                    {tag.name}
+                  </div>
+                ))
+              )}
+              <TagManager
+                vehicleId={vehicle.id}
+                currentTags={vehicle.tags || []}
+                onTagsUpdated={() => window.location.reload()}
+              />
             </div>
           )}
 
@@ -549,14 +556,6 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           )}
 
-          {/* Tag Manager */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <TagManager
-              vehicleId={vehicle.id}
-              currentTags={vehicle.tags || []}
-              onTagsUpdated={() => window.location.reload()}
-            />
-          </div>
 
           {/* Value */}
           {visibleFields.value && !shouldShowChaseUp && (
