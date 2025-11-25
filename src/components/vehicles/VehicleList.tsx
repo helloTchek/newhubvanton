@@ -417,19 +417,23 @@ export const VehicleList: React.FC = () => {
   };
 
   const updateVisibleColumns = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
-    if (activeTabId) {
-      const updated = updater(visibleColumns);
-      console.log('[VehicleList] Updating visible columns:', { activeTabId, before: visibleColumns, after: updated });
-      setTabState(activeTabId, { visibleColumns: updated });
-    }
-  }, [activeTabId, visibleColumns, setTabState]);
+    if (!activeTabId) return;
+
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    const currentColumns = currentTab?.visibleColumns || defaultVisibleColumns;
+    const updated = updater(currentColumns);
+    console.log('[VehicleList] Updating visible columns:', { activeTabId, before: currentColumns, after: updated });
+    setTabState(activeTabId, { visibleColumns: updated });
+  }, [activeTabId, tabs, setTabState]);
 
   const updateVisibleCardFields = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
-    if (activeTabId) {
-      const updated = updater(visibleCardFields);
-      setTabState(activeTabId, { visibleCardFields: updated });
-    }
-  }, [activeTabId, visibleCardFields, setTabState]);
+    if (!activeTabId) return;
+
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    const currentFields = currentTab?.visibleCardFields || defaultVisibleCardFields;
+    const updated = updater(currentFields);
+    setTabState(activeTabId, { visibleCardFields: updated });
+  }, [activeTabId, tabs, setTabState]);
 
   const updateColumnOrder = useCallback((newOrder: string[]) => {
     if (activeTabId) {
