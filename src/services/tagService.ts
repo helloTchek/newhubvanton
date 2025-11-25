@@ -66,6 +66,19 @@ class TagService {
         throw new ApiError('User not authenticated', 'AUTH_ERROR');
       }
 
+      // Check if tag already exists for this vehicle
+      const { data: existing } = await supabase
+        .from('vehicle_tags')
+        .select('id')
+        .eq('vehicle_id', vehicleId)
+        .eq('tag_id', tagId)
+        .maybeSingle();
+
+      if (existing) {
+        // Tag already exists, no need to add again
+        return;
+      }
+
       const { error } = await supabase
         .from('vehicle_tags')
         .insert({
@@ -118,7 +131,24 @@ class TagService {
         throw new ApiError('User not authenticated', 'AUTH_ERROR');
       }
 
-      const records = vehicleIds.map(vehicleId => ({
+      // First, check which vehicles already have this tag
+      const { data: existingTags } = await supabase
+        .from('vehicle_tags')
+        .select('vehicle_id')
+        .eq('tag_id', tagId)
+        .in('vehicle_id', vehicleIds);
+
+      const existingVehicleIds = new Set((existingTags || []).map((t: any) => t.vehicle_id));
+
+      // Only insert tags for vehicles that don't already have this tag
+      const vehiclesToTag = vehicleIds.filter(id => !existingVehicleIds.has(id));
+
+      if (vehiclesToTag.length === 0) {
+        // All vehicles already have this tag
+        return;
+      }
+
+      const records = vehiclesToTag.map(vehicleId => ({
         vehicle_id: vehicleId,
         tag_id: tagId,
         created_by: userData.user.id
