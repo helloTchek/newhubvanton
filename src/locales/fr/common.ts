@@ -8,6 +8,11 @@ export const common = {
     support: 'Support',
     newInspection: 'Nouvelle Inspection',
   },
+  inspectionActions: {
+    startInstant: 'Démarrer une inspection instantanée',
+    sendLink: 'Envoyer un lien d\'inspection',
+    uploadImages: 'Télécharger des images depuis votre ordinateur',
+  },
   actions: {
     create: 'Créer',
     edit: 'Modifier',

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect as useEffectReact } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Car, BarChart3, Users, Building2, Plus, Settings, HelpCircle, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { Car, BarChart3, Users, Building2, Plus, Settings, HelpCircle, ChevronLeft, ChevronRight, Menu, X, Camera, Mail, Upload, UserCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -23,8 +23,10 @@ export const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffectReact(() => {
     const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -36,16 +38,19 @@ export const Sidebar: React.FC = () => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
         setIsMobileOpen(false);
       }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
     };
 
-    if (isMobileOpen) {
+    if (isMobileOpen || isProfileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMobileOpen]);
+  }, [isMobileOpen, isProfileMenuOpen]);
 
   const toggleSidebar = () => {
     const newCollapsed = !isCollapsed;
@@ -64,78 +69,53 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      {/* Mobile floating action menu */}
+      {/* Mobile floating action menu - Inspection Actions */}
       <div ref={mobileMenuRef} className="lg:hidden fixed bottom-4 right-4 z-50">
         {isMobileOpen && (
-          <div className="absolute bottom-16 right-0 flex flex-col gap-3 mb-2 min-w-[200px]">
-            <NavLink
-              to="/vehicles"
-              onClick={closeMobileSidebar}
-              className="flex items-center justify-end gap-3 group"
+          <div className="absolute bottom-16 right-0 flex flex-col gap-3 mb-2 min-w-[240px]">
+            <button
+              onClick={() => {
+                closeMobileSidebar();
+                // TODO: Start instant inspection
+              }}
+              className="flex items-center justify-start gap-3 group bg-white rounded-2xl shadow-lg p-3 hover:shadow-xl transition-all"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
-                {t('navigation.vehicles')}
-              </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
-                <Car className="w-5 h-5 text-white" />
+              <div className="p-2 rounded-full bg-gray-100 group-hover:bg-gray-200 transition-colors flex-shrink-0">
+                <Camera className="w-6 h-6 text-gray-700" />
               </div>
-            </NavLink>
-
-            <NavLink
-              to="/analytics"
-              onClick={closeMobileSidebar}
-              className="flex items-center justify-end gap-3 group"
-            >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
-                {t('navigation.analytics')}
+              <span className="text-gray-900 text-sm font-medium flex-1 text-left">
+                {t('common.inspectionActions.startInstant')}
               </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
-                <BarChart3 className="w-5 h-5 text-white" />
-              </div>
-            </NavLink>
-
-            <NavLink
-              to="/companies"
-              onClick={closeMobileSidebar}
-              className="flex items-center justify-end gap-3 group"
-            >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
-                {t('navigation.companies')}
-              </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
-                <Building2 className="w-5 h-5 text-white" />
-              </div>
-            </NavLink>
-
-            <NavLink
-              to="/settings"
-              onClick={closeMobileSidebar}
-              className="flex items-center justify-end gap-3 group"
-            >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
-                {t('navigation.settings')}
-              </span>
-              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors flex-shrink-0">
-                <Settings className="w-5 h-5 text-white" />
-              </div>
-            </NavLink>
+            </button>
 
             <button
               onClick={() => {
                 closeMobileSidebar();
-                // TODO: Add new inspection logic
+                // TODO: Send inspection link
               }}
-              className="flex items-center justify-end gap-3 group"
+              className="flex items-center justify-start gap-3 group bg-white rounded-2xl shadow-lg p-3 hover:shadow-xl transition-all"
             >
-              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap flex-1 text-right">
-                {t('navigation.newInspection')}
-              </span>
-              <div
-                className="p-3 rounded-full shadow-lg transition-colors flex-shrink-0"
-                style={{ backgroundColor: theme?.primaryColor || '#10B981' }}
-              >
-                <Plus className="w-5 h-5 text-white" />
+              <div className="p-2 rounded-full bg-gray-100 group-hover:bg-gray-200 transition-colors flex-shrink-0">
+                <Mail className="w-6 h-6 text-gray-700" />
               </div>
+              <span className="text-gray-900 text-sm font-medium flex-1 text-left">
+                {t('common.inspectionActions.sendLink')}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                closeMobileSidebar();
+                // TODO: Upload images
+              }}
+              className="flex items-center justify-start gap-3 group bg-white rounded-2xl shadow-lg p-3 hover:shadow-xl transition-all"
+            >
+              <div className="p-2 rounded-full bg-gray-100 group-hover:bg-gray-200 transition-colors flex-shrink-0">
+                <Upload className="w-6 h-6 text-gray-700" />
+              </div>
+              <span className="text-gray-900 text-sm font-medium flex-1 text-left">
+                {t('common.inspectionActions.uploadImages')}
+              </span>
             </button>
           </div>
         )}
@@ -149,6 +129,47 @@ export const Sidebar: React.FC = () => {
           }}
         >
           <Plus className="w-6 h-6" />
+        </button>
+      </div>
+
+      {/* Mobile profile menu */}
+      <div ref={profileMenuRef} className="lg:hidden fixed bottom-4 left-4 z-50">
+        {isProfileMenuOpen && (
+          <div className="absolute bottom-16 left-0 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[180px] mb-2">
+            <NavLink
+              to="/analytics"
+              onClick={() => setIsProfileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <BarChart3 className="w-5 h-5 text-gray-500" />
+              <span className="text-sm font-medium">{t('navigation.analytics')}</span>
+            </NavLink>
+
+            <NavLink
+              to="/companies"
+              onClick={() => setIsProfileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <Building2 className="w-5 h-5 text-gray-500" />
+              <span className="text-sm font-medium">{t('navigation.companies')}</span>
+            </NavLink>
+
+            <NavLink
+              to="/settings"
+              onClick={() => setIsProfileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <Settings className="w-5 h-5 text-gray-500" />
+              <span className="text-sm font-medium">{t('navigation.settings')}</span>
+            </NavLink>
+          </div>
+        )}
+
+        <button
+          onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+          className="p-3 rounded-full shadow-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+        >
+          <UserCircle className="w-6 h-6" />
         </button>
       </div>
 
