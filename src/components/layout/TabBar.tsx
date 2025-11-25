@@ -21,6 +21,7 @@ export const TabBar: React.FC = () => {
   const [renameValue, setRenameValue] = useState('');
   const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
   const [dragOverTabId, setDragOverTabId] = useState<string | null>(null);
+  const [dropPosition, setDropPosition] = useState<'left' | 'right'>('left');
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const renameInputRef = useRef<HTMLInputElement>(null);
 
@@ -100,11 +101,18 @@ export const TabBar: React.FC = () => {
     e.dataTransfer.dropEffect = 'move';
     if (draggedTabId && draggedTabId !== tabId) {
       setDragOverTabId(tabId);
+
+      // Determine if we're on the left or right half of the tab
+      const rect = e.currentTarget.getBoundingClientRect();
+      const midpoint = rect.left + rect.width / 2;
+      const position = e.clientX < midpoint ? 'left' : 'right';
+      setDropPosition(position);
     }
   };
 
   const handleDragLeave = () => {
     setDragOverTabId(null);
+    setDropPosition('left');
   };
 
   const handleDrop = (e: React.DragEvent, targetTabId: string) => {
@@ -112,23 +120,36 @@ export const TabBar: React.FC = () => {
     if (!draggedTabId || draggedTabId === targetTabId) {
       setDraggedTabId(null);
       setDragOverTabId(null);
+      setDropPosition('left');
       return;
     }
 
     const fromIndex = tabs.findIndex(t => t.id === draggedTabId);
-    const toIndex = tabs.findIndex(t => t.id === targetTabId);
+    let toIndex = tabs.findIndex(t => t.id === targetTabId);
 
     if (fromIndex !== -1 && toIndex !== -1) {
+      // If dropping on the right side, adjust the target index
+      if (dropPosition === 'right') {
+        toIndex += 1;
+      }
+
+      // Adjust index if moving from left to right
+      if (fromIndex < toIndex) {
+        toIndex -= 1;
+      }
+
       reorderTabs(fromIndex, toIndex);
     }
 
     setDraggedTabId(null);
     setDragOverTabId(null);
+    setDropPosition('left');
   };
 
   const handleDragEnd = () => {
     setDraggedTabId(null);
     setDragOverTabId(null);
+    setDropPosition('left');
   };
 
   if (tabs.length === 0) {
@@ -156,7 +177,8 @@ export const TabBar: React.FC = () => {
                   ? 'bg-white text-gray-900 shadow-sm rounded-t-lg'
                   : 'bg-transparent text-gray-700 hover:bg-white/50 rounded-t-lg',
                 draggedTabId === tab.id && 'opacity-50',
-                dragOverTabId === tab.id && 'border-l-2 border-blue-500'
+                dragOverTabId === tab.id && dropPosition === 'left' && 'border-l-2 border-blue-500',
+                dragOverTabId === tab.id && dropPosition === 'right' && 'border-r-2 border-blue-500'
               )}
               style={{
                 marginBottom: '-1px',
