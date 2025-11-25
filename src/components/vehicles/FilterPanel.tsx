@@ -51,7 +51,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
   const filterButtonRef = useRef<HTMLDivElement>(null);
-  const [activeFilters, setActiveFilters] = useState<string[]>(['inspectionType', 'status']);
+  const [activeFilters, setActiveFilters] = useState<string[]>(['status']);
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [showInspectionTypeDropdown, setShowInspectionTypeDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
@@ -119,14 +119,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       const newFilters = [...prev];
       let changed = false;
 
-      // Always ensure inspectionType and status are in the list
-      if (!newFilters.includes('inspectionType')) {
-        newFilters.unshift('inspectionType');
+      // Always ensure status is in the list
+      if (!newFilters.includes('status')) {
+        newFilters.unshift('status');
         changed = true;
       }
-      if (!newFilters.includes('status')) {
-        const typeIndex = newFilters.indexOf('inspectionType');
-        newFilters.splice(typeIndex + 1, 0, 'status');
+
+      // Add inspectionType if it's being used in filters
+      if ((pendingFilters.inspectionType !== 'all' || (pendingFilters.inspectionTypeIds && pendingFilters.inspectionTypeIds.length > 0)) && !newFilters.includes('inspectionType')) {
+        const statusIndex = newFilters.indexOf('status');
+        newFilters.splice(statusIndex + 1, 0, 'inspectionType');
         changed = true;
       }
 
