@@ -116,7 +116,9 @@ export const VehicleList: React.FC = () => {
   const visibleColumns = useMemo(() => {
     if (!activeTabId) return defaultVisibleColumns;
     const currentTab = tabs.find(t => t.id === activeTabId);
-    return currentTab?.visibleColumns || defaultVisibleColumns;
+    const result = currentTab?.visibleColumns || defaultVisibleColumns;
+    console.log('[VehicleList] visibleColumns derived:', { activeTabId, hasVisibleColumns: !!currentTab?.visibleColumns, result });
+    return result;
   }, [activeTabId, tabs]);
 
   const visibleCardFields = useMemo(() => {
@@ -417,6 +419,7 @@ export const VehicleList: React.FC = () => {
   const updateVisibleColumns = useCallback((updater: (prev: Record<string, boolean>) => Record<string, boolean>) => {
     if (activeTabId) {
       const updated = updater(visibleColumns);
+      console.log('[VehicleList] Updating visible columns:', { activeTabId, before: visibleColumns, after: updated });
       setTabState(activeTabId, { visibleColumns: updated });
     }
   }, [activeTabId, visibleColumns, setTabState]);
