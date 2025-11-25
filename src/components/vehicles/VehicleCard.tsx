@@ -396,45 +396,35 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
 
         {/* Vehicle Info */}
-        <div className="p-6">
+        <div className="p-4">
           {/* Vertical vehicle information */}
-          <div className="space-y-2 mb-4">
+          <div className="space-y-1 mb-3">
             {visibleFields.registration && (
-              <div>
-                <p className="text-lg font-bold text-gray-900">{vehicle.registration}</p>
-              </div>
+              <h3 className="text-lg font-bold text-gray-900">{vehicle.registration}</h3>
             )}
 
             {visibleFields.vin && vehicle.vin && (
-              <div>
-                <p className="text-sm font-mono text-gray-700">{vehicle.vin}</p>
-              </div>
+              <p className="text-xs font-mono text-gray-600">{vehicle.vin}</p>
             )}
 
             {visibleFields.makeModel && (
-              <div>
-                <p className="text-base font-semibold text-gray-900">
-                  {vehicle.make} {vehicle.model}
-                </p>
-              </div>
+              <p className="text-base font-semibold text-gray-900">
+                {vehicle.make} {vehicle.model}
+              </p>
             )}
 
             {visibleFields.age && (
-              <div>
-                <p className="text-sm text-gray-700">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
-              </div>
+              <p className="text-sm text-gray-600">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
             )}
 
             {visibleFields.mileage && (
-              <div>
-                <p className="text-sm text-gray-700">{vehicle.mileage.toLocaleString()} km</p>
-              </div>
+              <p className="text-sm text-gray-600">{vehicle.mileage.toLocaleString()} km</p>
             )}
           </div>
 
           {/* Tags Section with Manager */}
           {visibleFields.tags && (
-            <div className="flex flex-wrap items-center gap-1.5 mb-3" onClick={(e) => e.stopPropagation()}>
+            <div className="flex flex-wrap items-center gap-1.5 mb-2" onClick={(e) => e.stopPropagation()}>
               {vehicle.tags && vehicle.tags.length > 0 && (
                 vehicle.tags.map(tag => (
                   <div
@@ -455,38 +445,38 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           )}
 
           {/* Additional Info Grid */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             {visibleFields.company && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-4 h-4 flex-shrink-0" />
                 <span>{vehicle.companyName}</span>
               </div>
             )}
 
             {visibleFields.customerEmail && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <User className="w-4 h-4" />
+                <User className="w-4 h-4 flex-shrink-0" />
                 <span>{vehicle.customerEmail}</span>
               </div>
             )}
 
             {visibleFields.inspectionDate && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-4 h-4 flex-shrink-0" />
                 <span>{formatDate(vehicle.inspectionDate)}</span>
               </div>
             )}
 
             {visibleFields.inspectionId && vehicle.reportId && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FileText className="w-4 h-4" />
+                <FileText className="w-4 h-4 flex-shrink-0" />
                 <span>{vehicle.reportId}</span>
               </div>
             )}
 
             {visibleFields.inspectionType && vehicle.inspectionType && (
               <div className="flex items-center gap-2 text-sm">
-                <FileCheck className="w-4 h-4 text-gray-500" />
+                <FileCheck className="w-4 h-4 flex-shrink-0 text-gray-500" />
                 <span className={clsx(
                   'px-2 py-0.5 rounded-full text-xs font-medium',
                   getInspectionTypeColor(vehicle.inspectionType)
@@ -498,7 +488,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
             {visibleFields.repairCost && vehicle.estimatedCost > 0 && (
               <div className="flex items-center gap-2 text-sm">
-                <DollarSign className="w-4 h-4 text-red-500" />
+                <DollarSign className="w-4 h-4 flex-shrink-0 text-red-500" />
                 <span className="text-red-600 font-medium">
                   {formatCurrency(vehicle.estimatedCost)}
                 </span>
@@ -508,47 +498,47 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Damage Results */}
           {visibleFields.damageResults && vehicle.damageInfo && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="grid grid-cols-4 gap-x-3 gap-y-2">
-                <div className="flex items-center gap-1.5" title="Car Body">
-                  <CarFront className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <div className="grid grid-cols-4 gap-x-2 gap-y-1.5">
+                <div className="flex items-center gap-1" title="Car Body">
+                  <CarFront className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.carBody}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Rims">
-                  <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Rims">
+                  <Disc className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.rims}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Glass">
-                  <WindshieldIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Glass">
+                  <WindshieldIcon className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.glazing}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Interior">
-                  <CarSeatIcon className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Interior">
+                  <CarSeatIcon className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.interior}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Tires">
-                  <Disc className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Tires">
+                  <Disc className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.tires}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Dashboard">
-                  <AlertTriangle className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Dashboard">
+                  <AlertTriangle className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.dashboard}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5" title="Declarations">
-                  <FileText className={`w-5 h-5 ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-sm font-medium ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                <div className="flex items-center gap-1" title="Declarations">
+                  <FileText className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-500' : 'text-gray-300'}`} />
+                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                     {vehicle.damageInfo.damageCounts.declarations}
                   </span>
                 </div>
@@ -559,7 +549,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Value */}
           {visibleFields.value && !shouldShowChaseUp && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-3 pt-3 border-t border-gray-100">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Estimated Value</span>
                 <span className="text-lg font-semibold text-green-600">
