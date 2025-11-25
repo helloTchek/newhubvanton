@@ -134,6 +134,7 @@ export const VehicleList: React.FC = () => {
   // Derive filters directly from tab state to avoid stale values during tab switches
   const filters = useMemo(() => {
     if (!activeTabId) {
+      console.log('[VehicleList] No active tab, using default filters');
       return {
         query: '',
         status: 'all' as const,
@@ -150,7 +151,8 @@ export const VehicleList: React.FC = () => {
       };
     }
     const currentTab = tabs.find(t => t.id === activeTabId);
-    return currentTab?.filters || {
+    console.log('[VehicleList] Active tab:', activeTabId, 'Tab filters:', currentTab?.filters);
+    const resultFilters = currentTab?.filters || {
       query: '',
       status: 'all' as const,
       companyId: user?.companyId || 'all',
@@ -164,6 +166,8 @@ export const VehicleList: React.FC = () => {
       page: 1,
       pageSize: 20
     };
+    console.log('[VehicleList] Using filters:', resultFilters);
+    return resultFilters;
   }, [activeTabId, tabs, user?.companyId]);
 
   const loadVehicles = useCallback(async (skipCache = false) => {

@@ -233,16 +233,46 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const savedTabs = localStorage.getItem(TAB_STORAGE_KEY);
     const isInitialized = localStorage.getItem(TABS_INITIALIZED_KEY);
 
+    console.log('[TabContext] Initializing tabs:', { savedTabs: !!savedTabs, isInitialized });
+
+    // If no tabs exist at all, create defaults
+    if (!savedTabs || savedTabs === '[]') {
+      console.log('[TabContext] No saved tabs, creating defaults');
+      const defaultTabs = createDefaultTabs();
+      localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
+      return defaultTabs;
+    }
+
+    // If tabs exist, load them
     if (savedTabs && isInitialized) {
       try {
-        return JSON.parse(savedTabs);
-      } catch {
+        const parsedTabs = JSON.parse(savedTabs);
+        console.log('[TabContext] Loaded saved tabs:', parsedTabs.length, 'tabs');
+        return parsedTabs;
+      } catch (error) {
+        console.error('[TabContext] Failed to parse saved tabs, creating defaults:', error);
         const defaultTabs = createDefaultTabs();
         localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
         return defaultTabs;
       }
     }
 
+    // If tabs exist but not initialized flag (legacy state), use saved tabs
+    if (savedTabs) {
+      try {
+        const parsedTabs = JSON.parse(savedTabs);
+        console.log('[TabContext] Loading legacy tabs:', parsedTabs.length, 'tabs');
+        localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
+        return parsedTabs;
+      } catch (error) {
+        console.error('[TabContext] Failed to parse legacy tabs, creating defaults:', error);
+        const defaultTabs = createDefaultTabs();
+        localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
+        return defaultTabs;
+      }
+    }
+
+    console.log('[TabContext] Creating default tabs for first time');
     const defaultTabs = createDefaultTabs();
     localStorage.setItem(TABS_INITIALIZED_KEY, 'true');
     return defaultTabs;
@@ -250,9 +280,12 @@ export const TabProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeTabId, setActiveTabId] = useState<string | null>(() => {
     const savedActiveTab = localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
     if (savedActiveTab) {
+      console.log('[TabContext] Restored active tab:', savedActiveTab);
       return savedActiveTab;
     }
-    return tabs.length > 0 ? tabs[0].id : null;
+    const firstTabId = tabs.length > 0 ? tabs[0].id : null;
+    console.log('[TabContext] Using first tab as active:', firstTabId);
+    return firstTabId;
   });
 
   useEffect(() => {
