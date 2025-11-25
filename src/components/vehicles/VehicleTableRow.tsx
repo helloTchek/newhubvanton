@@ -96,6 +96,8 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   }
 }) => {
   const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState(false);
+  const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState(false);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -492,10 +494,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         <div className="relative" ref={actionsMenuRef}>
           <button
             onClick={handleActionsClick}
-            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 bg-white border border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all shadow-sm hover:shadow"
             aria-label="Actions"
           >
-            <MoreVertical className="h-4 w-4 text-gray-400" />
+            <MoreVertical className="h-5 w-5 text-gray-700" />
           </button>
 
           {showActionsMenu && (
