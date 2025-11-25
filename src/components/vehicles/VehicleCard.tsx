@@ -231,7 +231,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Actions Menu Button - Top Right */}
         {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review')) && (
-          <div className="absolute top-3 right-3 z-10" ref={actionsMenuRef}>
+          <div className="absolute top-3 left-3 z-10" ref={actionsMenuRef}>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -242,7 +242,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <MoreVertical className="w-5 h-5 text-gray-700" />
             </button>
             {isActionsMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
+              <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
                 {shouldShowChaseUp && onChaseUp && (
                   <>
                     <button
