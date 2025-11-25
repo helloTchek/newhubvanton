@@ -44,6 +44,7 @@ interface VehicleTableRowProps {
     inspectionId: boolean;
     mileage: boolean;
     value: boolean;
+    repairCost: boolean;
     tags: boolean;
     carBody: boolean;
     rim: boolean;
@@ -72,7 +73,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   onSelectToggle,
   columnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
-    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
   visibleColumns = {
@@ -87,6 +88,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     inspectionId: true,
     mileage: true,
     value: true,
+    repairCost: true,
     tags: true,
     carBody: true,
     rim: true,
@@ -323,10 +325,18 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
             <div className="text-sm font-medium text-gray-900">
               {formatCurrency(vehicle.estimatedValue)}
             </div>
-            {vehicle.estimatedCost > 0 && (
-              <div className="text-sm text-red-600">
-                Cost: {formatCurrency(vehicle.estimatedCost)}
+          </td>
+        );
+
+      case 'repairCost':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            {vehicle.estimatedCost > 0 ? (
+              <div className="text-sm font-medium text-red-600">
+                {formatCurrency(vehicle.estimatedCost)}
               </div>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
             )}
           </td>
         );
