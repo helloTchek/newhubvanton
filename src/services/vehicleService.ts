@@ -30,7 +30,11 @@ class VehicleService {
       }
 
       if (filters?.companyId && filters.companyId !== 'all') {
-        countQuery = countQuery.eq('company_id', filters.companyId);
+        // Validate that companyId is a valid UUID format
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(filters.companyId)) {
+          countQuery = countQuery.eq('company_id', filters.companyId);
+        }
       }
 
       if (filters?.inspectionTypeIds && filters.inspectionTypeIds.length > 0) {
@@ -116,7 +120,11 @@ class VehicleService {
       }
 
       if (filters?.companyId && filters.companyId !== 'all') {
-        query = query.eq('company_id', filters.companyId);
+        // Validate that companyId is a valid UUID format
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(filters.companyId)) {
+          query = query.eq('company_id', filters.companyId);
+        }
       }
 
       if (filters?.inspectionTypeIds && filters.inspectionTypeIds.length > 0) {
