@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useRef, useEffect as useEffectReact } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Car, BarChart3, Users, Building2, Plus, Settings, HelpCircle, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -25,10 +24,28 @@ export const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  useEffect(() => {
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffectReact(() => {
     const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     setIsCollapsed(collapsed);
   }, []);
+
+  useEffectReact(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMobileOpen(false);
+      }
+    };
+
+    if (isMobileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileOpen]);
 
   const toggleSidebar = () => {
     const newCollapsed = !isCollapsed;
@@ -47,38 +64,106 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={toggleMobileSidebar}
-        className="lg:hidden fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-white"
-        style={{ backgroundColor: theme?.primaryColor || '#10B981' }}
-      >
-        {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-      </button>
+      {/* Mobile floating action menu */}
+      <div ref={mobileMenuRef} className="lg:hidden fixed bottom-4 right-4 z-50">
+        {isMobileOpen && (
+          <div className="absolute bottom-16 right-0 flex flex-col gap-3 mb-2">
+            <NavLink
+              to="/vehicles"
+              onClick={closeMobileSidebar}
+              className="flex items-center gap-3 group"
+            >
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                {t('navigation.vehicles')}
+              </span>
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+                <Car className="w-5 h-5 text-white" />
+              </div>
+            </NavLink>
 
-      {/* Mobile backdrop */}
-      {isMobileOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={closeMobileSidebar}
-        />
-      )}
+            <NavLink
+              to="/analytics"
+              onClick={closeMobileSidebar}
+              className="flex items-center gap-3 group"
+            >
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                {t('navigation.analytics')}
+              </span>
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+                <BarChart3 className="w-5 h-5 text-white" />
+              </div>
+            </NavLink>
 
-      {/* Sidebar */}
+            <NavLink
+              to="/companies"
+              onClick={closeMobileSidebar}
+              className="flex items-center gap-3 group"
+            >
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                {t('navigation.companies')}
+              </span>
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+                <Building2 className="w-5 h-5 text-white" />
+              </div>
+            </NavLink>
+
+            <NavLink
+              to="/settings"
+              onClick={closeMobileSidebar}
+              className="flex items-center gap-3 group"
+            >
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                {t('navigation.settings')}
+              </span>
+              <div className="p-3 rounded-full shadow-lg bg-gray-700 group-hover:bg-gray-600 transition-colors">
+                <Settings className="w-5 h-5 text-white" />
+              </div>
+            </NavLink>
+
+            <button
+              onClick={() => {
+                closeMobileSidebar();
+                // TODO: Add new inspection logic
+              }}
+              className="flex items-center gap-3 group"
+            >
+              <span className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                {t('navigation.newInspection')}
+              </span>
+              <div
+                className="p-3 rounded-full shadow-lg transition-colors"
+                style={{ backgroundColor: theme?.primaryColor || '#10B981' }}
+              >
+                <Plus className="w-5 h-5 text-white" />
+              </div>
+            </button>
+          </div>
+        )}
+
+        <button
+          onClick={toggleMobileSidebar}
+          className="p-4 rounded-full shadow-lg text-white transition-transform"
+          style={{
+            backgroundColor: theme?.primaryColor || '#10B981',
+            transform: isMobileOpen ? 'rotate(45deg)' : 'rotate(0deg)'
+          }}
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+      </div>
+
+      {/* Sidebar - Desktop only */}
       <div className={clsx(
-        'flex flex-col flex-shrink-0 transition-all duration-300 fixed top-14 sm:top-16 bottom-0 z-40',
-        // Mobile styles
-        isMobileOpen ? 'left-0 w-64' : '-left-64',
-        // Desktop styles
-        isCollapsed ? 'lg:w-16' : 'lg:w-64',
-        'lg:left-0'
+        'hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 fixed top-14 sm:top-16 bottom-0 z-40',
+        isCollapsed ? 'w-16' : 'w-64',
+        'left-0'
       )}>
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 px-3 pb-4 h-full" style={{ backgroundColor: theme?.backgroundPrimaryColor || '#FFFFFF' }}>
           <div className="flex items-center justify-between pt-6 px-3">
             <div></div>
             <button
               onClick={toggleSidebar}
-              className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
             >
               {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
@@ -107,7 +192,6 @@ export const Sidebar: React.FC = () => {
                   e.currentTarget.style.backgroundColor = theme?.primaryColor || '#10B981';
                 }}
                 title={isCollapsed ? t('navigation.newInspection') : undefined}
-                onClick={closeMobileSidebar}
               >
                 <Plus className={clsx(isCollapsed ? "w-6 h-6" : "w-4 h-4")} />
                 {!isCollapsed && <span className="ml-2">{t('navigation.newInspection')}</span>}
@@ -121,14 +205,13 @@ export const Sidebar: React.FC = () => {
                     <li key={item.key}>
                       <NavLink
                         to={item.href}
-                        onClick={closeMobileSidebar}
                         className={({ isActive }) =>
                           clsx(
                             isActive
                               ? 'bg-blue-50 border-r-2 border-blue-600 text-blue-600'
                               : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                             'group flex gap-x-3 rounded-l-md text-sm font-medium transition-colors',
-                            isCollapsed ? 'lg:p-2 lg:justify-center p-3' : 'p-3'
+                            isCollapsed ? 'p-2 justify-center' : 'p-3'
                           )
                         }
                         title={isCollapsed ? t(`navigation.${item.key}`) : undefined}
@@ -142,7 +225,7 @@ export const Sidebar: React.FC = () => {
                               )}
                               aria-hidden="true"
                             />
-                            <span className={clsx(isCollapsed && 'lg:hidden')}>{t(`navigation.${item.key}`)}</span>
+                            <span className={clsx(isCollapsed && 'hidden')}>{t(`navigation.${item.key}`)}</span>
                           </>
                         )}
                       </NavLink>
@@ -157,14 +240,13 @@ export const Sidebar: React.FC = () => {
                     <li key={item.key}>
                       <NavLink
                         to={item.href}
-                        onClick={closeMobileSidebar}
                         className={({ isActive }) =>
                           clsx(
                             isActive
                               ? 'bg-blue-50 border-r-2 border-blue-600 text-blue-600'
                               : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                             'group flex gap-x-3 rounded-l-md text-sm font-medium transition-colors',
-                            isCollapsed ? 'lg:p-2 lg:justify-center p-3' : 'p-3'
+                            isCollapsed ? 'p-2 justify-center' : 'p-3'
                           )
                         }
                         title={isCollapsed ? t(`navigation.${item.key}`) : undefined}
@@ -178,7 +260,7 @@ export const Sidebar: React.FC = () => {
                               )}
                               aria-hidden="true"
                             />
-                            <span className={clsx(isCollapsed && 'lg:hidden')}>{t(`navigation.${item.key}`)}</span>
+                            <span className={clsx(isCollapsed && 'hidden')}>{t(`navigation.${item.key}`)}</span>
                           </>
                         )}
                       </NavLink>
