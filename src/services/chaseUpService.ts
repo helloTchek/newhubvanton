@@ -2,11 +2,14 @@ import { ApiResponse } from '../types';
 import { supabase } from '../lib/supabase';
 
 class ChaseUpService {
-  async sendChaseUp(vehicleId: string, method: 'email' | 'sms'): Promise<ApiResponse<void>> {
+  async sendChaseUp(vehicleId: string, method: 'email' | 'sms', message?: string): Promise<ApiResponse<void>> {
     await this.delay(1000);
 
     try {
       console.log(`Sending ${method} chase up for vehicle ${vehicleId}`);
+      if (message) {
+        console.log(`Message: ${message}`);
+      }
 
       // Update vehicle status to chased_up_manual
       const { error } = await supabase

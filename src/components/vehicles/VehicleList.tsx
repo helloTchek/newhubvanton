@@ -365,13 +365,14 @@ export const VehicleList: React.FC = () => {
     navigate(`/vehicles/${vehicle.id}/report`);
   };
 
-  const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms') => {
+  const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms', message?: string) => {
     try {
-      await chaseUpService.sendChaseUp(vehicleId, method);
+      await chaseUpService.sendChaseUp(vehicleId, method, message);
       toast.success(`Chase up ${method} sent successfully`);
       await loadVehicles(true);
     } catch (error: unknown) {
-      toast.error(error.message || 'Failed to send chase up');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send chase up';
+      toast.error(errorMessage);
       throw error;
     }
   };

@@ -27,7 +27,7 @@ const CarSeatIcon = ({ className }: { className?: string }) => (
 interface VehicleCardProps {
   vehicle: Vehicle;
   onClick?: () => void;
-  onChaseUp?: (vehicleId: string, method: 'email' | 'sms') => Promise<void>;
+  onChaseUp?: (vehicleId: string, method: 'email' | 'sms', message?: string) => Promise<void>;
   onShareReport?: (vehicle: Vehicle) => void;
   isSelectionMode?: boolean;
   isSelected?: boolean;
@@ -154,9 +154,9 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     setIsChaseUpModalOpen(true);
   };
 
-  const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms') => {
+  const handleChaseUp = async (vehicleId: string, method: 'email' | 'sms', message?: string) => {
     if (onChaseUp) {
-      await onChaseUp(vehicleId, method);
+      await onChaseUp(vehicleId, method, message);
     }
   };
 
