@@ -43,6 +43,7 @@ interface VehicleTableRowProps {
     inspectionDate: boolean;
     inspectionId: boolean;
     mileage: boolean;
+    repairCost: boolean;
     value: boolean;
     tags: boolean;
     carBody: boolean;
@@ -72,7 +73,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   onSelectToggle,
   columnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId',
-    'mileage', 'value', 'tags', 'carBody', 'rim', 'glass',
+    'mileage', 'repairCost', 'value', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
   visibleColumns = {
@@ -86,6 +87,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     inspectionDate: true,
     inspectionId: true,
     mileage: true,
+    repairCost: true,
     value: true,
     tags: true,
     carBody: true,
