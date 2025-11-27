@@ -114,13 +114,8 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
                   <StatusBadge status={vehicle.status} />
                 </div>
                 <div className="text-sm text-blue-800">
-                  <span className="font-medium">Date:</span> {formatDate(vehicle.inspection_date)}
+                  <span className="font-medium">Date:</span> {formatDateTime(vehicle.inspectionDate || new Date().toISOString())}
                 </div>
-                {vehicle.make && vehicle.model && (
-                  <div className="text-sm text-blue-800 mt-1">
-                    <span className="font-medium">Vehicle:</span> {vehicle.make} {vehicle.model}
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -159,16 +154,6 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
                       <div className="text-sm text-gray-700">
                         <span className="font-medium">Inspection Date:</span> {formatDateTime(report.report_date)}
                       </div>
-                      {report.vehicle.make && report.vehicle.model && (
-                        <div className="text-sm text-gray-700 mt-1">
-                          <span className="font-medium">Vehicle:</span> {report.vehicle.make} {report.vehicle.model}
-                        </div>
-                      )}
-                      {report.vehicle.mileage && (
-                        <div className="text-sm text-gray-600 mt-1">
-                          <span className="font-medium">Mileage:</span> {report.vehicle.mileage.toLocaleString()} km
-                        </div>
-                      )}
                       {report.total_cost && parseFloat(report.total_cost) > 0 && (
                         <div className="text-sm text-gray-600 mt-1">
                           <span className="font-medium">Cost:</span> €{parseFloat(report.total_cost).toLocaleString()}
