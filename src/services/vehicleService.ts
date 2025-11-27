@@ -4,6 +4,51 @@ import { Vehicle, VehicleInspectionReport, SearchFilters, ApiResponse, Inspectio
 import { supabase } from '../lib/supabase';
 
 class VehicleService {
+  async getVehicleInspections(vehicleId: string): Promise<ApiResponse<Vehicle[]>> {
+    try {
+      const { data: currentVehicle, error: currentError } = await supabase
+        .from('vehicles')
+        .select('registration, vin')
+        .eq('id', vehicleId)
+        .maybeSingle();
+
+      if (currentError) {
+        throw new Error(currentError.message);
+      }
+
+      if (!currentVehicle) {
+        throw new Error('Vehicle not found');
+      }
+
+      let query = supabase
+        .from('vehicles')
+        .select('*')
+        .neq('id', vehicleId)
+        .order('inspection_date', { ascending: false });
+
+      if (currentVehicle.vin) {
+        query = query.eq('vin', currentVehicle.vin);
+      } else {
+        query = query.eq('registration', currentVehicle.registration);
+      }
+
+      const { data: vehicles, error } = await query;
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return {
+        data: vehicles || [],
+        success: true,
+        message: 'Vehicle inspections retrieved successfully'
+      };
+    } catch (error: unknown) {
+      console.error('getVehicleInspections error:', error);
+      throw error instanceof Error ? error : new Error('Failed to fetch vehicle inspections');
+    }
+  }
+
   async getVehicles(filters?: SearchFilters): Promise<ApiResponse<Vehicle[]>> {
     try {
       console.log('getVehicles called with filters:', filters);

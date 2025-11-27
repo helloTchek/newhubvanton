@@ -4,6 +4,7 @@ import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
 import { TagManager } from './TagManager';
+import { InspectionDateSelector } from './InspectionDateSelector';
 import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -95,6 +96,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   const { t } = useTranslation('vehicles');
   const [isChaseUpModalOpen, setIsChaseUpModalOpen] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
+  const [isInspectionDateSelectorOpen, setIsInspectionDateSelectorOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
 
@@ -461,10 +463,17 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
 
             {visibleFields.inspectionDate && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar className="w-4 h-4 flex-shrink-0" />
-                <span>{formatDate(vehicle.inspectionDate)}</span>
-              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsInspectionDateSelectorOpen(true);
+                }}
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
+                title="View inspection history"
+              >
+                <Calendar className="w-4 h-4 flex-shrink-0 group-hover:text-blue-600" />
+                <span className="group-hover:underline">{formatDate(vehicle.inspectionDate)}</span>
+              </button>
             )}
 
             {visibleFields.inspectionId && vehicle.reportId && (
@@ -567,6 +576,19 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           isOpen={isChaseUpModalOpen}
           onClose={() => setIsChaseUpModalOpen(false)}
           onChaseUp={handleChaseUp}
+        />
+      )}
+
+      {isInspectionDateSelectorOpen && (
+        <InspectionDateSelector
+          vehicle={vehicle}
+          onClose={() => setIsInspectionDateSelectorOpen(false)}
+          onSelectInspection={(vehicleId) => {
+            if (onClick) {
+              onClick();
+            }
+            window.location.href = `/vehicles/${vehicleId}`;
+          }}
         />
       )}
     </>

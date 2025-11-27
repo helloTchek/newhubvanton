@@ -3,6 +3,7 @@ import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpr
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { TagManager } from './TagManager';
+import { InspectionDateSelector } from './InspectionDateSelector';
 import { getVehicleStatusInfo, getBadgeColorClasses } from '../../utils/vehicleStatus';
 import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import clsx from 'clsx';
@@ -105,6 +106,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState(false);
   const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState(false);
+  const [isInspectionDateSelectorOpen, setIsInspectionDateSelectorOpen] = useState(false);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -300,7 +302,16 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       case 'inspectionDate':
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            {formatDate(vehicle.inspectionDate)}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsInspectionDateSelectorOpen(true);
+              }}
+              className="hover:text-blue-600 hover:underline transition-colors"
+              title="View inspection history"
+            >
+              {formatDate(vehicle.inspectionDate)}
+            </button>
           </td>
         );
 
@@ -620,6 +631,19 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           )}
         </div>
       </td>
+
+      {isInspectionDateSelectorOpen && (
+        <InspectionDateSelector
+          vehicle={vehicle}
+          onClose={() => setIsInspectionDateSelectorOpen(false)}
+          onSelectInspection={(vehicleId) => {
+            if (onClick) {
+              onClick();
+            }
+            window.location.href = `/vehicles/${vehicleId}`;
+          }}
+        />
+      )}
     </tr>
   );
 };
