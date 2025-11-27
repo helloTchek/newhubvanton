@@ -4,7 +4,7 @@ import { Vehicle, VehicleInspectionReport, SearchFilters, ApiResponse, Inspectio
 import { supabase } from '../lib/supabase';
 
 class VehicleService {
-  async getVehicleInspections(vehicleId: string): Promise<ApiResponse<Vehicle[]>> {
+  async getVehicleInspections(vehicleId: string): Promise<ApiResponse<any[]>> {
     try {
       const { data: currentVehicle, error: currentError } = await supabase
         .from('vehicles')
@@ -20,26 +20,60 @@ class VehicleService {
         throw new Error('Vehicle not found');
       }
 
-      let query = supabase
+      let vehiclesQuery = supabase
         .from('vehicles')
-        .select('*')
-        .neq('id', vehicleId)
-        .order('inspection_date', { ascending: false });
+        .select('id, registration, vin')
+        .neq('id', vehicleId);
 
       if (currentVehicle.vin) {
-        query = query.eq('vin', currentVehicle.vin);
+        vehiclesQuery = vehiclesQuery.eq('vin', currentVehicle.vin);
       } else {
-        query = query.eq('registration', currentVehicle.registration);
+        vehiclesQuery = vehiclesQuery.eq('registration', currentVehicle.registration);
       }
 
-      const { data: vehicles, error } = await query;
+      const { data: relatedVehicles, error: vehiclesError } = await vehiclesQuery;
 
-      if (error) {
-        throw new Error(error.message);
+      if (vehiclesError) {
+        throw new Error(vehiclesError.message);
+      }
+
+      if (!relatedVehicles || relatedVehicles.length === 0) {
+        return {
+          data: [],
+          success: true,
+          message: 'No other inspections found'
+        };
+      }
+
+      const vehicleIds = relatedVehicles.map(v => v.id);
+
+      const { data: inspectionReports, error: reportsError } = await supabase
+        .from('inspection_reports')
+        .select(`
+          *,
+          vehicle:vehicles (
+            id,
+            registration,
+            vin,
+            make,
+            model,
+            mileage,
+            status,
+            inspection_date,
+            inspection_type,
+            images,
+            tchek_id
+          )
+        `)
+        .in('vehicle_id', vehicleIds)
+        .order('report_date', { ascending: false });
+
+      if (reportsError) {
+        throw new Error(reportsError.message);
       }
 
       return {
-        data: vehicles || [],
+        data: inspectionReports || [],
         success: true,
         message: 'Vehicle inspections retrieved successfully'
       };

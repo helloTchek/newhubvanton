@@ -6,6 +6,28 @@ import { StatusBadge } from '../common/StatusBadge';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+interface InspectionReport {
+  id: string;
+  vehicle_id: string;
+  tchek_id: string;
+  report_date: string;
+  total_cost: string;
+  report_status: string;
+  vehicle: {
+    id: string;
+    registration: string;
+    vin: string;
+    make: string;
+    model: string;
+    mileage: number;
+    status: string;
+    inspection_date: string;
+    inspection_type: string;
+    images: string[];
+    tchek_id: string;
+  };
+}
+
 interface InspectionDateSelectorProps {
   vehicle: Vehicle;
   onClose: () => void;
@@ -18,7 +40,7 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
   onSelectInspection,
 }) => {
   const navigate = useNavigate();
-  const [inspections, setInspections] = useState<Vehicle[]>([]);
+  const [inspections, setInspections] = useState<InspectionReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -46,8 +68,18 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
     });
   };
 
-  const handleSelectInspection = (inspectionVehicle: Vehicle) => {
-    onSelectInspection(inspectionVehicle.id);
+  const formatDateTime = (date: string) => {
+    return new Date(date).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const handleSelectInspection = (report: InspectionReport) => {
+    onSelectInspection(report.vehicle.id);
     onClose();
   };
 
@@ -110,31 +142,36 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
               <h3 className="text-sm font-semibold text-gray-700 mb-2">
                 Previous Inspections ({inspections.length})
               </h3>
-              {inspections.map((inspection) => (
+              {inspections.map((report) => (
                 <div
-                  key={inspection.id}
+                  key={report.id}
                   className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer group"
-                  onClick={() => handleSelectInspection(inspection)}
+                  onClick={() => handleSelectInspection(report)}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <StatusBadge status={inspection.status} />
+                        <StatusBadge status={report.vehicle.status as any} />
                         <span className="text-xs text-gray-500">
-                          ID: {inspection.tchek_id || inspection.id.slice(0, 8)}
+                          ID: {report.tchek_id}
                         </span>
                       </div>
                       <div className="text-sm text-gray-700">
-                        <span className="font-medium">Date:</span> {formatDate(inspection.inspection_date)}
+                        <span className="font-medium">Inspection Date:</span> {formatDateTime(report.report_date)}
                       </div>
-                      {inspection.make && inspection.model && (
+                      {report.vehicle.make && report.vehicle.model && (
                         <div className="text-sm text-gray-700 mt-1">
-                          <span className="font-medium">Vehicle:</span> {inspection.make} {inspection.model}
+                          <span className="font-medium">Vehicle:</span> {report.vehicle.make} {report.vehicle.model}
                         </div>
                       )}
-                      {inspection.mileage && (
+                      {report.vehicle.mileage && (
                         <div className="text-sm text-gray-600 mt-1">
-                          <span className="font-medium">Mileage:</span> {inspection.mileage.toLocaleString()} km
+                          <span className="font-medium">Mileage:</span> {report.vehicle.mileage.toLocaleString()} km
+                        </div>
+                      )}
+                      {report.total_cost && parseFloat(report.total_cost) > 0 && (
+                        <div className="text-sm text-gray-600 mt-1">
+                          <span className="font-medium">Cost:</span> €{parseFloat(report.total_cost).toLocaleString()}
                         </div>
                       )}
                     </div>
