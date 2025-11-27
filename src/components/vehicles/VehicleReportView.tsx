@@ -666,9 +666,6 @@ export const VehicleReportView: React.FC = () => {
                       <div>
                         <h4 className="font-medium text-gray-900">Inspection #{historyReport.tchek_id}</h4>
                         <p className="text-sm text-gray-600">{formatDateTime(historyReport.report_date)}</p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Inspecteur: {historyReport.inspector?.email || 'N/A'}
-                        </p>
                         <p className="text-sm text-gray-600">Tchek ID: {historyReport.id.slice(0, 13)}</p>
                       </div>
                     </div>

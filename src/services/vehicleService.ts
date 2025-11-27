@@ -62,11 +62,6 @@ class VehicleService {
             inspection_type,
             images,
             tchek_id
-          ),
-          inspector:user_profiles!inspection_reports_inspector_id_fkey (
-            id,
-            name,
-            email
           )
         `)
         .in('vehicle_id', vehicleIds)
