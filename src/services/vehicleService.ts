@@ -4,7 +4,7 @@ import { Vehicle, VehicleInspectionReport, SearchFilters, ApiResponse, Inspectio
 import { supabase } from '../lib/supabase';
 
 class VehicleService {
-  async getVehicleInspections(vehicleId: string): Promise<ApiResponse<any[]>> {
+  async getVehicleInspections(vehicleId: string, currentReportId?: string): Promise<ApiResponse<any[]>> {
     try {
       const { data: currentVehicle, error: currentError } = await supabase
         .from('vehicles')
@@ -22,8 +22,7 @@ class VehicleService {
 
       let vehiclesQuery = supabase
         .from('vehicles')
-        .select('id, registration, vin')
-        .neq('id', vehicleId);
+        .select('id, registration, vin');
 
       if (currentVehicle.vin) {
         vehiclesQuery = vehiclesQuery.eq('vin', currentVehicle.vin);
@@ -31,23 +30,23 @@ class VehicleService {
         vehiclesQuery = vehiclesQuery.eq('registration', currentVehicle.registration);
       }
 
-      const { data: relatedVehicles, error: vehiclesError } = await vehiclesQuery;
+      const { data: allVehicles, error: vehiclesError } = await vehiclesQuery;
 
       if (vehiclesError) {
         throw new Error(vehiclesError.message);
       }
 
-      if (!relatedVehicles || relatedVehicles.length === 0) {
+      if (!allVehicles || allVehicles.length === 0) {
         return {
           data: [],
           success: true,
-          message: 'No other inspections found'
+          message: 'No inspections found'
         };
       }
 
-      const vehicleIds = relatedVehicles.map(v => v.id);
+      const vehicleIds = allVehicles.map(v => v.id);
 
-      const { data: inspectionReports, error: reportsError } = await supabase
+      let reportsQuery = supabase
         .from('inspection_reports')
         .select(`
           *,
@@ -63,10 +62,21 @@ class VehicleService {
             inspection_type,
             images,
             tchek_id
+          ),
+          inspector:user_profiles!inspection_reports_inspector_id_fkey (
+            id,
+            name,
+            email
           )
         `)
         .in('vehicle_id', vehicleIds)
         .order('report_date', { ascending: false });
+
+      if (currentReportId) {
+        reportsQuery = reportsQuery.neq('id', currentReportId);
+      }
+
+      const { data: inspectionReports, error: reportsError } = await reportsQuery;
 
       if (reportsError) {
         throw new Error(reportsError.message);

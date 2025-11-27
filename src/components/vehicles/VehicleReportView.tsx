@@ -31,6 +31,7 @@ export const VehicleReportView: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const [report, setReport] = useState<VehicleInspectionReport | null>(null);
+  const [inspectionHistory, setInspectionHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<LoadingState>({ isLoading: true, error: null });
   const [activeTab, setActiveTab] = useState('estimations');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -77,6 +78,15 @@ export const VehicleReportView: React.FC = () => {
       setLoading({ isLoading: true, error: null });
       const response = await vehicleService.getVehicleReport(id);
       setReport(response.data);
+
+      if (response.data) {
+        try {
+          const historyResponse = await vehicleService.getVehicleInspections(id, response.data.id);
+          setInspectionHistory(historyResponse.data);
+        } catch (historyError) {
+          console.error('Failed to load inspection history:', historyError);
+        }
+      }
     } catch (error: unknown) {
       const errorMessage = error.message || 'Failed to load vehicle report';
       setLoading({ isLoading: false, error: errorMessage });
@@ -643,28 +653,38 @@ export const VehicleReportView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Previous Inspection */}
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="w-3 h-3 bg-gray-400 rounded-full mt-2"></div>
-                    <div>
-                      <h4 className="font-medium text-gray-900">Inspection #T722156</h4>
-                      <p className="text-sm text-gray-600">15/06/2025 10:23 (UTC)</p>
-                      <p className="text-sm text-gray-600 mt-1">Inspecteur: marie.dupont@tchek.ai</p>
-                      <p className="text-sm text-gray-600">Tchek ID: 5kLmNpQ32Y</p>
+              {/* Previous Inspections */}
+              {inspectionHistory.map((historyReport) => (
+                <div
+                  key={historyReport.id}
+                  className="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:bg-gray-100 cursor-pointer transition-colors"
+                  onClick={() => navigate(`/vehicles/${historyReport.vehicle.id}`)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      <div className="w-3 h-3 bg-gray-400 rounded-full mt-2"></div>
+                      <div>
+                        <h4 className="font-medium text-gray-900">Inspection #{historyReport.tchek_id}</h4>
+                        <p className="text-sm text-gray-600">{formatDateTime(historyReport.report_date)}</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Inspecteur: {historyReport.inspector?.email || 'N/A'}
+                        </p>
+                        <p className="text-sm text-gray-600">Tchek ID: {historyReport.id.slice(0, 13)}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded">
+                        Terminée
+                      </span>
+                      {historyReport.total_cost && parseFloat(historyReport.total_cost) > 0 && (
+                        <p className="text-sm font-medium text-gray-600 mt-1">
+                          {formatCurrency(parseFloat(historyReport.total_cost))}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded">
-                      Terminée
-                    </span>
-                    <p className="text-sm font-medium text-gray-600 mt-1">
-                      850,00 €
-                    </p>
-                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
