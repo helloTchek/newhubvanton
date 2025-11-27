@@ -110,7 +110,7 @@ export const InspectionDateSelector: React.FC<InspectionDateSelectorProps> = ({
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-medium text-blue-900">Current Inspection</span>
+                  <span className="text-sm font-medium text-blue-900">Latest Inspection</span>
                   <StatusBadge status={vehicle.status} />
                 </div>
                 <div className="text-sm text-blue-800">
