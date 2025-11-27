@@ -60,8 +60,7 @@ class VehicleService {
             status,
             inspection_date,
             inspection_type,
-            images,
-            tchek_id
+            images
           )
         `)
         .in('vehicle_id', vehicleIds)
