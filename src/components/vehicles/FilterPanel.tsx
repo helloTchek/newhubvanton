@@ -13,10 +13,10 @@ interface FilterPanelProps {
 
 const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'All Status' },
-  { value: 'link_sent', label: 'Link Sent' },
-  { value: 'chased_up_1', label: 'Chased-up (1st)' },
-  { value: 'chased_up_2', label: 'Chased-up (2nd)' },
-  { value: 'chased_up_manual', label: 'Chased-up (Manual)' },
+  { value: 'link_sent', label: 'Created' },
+  { value: 'chased_up_1', label: 'ChaseUp' },
+  { value: 'chased_up_2', label: 'ChaseUp' },
+  { value: 'chased_up_manual', label: 'ChaseUp' },
   { value: 'inspection_in_progress', label: 'In Progress' },
   { value: 'inspected', label: 'Inspected' },
   { value: 'to_review', label: 'To Review' },

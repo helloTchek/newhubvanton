@@ -11,22 +11,22 @@ interface StatusBadgeProps {
 const statusConfig = {
   // Vehicle statuses
   link_sent: {
-    label: 'Link Sent',
+    label: 'Created',
     color: 'bg-blue-100 text-blue-800',
     dot: 'bg-blue-400'
   },
   chased_up_1: {
-    label: 'Chased-up (1st)',
+    label: 'ChaseUp',
     color: 'bg-orange-100 text-orange-800',
     dot: 'bg-orange-400'
   },
   chased_up_2: {
-    label: 'Chased-up (2nd)',
+    label: 'ChaseUp',
     color: 'bg-red-100 text-red-800',
     dot: 'bg-red-400'
   },
   chased_up_manual: {
-    label: 'Chased-up (Manual)',
+    label: 'ChaseUp',
     color: 'bg-amber-100 text-amber-800',
     dot: 'bg-amber-400'
   },
