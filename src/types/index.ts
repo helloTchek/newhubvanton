@@ -19,6 +19,15 @@ export interface Company {
   isFastTrackDisabled?: boolean;
 }
 
+export type ImageQuality = 'good' | 'acceptable' | 'bad' | 'none';
+export type AIInspectionStatus = 'worked' | 'light_issue' | 'did_not_work' | 'none';
+
+export interface AIInspectionInfo {
+  imageQuality: ImageQuality;
+  aiStatus: AIInspectionStatus;
+  manualReviewCompleted: boolean;
+}
+
 export interface Vehicle {
   id: string;
   registration: string;
@@ -44,6 +53,7 @@ export interface Vehicle {
   damageInfo?: VehicleDamageInfo;
   isFastTrackDisabled?: boolean;
   manualReviewCompleted?: boolean;
+  aiInspectionInfo?: AIInspectionInfo;
   sharedReport?: SharedReportInfo;
   tags?: Tag[];
 }

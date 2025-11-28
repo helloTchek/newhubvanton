@@ -179,7 +179,9 @@ class VehicleService {
             tchek_id,
             manual_review_completed,
             manual_review_completed_at,
-            manual_review_completed_by
+            manual_review_completed_by,
+            image_quality,
+            ai_inspection_status
           ),
           vehicle_tags(
             tag_id,
@@ -299,6 +301,7 @@ class VehicleService {
         let damageInfo = undefined;
         let reportId = undefined;
         let externalId = undefined;
+        let aiInspectionInfo = undefined;
         const isFastTrackDisabled = row.companies?.is_fast_track_disabled || false;
         const manualReviewCompleted = row.inspection_reports?.[0]?.manual_review_completed || false;
 
@@ -307,6 +310,13 @@ class VehicleService {
           externalId = row.inspection_reports[0].tchek_id;
           // Always fetch damage info if we have a report
           damageInfo = await this.getDamageInfo(reportId);
+
+          // Extract AI inspection info
+          aiInspectionInfo = {
+            imageQuality: row.inspection_reports[0].image_quality || 'none',
+            aiStatus: row.inspection_reports[0].ai_inspection_status || 'none',
+            manualReviewCompleted: manualReviewCompleted
+          };
         }
 
         // Determine actual status based on fast track settings
@@ -345,6 +355,7 @@ class VehicleService {
           damageInfo,
           isFastTrackDisabled,
           manualReviewCompleted,
+          aiInspectionInfo,
           tags
         };
       });

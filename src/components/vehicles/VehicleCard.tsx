@@ -5,6 +5,7 @@ import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
 import { TagManager } from './TagManager';
 import { InspectionDateSelector } from './InspectionDateSelector';
+import { AIInspectionBadge } from './AIInspectionBadge';
 import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -325,7 +326,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   alt={`${vehicle.make} ${vehicle.model}`}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-3 right-3 flex flex-col gap-2">
+                <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -334,6 +335,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* AI Inspection Badge - Bottom Left */}
+                {vehicle.aiInspectionInfo && (
+                  <div className="absolute bottom-3 left-3">
+                    <AIInspectionBadge info={vehicle.aiInspectionInfo} />
+                  </div>
+                )}
 
                 {hasMultipleImages && (
                   <>
@@ -381,7 +389,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   </div>
                   <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
                 </div>
-                <div className="absolute top-3 right-3 flex flex-col gap-2">
+                <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -390,6 +398,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* AI Inspection Badge - Bottom Left */}
+                {vehicle.aiInspectionInfo && (
+                  <div className="absolute bottom-3 left-3">
+                    <AIInspectionBadge info={vehicle.aiInspectionInfo} />
+                  </div>
+                )}
               </div>
             )}
           </>
