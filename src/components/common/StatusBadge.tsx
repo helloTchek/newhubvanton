@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { VehicleStatus, InspectionStatus } from '../../types';
 
@@ -70,24 +70,23 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   className,
   statusUpdatedAt
 }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
   const config = statusConfig[status];
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric'
-    });
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
-  const tooltipText = statusUpdatedAt ? `since ${formatDate(statusUpdatedAt)}` : undefined;
+  const tooltipText = statusUpdatedAt ? `since ${formatDate(statusUpdatedAt)}` : null;
 
   if (!config) {
     return (
       <span
         className={clsx('inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full', className)}
-        title={tooltipText}
       >
         {status}
       </span>
@@ -99,17 +98,28 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     : 'px-3 py-1 text-sm';
 
   return (
-    <span
-      className={clsx(
-        'inline-flex items-center gap-1.5 font-medium rounded-full',
-        config.color,
-        sizeClasses,
-        className
+    <div className="relative inline-block">
+      <span
+        className={clsx(
+          'inline-flex items-center gap-1.5 font-medium rounded-full cursor-default',
+          config.color,
+          sizeClasses,
+          className
+        )}
+        onMouseEnter={() => tooltipText && setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <div className={clsx('w-2 h-2 rounded-full', config.dot)} />
+        {config.label}
+      </span>
+      {showTooltip && tooltipText && (
+        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap pointer-events-none">
+          {tooltipText}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
+            <div className="border-4 border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
       )}
-      title={tooltipText}
-    >
-      <div className={clsx('w-2 h-2 rounded-full', config.dot)} />
-      {config.label}
-    </span>
+    </div>
   );
 };
