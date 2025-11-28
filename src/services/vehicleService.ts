@@ -176,6 +176,7 @@ class VehicleService {
           ),
           inspection_reports(
             id,
+            tchek_id,
             manual_review_completed,
             manual_review_completed_at,
             manual_review_completed_by
@@ -297,11 +298,13 @@ class VehicleService {
       const vehiclesWithReports = (data || []).map(async (row: any) => {
         let damageInfo = undefined;
         let reportId = undefined;
+        let externalId = undefined;
         const isFastTrackDisabled = row.companies?.is_fast_track_disabled || false;
         const manualReviewCompleted = row.inspection_reports?.[0]?.manual_review_completed || false;
 
         if (row.inspection_reports && row.inspection_reports.length > 0) {
           reportId = row.inspection_reports[0].id;
+          externalId = row.inspection_reports[0].tchek_id;
           // Always fetch damage info if we have a report
           damageInfo = await this.getDamageInfo(reportId);
         }
@@ -338,6 +341,7 @@ class VehicleService {
           customerPhone: row.customer_phone,
           inspectionType: row.inspection_type,
           reportId,
+          externalId,
           damageInfo,
           isFastTrackDisabled,
           manualReviewCompleted,

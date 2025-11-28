@@ -77,6 +77,7 @@ export const VehicleList: React.FC = () => {
     status: true,
     inspectionDate: true,
     inspectionId: true,
+    externalId: true,
     inspectionType: true,
     mileage: true,
     value: true,
@@ -102,6 +103,7 @@ export const VehicleList: React.FC = () => {
     customerEmail: true,
     inspectionDate: true,
     inspectionId: true,
+    externalId: true,
     inspectionType: true,
     repairCost: true,
     value: true,
@@ -110,7 +112,7 @@ export const VehicleList: React.FC = () => {
   };
 
   const defaultColumnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'externalId', 'inspectionType',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
@@ -630,6 +632,7 @@ export const VehicleList: React.FC = () => {
       'status': 'Status',
       'inspectionDate': 'Inspection Date',
       'inspectionId': 'Inspection ID',
+      'externalId': 'External ID',
       'inspectionType': 'Inspection Type',
       'mileage': 'Mileage',
       'value': 'Value',
@@ -809,6 +812,7 @@ export const VehicleList: React.FC = () => {
                           customerEmail: 'Customer Email',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
+                          externalId: 'External ID',
                           inspectionType: 'Inspection Type',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
@@ -853,6 +857,7 @@ export const VehicleList: React.FC = () => {
                           status: 'Status',
                           inspectionDate: 'Inspection Date',
                           inspectionId: 'Inspection ID',
+                          externalId: 'External ID',
                           inspectionType: 'Inspection Type',
                           mileage: 'Mileage',
                           value: 'Value',

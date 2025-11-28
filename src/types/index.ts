@@ -40,6 +40,7 @@ export interface Vehicle {
   customerPhone?: string;
   inspectionType?: InspectionType;
   reportId?: string;
+  externalId?: string;
   damageInfo?: VehicleDamageInfo;
   isFastTrackDisabled?: boolean;
   manualReviewCompleted?: boolean;

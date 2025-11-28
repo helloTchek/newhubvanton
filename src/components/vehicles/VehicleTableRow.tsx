@@ -325,6 +325,17 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </td>
         );
 
+      case 'externalId':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {vehicle.externalId ? (
+              <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{vehicle.externalId}</span>
+            ) : (
+              <span className="text-gray-400">-</span>
+            )}
+          </td>
+        );
+
       case 'mileage':
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
