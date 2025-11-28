@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, User } from 'lucide-react';
+import { Camera, User, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { AIInspectionInfo, ImageQuality } from '../../types';
 
@@ -41,11 +41,7 @@ export const AIInspectionBadge: React.FC<AIInspectionBadgeProps> = ({ info }) =>
           className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-green-50"
           title="AI Inspection Complete"
         >
-          <img
-            src="/logo_tchek-web.png"
-            alt="Tchek.ai"
-            className="w-3 h-3 object-contain"
-          />
+          <Sparkles className="w-3 h-3 text-green-600" />
           <span className="font-medium text-green-600">AI</span>
         </div>
       )}
