@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { VehicleStatus, InspectionStatus } from '../../types';
 
@@ -71,6 +71,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   statusUpdatedAt
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const badgeRef = useRef<HTMLSpanElement>(null);
   const config = statusConfig[status];
 
   const formatDate = (dateString: string) => {
@@ -82,6 +84,21 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   };
 
   const tooltipText = statusUpdatedAt ? `since ${formatDate(statusUpdatedAt)}` : null;
+
+  const handleMouseEnter = () => {
+    if (tooltipText && badgeRef.current) {
+      const rect = badgeRef.current.getBoundingClientRect();
+      setTooltipPosition({
+        top: rect.bottom + 8,
+        left: rect.left + rect.width / 2
+      });
+      setShowTooltip(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   if (!config) {
     return (
@@ -98,28 +115,33 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     : 'px-3 py-1 text-sm';
 
   return (
-    <div className="relative inline-block">
+    <>
       <span
+        ref={badgeRef}
         className={clsx(
           'inline-flex items-center gap-1.5 font-medium rounded-full cursor-default',
           config.color,
           sizeClasses,
           className
         )}
-        onMouseEnter={() => tooltipText && setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className={clsx('w-2 h-2 rounded-full', config.dot)} />
         {config.label}
       </span>
       {showTooltip && tooltipText && (
-        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap pointer-events-none">
+        <div
+          className="fixed z-[9999] px-3 py-1.5 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap pointer-events-none shadow-lg"
+          style={{
+            top: `${tooltipPosition.top}px`,
+            left: `${tooltipPosition.left}px`,
+            transform: 'translateX(-50%)'
+          }}
+        >
           {tooltipText}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
-            <div className="border-4 border-transparent border-t-gray-900"></div>
-          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
