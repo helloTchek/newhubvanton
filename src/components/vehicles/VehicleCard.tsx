@@ -47,6 +47,7 @@ interface VehicleCardProps {
     inspectionDate: boolean;
     inspectionId: boolean;
     inspectionType: boolean;
+    aiInspectionBadge: boolean;
     repairCost: boolean;
     value: boolean;
     damageResults: boolean;
@@ -86,6 +87,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     inspectionDate: true,
     inspectionId: true,
     inspectionType: true,
+    aiInspectionBadge: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -337,7 +339,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 </div>
 
                 {/* AI Inspection Badge - Bottom Left */}
-                {vehicle.aiInspectionInfo && (
+                {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
                   <div className="absolute bottom-3 left-3">
                     <AIInspectionBadge info={vehicle.aiInspectionInfo} />
                   </div>
@@ -400,7 +402,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 </div>
 
                 {/* AI Inspection Badge - Bottom Left */}
-                {vehicle.aiInspectionInfo && (
+                {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
                   <div className="absolute bottom-3 left-3">
                     <AIInspectionBadge info={vehicle.aiInspectionInfo} />
                   </div>

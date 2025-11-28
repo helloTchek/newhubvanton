@@ -25,6 +25,8 @@ export interface UserPreferences {
     status: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
+    inspectionType: boolean;
+    aiInspectionBadge: boolean;
     mileage: boolean;
     value: boolean;
     tags: boolean;
@@ -47,6 +49,8 @@ export interface UserPreferences {
     customerEmail: boolean;
     inspectionDate: boolean;
     inspectionId: boolean;
+    inspectionType: boolean;
+    aiInspectionBadge: boolean;
     repairCost: boolean;
     value: boolean;
     damageResults: boolean;
@@ -86,6 +90,8 @@ class UserPreferencesService {
       status: visibleColumns.status !== undefined ? visibleColumns.status : true,
       inspectionDate: visibleColumns.inspectionDate !== undefined ? visibleColumns.inspectionDate : true,
       inspectionId: visibleColumns.inspectionId !== undefined ? visibleColumns.inspectionId : true,
+      inspectionType: visibleColumns.inspectionType !== undefined ? visibleColumns.inspectionType : true,
+      aiInspectionBadge: visibleColumns.aiInspectionBadge !== undefined ? visibleColumns.aiInspectionBadge : true,
       mileage: visibleColumns.mileage !== undefined ? visibleColumns.mileage : true,
       value: visibleColumns.value !== undefined ? visibleColumns.value : true,
       tags: visibleColumns.tags !== undefined ? visibleColumns.tags : true,
@@ -110,6 +116,8 @@ class UserPreferencesService {
       customerEmail: visibleCardFields.customerEmail !== undefined ? visibleCardFields.customerEmail : true,
       inspectionDate: visibleCardFields.inspectionDate !== undefined ? visibleCardFields.inspectionDate : true,
       inspectionId: visibleCardFields.inspectionId !== undefined ? visibleCardFields.inspectionId : true,
+      inspectionType: visibleCardFields.inspectionType !== undefined ? visibleCardFields.inspectionType : true,
+      aiInspectionBadge: visibleCardFields.aiInspectionBadge !== undefined ? visibleCardFields.aiInspectionBadge : true,
       repairCost: visibleCardFields.repairCost !== undefined ? visibleCardFields.repairCost : true,
       value: visibleCardFields.value !== undefined ? visibleCardFields.value : true,
       damageResults: visibleCardFields.damageResults !== undefined ? visibleCardFields.damageResults : true,

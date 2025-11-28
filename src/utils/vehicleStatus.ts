@@ -28,18 +28,6 @@ export function getVehicleStatusInfo(
       };
     }
 
-    if (!isFastTrackDisabled && manualReviewCompleted) {
-      return {
-        status: 'inspected',
-        displayStatus: 'Inspected',
-        badge: {
-          text: 'Manual Review Completed',
-          color: 'green'
-        },
-        needsReview: false
-      };
-    }
-
     return {
       status: 'inspected',
       displayStatus: 'Inspected',

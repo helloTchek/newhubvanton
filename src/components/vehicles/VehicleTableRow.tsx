@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink, FileCheck } from 'lucide-react';
+import { AIInspectionBadge } from './AIInspectionBadge';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { TagManager } from './TagManager';
@@ -45,6 +46,7 @@ interface VehicleTableRowProps {
     inspectionDate: boolean;
     inspectionId: boolean;
     inspectionType: boolean;
+    aiInspectionBadge: boolean;
     mileage: boolean;
     value: boolean;
     repairCost: boolean;
@@ -74,7 +76,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelected = false,
   onSelectToggle,
   columnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType', 'aiInspectionBadge',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ],
@@ -89,6 +91,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     inspectionDate: true,
     inspectionId: true,
     inspectionType: true,
+    aiInspectionBadge: true,
     mileage: true,
     value: true,
     repairCost: true,
@@ -375,6 +378,17 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               )}>
                 {getInspectionTypeLabel(vehicle.inspectionType)}
               </span>
+            ) : (
+              <span className="text-sm text-gray-400">-</span>
+            )}
+          </td>
+        );
+
+      case 'aiInspectionBadge':
+        return (
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap">
+            {vehicle.aiInspectionInfo ? (
+              <AIInspectionBadge info={vehicle.aiInspectionInfo} />
             ) : (
               <span className="text-sm text-gray-400">-</span>
             )}

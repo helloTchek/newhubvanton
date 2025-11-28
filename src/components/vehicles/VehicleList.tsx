@@ -79,6 +79,7 @@ export const VehicleList: React.FC = () => {
     inspectionId: true,
     externalId: true,
     inspectionType: true,
+    aiInspectionBadge: true,
     mileage: true,
     value: true,
     repairCost: true,
@@ -105,6 +106,7 @@ export const VehicleList: React.FC = () => {
     inspectionId: true,
     externalId: true,
     inspectionType: true,
+    aiInspectionBadge: true,
     repairCost: true,
     value: true,
     damageResults: true,
@@ -112,7 +114,7 @@ export const VehicleList: React.FC = () => {
   };
 
   const defaultColumnOrder = [
-    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'externalId', 'inspectionType',
+    'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'externalId', 'inspectionType', 'aiInspectionBadge',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
     'interior', 'tires', 'dashboard', 'declarations'
   ];
@@ -634,6 +636,7 @@ export const VehicleList: React.FC = () => {
       'inspectionId': 'Inspection ID',
       'externalId': 'External ID',
       'inspectionType': 'Inspection Type',
+      'aiInspectionBadge': 'AI Inspection Badge',
       'mileage': 'Mileage',
       'value': 'Value',
       'repairCost': 'Repair Cost',
@@ -814,6 +817,7 @@ export const VehicleList: React.FC = () => {
                           inspectionId: 'Inspection ID',
                           externalId: 'External ID',
                           inspectionType: 'Inspection Type',
+                          aiInspectionBadge: 'AI Inspection Badge',
                           repairCost: 'Repair Cost',
                           value: 'Estimated Value',
                           damageResults: 'Damage Results',
@@ -859,6 +863,7 @@ export const VehicleList: React.FC = () => {
                           inspectionId: 'Inspection ID',
                           externalId: 'External ID',
                           inspectionType: 'Inspection Type',
+                          aiInspectionBadge: 'AI Inspection Badge',
                           mileage: 'Mileage',
                           value: 'Value',
                           repairCost: 'Repair Cost',
