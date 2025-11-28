@@ -694,7 +694,7 @@ export const VehicleList: React.FC = () => {
   const canChaseUpSelection = () => {
     const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
     return selectedVehicles.every(v =>
-      ['link_sent', 'chased_up_1', 'chased_up_2', 'inspection_in_progress'].includes(v.status)
+      ['link_sent', 'chased_up', 'inspection_in_progress'].includes(v.status)
     );
   };
 

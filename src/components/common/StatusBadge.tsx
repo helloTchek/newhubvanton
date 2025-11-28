@@ -15,20 +15,10 @@ const statusConfig = {
     color: 'bg-blue-100 text-blue-800',
     dot: 'bg-blue-400'
   },
-  chased_up_1: {
+  chased_up: {
     label: 'ChaseUp',
     color: 'bg-orange-100 text-orange-800',
     dot: 'bg-orange-400'
-  },
-  chased_up_2: {
-    label: 'ChaseUp',
-    color: 'bg-red-100 text-red-800',
-    dot: 'bg-red-400'
-  },
-  chased_up_manual: {
-    label: 'ChaseUp',
-    color: 'bg-amber-100 text-amber-800',
-    dot: 'bg-amber-400'
   },
   inspection_in_progress: {
     label: 'In Progress',

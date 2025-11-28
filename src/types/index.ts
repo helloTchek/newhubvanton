@@ -173,9 +173,7 @@ export interface CompanyConfiguration {
 // Enums
 export type VehicleStatus =
   | 'link_sent'
-  | 'chased_up_1'
-  | 'chased_up_2'
-  | 'chased_up_manual'
+  | 'chased_up'
   | 'inspection_in_progress'
   | 'inspected'
   | 'to_review'

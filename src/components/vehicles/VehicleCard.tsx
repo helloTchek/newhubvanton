@@ -55,15 +55,13 @@ interface VehicleCardProps {
 
 const statusesWithoutImages: VehicleStatus[] = [
   'link_sent',
-  'chased_up_1',
-  'chased_up_2',
+  'chased_up',
   'inspection_in_progress'
 ];
 
 const statusesWithChaseUp: VehicleStatus[] = [
   'link_sent',
-  'chased_up_1',
-  'chased_up_2',
+  'chased_up',
   'inspection_in_progress'
 ];
 

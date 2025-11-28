@@ -61,8 +61,7 @@ interface VehicleTableRowProps {
 
 const statusesWithoutImages: VehicleStatus[] = [
   'link_sent',
-  'chased_up_1',
-  'chased_up_2',
+  'chased_up',
   'inspection_in_progress'
 ];
 
@@ -555,8 +554,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               <div className="py-1" role="menu">
                 {onChaseUp && (
                   vehicle.status === 'link_sent' ||
-                  vehicle.status === 'chased_up_1' ||
-                  vehicle.status === 'chased_up_2' ||
+                  vehicle.status === 'chased_up' ||
                   vehicle.status === 'inspection_in_progress'
                 ) && (
                   <>

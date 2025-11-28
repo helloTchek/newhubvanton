@@ -71,9 +71,7 @@ export function getVehicleStatusInfo(
 function getStatusLabel(status: VehicleStatus): string {
   const labels: Record<VehicleStatus, string> = {
     link_sent: 'Created',
-    chased_up_1: 'ChaseUp',
-    chased_up_2: 'ChaseUp',
-    chased_up_manual: 'ChaseUp',
+    chased_up: 'ChaseUp',
     inspection_in_progress: 'In Progress',
     inspected: 'Inspected',
     to_review: 'To Review',

@@ -11,11 +11,11 @@ class ChaseUpService {
         console.log(`Message: ${message}`);
       }
 
-      // Update vehicle status to chased_up_manual
+      // Update vehicle status to chased_up
       const { error } = await supabase
         .from('vehicles')
         .update({
-          status: 'chased_up_manual',
+          status: 'chased_up',
           updated_at: new Date().toISOString()
         })
         .eq('id', vehicleId);
@@ -40,11 +40,11 @@ class ChaseUpService {
     try {
       console.log(`Sending bulk ${method} chase up for ${vehicleIds.length} vehicles`);
 
-      // Update all vehicle statuses to chased_up_manual
+      // Update all vehicle statuses to chased_up
       const { error } = await supabase
         .from('vehicles')
         .update({
-          status: 'chased_up_manual',
+          status: 'chased_up',
           updated_at: new Date().toISOString()
         })
         .in('id', vehicleIds);
