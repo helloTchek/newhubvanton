@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, User, Sparkles } from 'lucide-react';
+import { Camera, CheckCircle2, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { AIInspectionInfo, ImageQuality } from '../../types';
 
@@ -52,22 +52,22 @@ export const AIInspectionBadge: React.FC<AIInspectionBadgeProps> = ({ info }) =>
           className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50"
           title="Customer Manual Review"
         >
-          <User className="w-3 h-3 text-blue-600" />
-          <span className="font-medium text-blue-600">Customer</span>
+          <CheckCircle2 className="w-3 h-3 text-blue-600" />
+          <span className="font-medium text-blue-600">Customer review</span>
         </div>
       )}
 
       {info.manualReviewType === 'tchek' && (
         <div
-          className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-50"
+          className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-green-50"
           title="Tchek Manual Review"
         >
           <img
-            src="/logo_tchek-web.png"
+            src="/simple-logo.png"
             alt="Tchek"
             className="w-3 h-3 object-contain"
           />
-          <span className="font-medium text-purple-600">Tchek</span>
+          <span className="font-medium text-green-600">Tchek review</span>
         </div>
       )}
     </div>
