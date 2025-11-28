@@ -6,6 +6,7 @@ interface StatusBadgeProps {
   status: VehicleStatus | InspectionStatus;
   size?: 'sm' | 'md';
   className?: string;
+  statusUpdatedAt?: string;
 }
 
 const statusConfig = {
@@ -63,33 +64,49 @@ const statusConfig = {
   }
 };
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  status, 
+export const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
   size = 'md',
-  className 
+  className,
+  statusUpdatedAt
 }) => {
   const config = statusConfig[status];
-  
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const tooltipText = statusUpdatedAt ? `since ${formatDate(statusUpdatedAt)}` : undefined;
+
   if (!config) {
     return (
-      <span className={clsx('inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full', className)}>
+      <span
+        className={clsx('inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full', className)}
+        title={tooltipText}
+      >
         {status}
       </span>
     );
   }
 
-  const sizeClasses = size === 'sm' 
-    ? 'px-2 py-1 text-xs' 
+  const sizeClasses = size === 'sm'
+    ? 'px-2 py-1 text-xs'
     : 'px-3 py-1 text-sm';
 
   return (
-    <span 
+    <span
       className={clsx(
         'inline-flex items-center gap-1.5 font-medium rounded-full',
         config.color,
         sizeClasses,
         className
       )}
+      title={tooltipText}
     >
       <div className={clsx('w-2 h-2 rounded-full', config.dot)} />
       {config.label}

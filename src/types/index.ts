@@ -30,6 +30,7 @@ export interface Vehicle {
   companyId: string;
   companyName: string;
   status: VehicleStatus;
+  statusUpdatedAt?: string;
   inspectionDate?: string;
   estimatedValue: number;
   estimatedCost: number;

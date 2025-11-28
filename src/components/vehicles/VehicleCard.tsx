@@ -326,7 +326,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-3 right-3 flex flex-col gap-2">
-                  <StatusBadge status={vehicle.status} />
+                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
                       <Share2 className="w-3 h-3" />
@@ -382,7 +382,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
                 </div>
                 <div className="absolute top-3 right-3 flex flex-col gap-2">
-                  <StatusBadge status={vehicle.status} />
+                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
                       <Share2 className="w-3 h-3" />

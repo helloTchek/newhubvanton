@@ -274,7 +274,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
         return (
           <td key={columnId} className="px-6 py-4 whitespace-nowrap">
             <div className="flex flex-col gap-1">
-              <StatusBadge status={vehicle.status} />
+              <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
               {statusInfo.badge && (
                 <div className={clsx(
                   'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border',
