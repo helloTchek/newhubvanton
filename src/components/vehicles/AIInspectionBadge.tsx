@@ -65,7 +65,7 @@ export const AIInspectionBadge: React.FC<AIInspectionBadgeProps> = ({ info }) =>
           <img
             src="/simple-logo.png"
             alt="Tchek"
-            className="w-3 h-3 object-contain"
+            className="w-4 h-4 object-contain -my-0.5"
           />
           <span className="font-medium text-green-600">Tchek review</span>
         </div>
