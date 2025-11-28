@@ -21,11 +21,12 @@ export interface Company {
 
 export type ImageQuality = 'good' | 'acceptable' | 'bad' | 'none';
 export type AIInspectionStatus = 'worked' | 'light_issue' | 'did_not_work' | 'none';
+export type ManualReviewType = 'customer' | 'tchek' | null;
 
 export interface AIInspectionInfo {
   imageQuality: ImageQuality;
   aiStatus: AIInspectionStatus;
-  manualReviewCompleted: boolean;
+  manualReviewType: ManualReviewType;
 }
 
 export interface Vehicle {

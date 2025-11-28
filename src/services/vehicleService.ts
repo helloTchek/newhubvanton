@@ -180,6 +180,7 @@ class VehicleService {
             manual_review_completed,
             manual_review_completed_at,
             manual_review_completed_by,
+            manual_review_type,
             image_quality,
             ai_inspection_status
           ),
@@ -315,7 +316,7 @@ class VehicleService {
           aiInspectionInfo = {
             imageQuality: row.inspection_reports[0].image_quality || 'none',
             aiStatus: row.inspection_reports[0].ai_inspection_status || 'none',
-            manualReviewCompleted: manualReviewCompleted
+            manualReviewType: row.inspection_reports[0].manual_review_type || null
           };
         }
 
