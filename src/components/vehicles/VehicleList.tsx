@@ -65,6 +65,9 @@ export const VehicleList: React.FC = () => {
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
   const [shareStatus, setShareStatus] = useState<'never_shared' | 'up_to_date' | 'needs_sharing'>('needs_sharing');
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+  const stickyScrollRef = useRef<HTMLDivElement>(null);
+  const stickyScrollContentRef = useRef<HTMLDivElement>(null);
 
   // Default values for view state
   const defaultVisibleColumns = {
@@ -276,6 +279,52 @@ export const VehicleList: React.FC = () => {
   useEffect(() => {
     loadCompanies();
   }, []);
+
+  // Synchronize table scroll with sticky scrollbar
+  useEffect(() => {
+    const tableScroll = tableScrollRef.current;
+    const stickyScroll = stickyScrollRef.current;
+    const stickyContent = stickyScrollContentRef.current;
+
+    if (!tableScroll || !stickyScroll || !stickyContent || viewMode !== 'list') return;
+
+    // Update sticky scrollbar width to match table
+    const updateScrollbarWidth = () => {
+      const tableWidth = tableScroll.scrollWidth;
+      stickyContent.style.width = `${tableWidth}px`;
+    };
+
+    // Sync scroll positions
+    const handleTableScroll = () => {
+      if (stickyScroll) {
+        stickyScroll.scrollLeft = tableScroll.scrollLeft;
+      }
+    };
+
+    const handleStickyScroll = () => {
+      if (tableScroll) {
+        tableScroll.scrollLeft = stickyScroll.scrollLeft;
+      }
+    };
+
+    updateScrollbarWidth();
+    tableScroll.addEventListener('scroll', handleTableScroll);
+    stickyScroll.addEventListener('scroll', handleStickyScroll);
+
+    // Update on window resize
+    window.addEventListener('resize', updateScrollbarWidth);
+
+    // Observer to detect table width changes
+    const resizeObserver = new ResizeObserver(updateScrollbarWidth);
+    resizeObserver.observe(tableScroll);
+
+    return () => {
+      tableScroll.removeEventListener('scroll', handleTableScroll);
+      stickyScroll.removeEventListener('scroll', handleStickyScroll);
+      window.removeEventListener('resize', updateScrollbarWidth);
+      resizeObserver.disconnect();
+    };
+  }, [viewMode, vehicles, visibleColumns]);
 
   useEffect(() => {
     if (!activeTabId) {
@@ -1008,7 +1057,7 @@ export const VehicleList: React.FC = () => {
         </>
       ) : (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
+          <div ref={tableScrollRef} className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -1101,6 +1150,17 @@ export const VehicleList: React.FC = () => {
           }}
           onChaseUp={handleChaseUp}
         />
+      )}
+
+      {/* Sticky horizontal scrollbar for table view */}
+      {viewMode === 'list' && vehicles.length > 0 && (
+        <div
+          ref={stickyScrollRef}
+          className="fixed bottom-0 left-0 right-0 z-30 overflow-x-auto bg-gray-100 border-t border-gray-300"
+          style={{ height: '16px' }}
+        >
+          <div ref={stickyScrollContentRef} style={{ height: '1px' }} />
+        </div>
       )}
     </div>
   );
