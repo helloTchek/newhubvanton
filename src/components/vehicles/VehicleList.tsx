@@ -1006,8 +1006,8 @@ export const VehicleList: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden pb-6">
+          <div className="overflow-x-auto overflow-y-visible sticky bottom-0 z-30">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
