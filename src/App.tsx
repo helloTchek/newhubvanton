@@ -78,7 +78,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
       )}>
         <TabBar />
-        <main className="min-h-screen">
+        <main className="h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] overflow-auto">
           {children}
         </main>
       </div>

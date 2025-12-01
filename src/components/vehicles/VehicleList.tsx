@@ -67,6 +67,8 @@ export const VehicleList: React.FC = () => {
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
   const tableScrollRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [tableMaxHeight, setTableMaxHeight] = useState('calc(100vh - 200px)');
 
   // Default values for view state
   const defaultVisibleColumns = {
@@ -278,6 +280,24 @@ export const VehicleList: React.FC = () => {
   useEffect(() => {
     loadCompanies();
   }, []);
+
+  // Calculate dynamic table height
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (!containerRef.current) return;
+
+      const containerTop = containerRef.current.getBoundingClientRect().top;
+      const paginationHeight = 60; // Approximate pagination height
+      const bottomPadding = window.innerWidth < 640 ? 8 : 16; // Mobile vs desktop padding
+      const availableHeight = window.innerHeight - containerTop - paginationHeight - bottomPadding;
+
+      setTableMaxHeight(`${Math.max(300, availableHeight)}px`);
+    };
+
+    calculateHeight();
+    window.addEventListener('resize', calculateHeight);
+    return () => window.removeEventListener('resize', calculateHeight);
+  }, [vehicles, viewMode]);
 
   // Sync scrollbars
   useEffect(() => {
@@ -766,9 +786,9 @@ export const VehicleList: React.FC = () => {
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-20 lg:pb-6">
+    <div className="p-2 sm:p-4 lg:p-6 space-y-2 sm:space-y-4 lg:space-y-6 pb-2 sm:pb-4 lg:pb-6">
       {/* Compact Search & Filter Bar */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 sm:p-3 lg:p-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           {/* Search */}
           <div className="flex-1 relative">
@@ -1029,7 +1049,7 @@ export const VehicleList: React.FC = () => {
         </div>
       ) : viewMode === 'grid' ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}
@@ -1046,8 +1066,8 @@ export const VehicleList: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
+        <div ref={containerRef} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div style={{ maxHeight: tableMaxHeight, overflowY: 'auto' }}>
             <div
               ref={tableScrollRef}
               className="overflow-x-auto scrollbar-hide"
