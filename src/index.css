@@ -53,4 +53,29 @@
     scrollbar-width: auto;
     scrollbar-color: #94a3b8 #f1f5f9;
   }
+
+  /* Fixed scrollbar at bottom styling */
+  .fixed.bottom-0[style*="z-index: 9999"]::-webkit-scrollbar {
+    height: 20px;
+  }
+
+  .fixed.bottom-0[style*="z-index: 9999"]::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  .fixed.bottom-0[style*="z-index: 9999"]::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 10px;
+    border: 4px solid #ffffff;
+  }
+
+  .fixed.bottom-0[style*="z-index: 9999"]::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+
+  /* Firefox scrollbar for fixed bottom scrollbar */
+  .fixed.bottom-0[style*="z-index: 9999"] {
+    scrollbar-width: auto;
+    scrollbar-color: #94a3b8 #ffffff;
+  }
 }

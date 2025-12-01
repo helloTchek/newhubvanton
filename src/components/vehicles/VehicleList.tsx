@@ -1127,10 +1127,14 @@ export const VehicleList: React.FC = () => {
         <div
           ref={fixedScrollRef}
           className={clsx(
-            "fixed bottom-0 right-0 h-5 bg-gray-100 border-t border-gray-300 overflow-x-auto overflow-y-hidden z-50 transition-all duration-300",
-            sidebarCollapsed ? "lg:left-16" : "lg:left-64"
+            "fixed bottom-0 right-0 bg-white border-t-2 border-gray-300 overflow-x-auto overflow-y-hidden shadow-lg transition-all duration-300",
+            sidebarCollapsed ? "lg:left-16" : "lg:left-64",
+            "left-0"
           )}
-          style={{ left: 0 }}>
+          style={{
+            height: '24px',
+            zIndex: 9999
+          }}>
           <div style={{
             width: '100%',
             height: '1px'
