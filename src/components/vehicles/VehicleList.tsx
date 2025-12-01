@@ -1050,7 +1050,7 @@ export const VehicleList: React.FC = () => {
           <div style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
             <div
               ref={tableScrollRef}
-              className="overflow-x-auto"
+              className="overflow-x-auto scrollbar-hide"
             >
               <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
