@@ -46,6 +46,9 @@ export const VehicleList: React.FC = () => {
   const [filterPanelKey, setFilterPanelKey] = useState(0);
   // Cache vehicles per tab to avoid reloading when switching tabs
   const vehicleCacheRef = React.useRef<Map<string, { vehicles: Vehicle[]; pagination: PaginationMetadata }>>(new Map());
+  const tableScrollRef = React.useRef<HTMLDivElement>(null);
+  const fixedScrollRef = React.useRef<HTMLDivElement>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     currentPage: 1,
     pageSize: 20,
@@ -172,6 +175,23 @@ export const VehicleList: React.FC = () => {
       pageSize: 20
     };
   }, [activeTabId, tabs, user?.companyId]);
+
+  // Listen for sidebar state changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      setSidebarCollapsed(collapsed);
+    };
+
+    handleStorageChange();
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('sidebarToggle', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('sidebarToggle', handleStorageChange);
+    };
+  }, []);
 
   const loadVehicles = useCallback(async (skipCache = false) => {
     if (!activeTabId) return;
@@ -357,6 +377,49 @@ export const VehicleList: React.FC = () => {
       }
     }
   }, [loading.isLoading, vehicles.length]);
+
+  // Sync fixed scrollbar with table scroll
+  useEffect(() => {
+    const tableScroll = tableScrollRef.current;
+    const fixedScroll = fixedScrollRef.current;
+
+    if (!tableScroll || !fixedScroll || viewMode !== 'table') return;
+
+    // Update the inner width of fixed scrollbar to match table
+    const updateScrollbarWidth = () => {
+      const innerDiv = fixedScroll.querySelector('div');
+      if (innerDiv && tableScroll) {
+        innerDiv.style.width = `${tableScroll.scrollWidth}px`;
+      }
+    };
+
+    updateScrollbarWidth();
+
+    const syncFixedToTable = () => {
+      if (fixedScroll && tableScroll) {
+        fixedScroll.scrollLeft = tableScroll.scrollLeft;
+      }
+    };
+
+    const syncTableToFixed = () => {
+      if (fixedScroll && tableScroll) {
+        tableScroll.scrollLeft = fixedScroll.scrollLeft;
+      }
+    };
+
+    tableScroll.addEventListener('scroll', syncFixedToTable);
+    fixedScroll.addEventListener('scroll', syncTableToFixed);
+
+    // Use ResizeObserver to update width when table size changes
+    const resizeObserver = new ResizeObserver(updateScrollbarWidth);
+    resizeObserver.observe(tableScroll);
+
+    return () => {
+      tableScroll.removeEventListener('scroll', syncFixedToTable);
+      fixedScroll.removeEventListener('scroll', syncTableToFixed);
+      resizeObserver.disconnect();
+    };
+  }, [viewMode, vehicles.length]);
 
   useEffect(() => {
     if (!preferencesLoaded) return;
@@ -1006,16 +1069,18 @@ export const VehicleList: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
-          <div
-            className="overflow-x-auto"
-            id="vehicle-table-scroll"
-            style={{
-              overflowY: 'visible',
-              scrollbarGutter: 'stable',
-              paddingBottom: '20px'
-            }}>
-            <table className="min-w-full divide-y divide-gray-200">
+        <>
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+            <div
+              ref={tableScrollRef}
+              className="overflow-x-auto"
+              id="vehicle-table-scroll"
+              style={{
+                overflowY: 'visible',
+                scrollbarGutter: 'stable',
+                paddingBottom: '20px'
+              }}>
+              <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   {isSelectionMode && (
@@ -1057,6 +1122,21 @@ export const VehicleList: React.FC = () => {
             </table>
           </div>
         </div>
+
+        {/* Fixed horizontal scrollbar at bottom of viewport */}
+        <div
+          ref={fixedScrollRef}
+          className={clsx(
+            "fixed bottom-0 right-0 h-5 bg-gray-100 border-t border-gray-300 overflow-x-auto overflow-y-hidden z-50 transition-all duration-300",
+            sidebarCollapsed ? "lg:left-16" : "lg:left-64"
+          )}
+          style={{ left: 0 }}>
+          <div style={{
+            width: '100%',
+            height: '1px'
+          }}></div>
+        </div>
+      </>
       )}
 
       {pagination.totalItems > 0 && (
