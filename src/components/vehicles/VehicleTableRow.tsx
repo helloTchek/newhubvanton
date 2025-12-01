@@ -129,6 +129,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   };
 
   const shouldShowImage = !statusesWithoutImages.includes(vehicle.status);
+  const hasInspection = !!vehicle.reportId || !!vehicle.inspectionDate;
 
   const statusInfo = getVehicleStatusInfo(
     vehicle.status,
@@ -139,7 +140,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   const handleRowClick = () => {
     if (isSelectionMode && onSelectToggle) {
       onSelectToggle(vehicle.id);
-    } else if (onClick) {
+    } else if (hasInspection && onClick) {
       onClick();
     }
   };
@@ -541,8 +542,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   return (
     <tr
       className={clsx(
-        'group hover:bg-gray-50 transition-colors',
-        (isSelectionMode || onClick) && 'cursor-pointer',
+        'group transition-colors',
+        hasInspection && 'hover:bg-gray-50',
+        !hasInspection && 'cursor-not-allowed opacity-60',
+        (isSelectionMode || (hasInspection && onClick)) && 'cursor-pointer',
         isSelected && 'bg-blue-50'
       )}
       onClick={handleRowClick}

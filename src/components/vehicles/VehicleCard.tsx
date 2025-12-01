@@ -140,11 +140,12 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
   const shouldShowImage = !statusesWithoutImages.includes(vehicle.status);
   const shouldShowChaseUp = statusesWithChaseUp.includes(vehicle.status);
+  const hasInspection = !!vehicle.reportId || !!vehicle.inspectionDate;
 
   const handleCardClick = () => {
     if (isSelectionMode && onSelectToggle) {
       onSelectToggle(vehicle.id);
-    } else if (!shouldShowChaseUp && onClick) {
+    } else if (hasInspection && onClick) {
       onClick();
     }
   };
@@ -215,7 +216,8 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
       <div
         className={clsx(
           'bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-200 relative',
-          !shouldShowChaseUp && onClick && 'cursor-pointer hover:shadow-md hover:border-blue-200',
+          hasInspection && onClick && 'cursor-pointer hover:shadow-md hover:border-blue-200',
+          !hasInspection && 'cursor-not-allowed opacity-75',
           isSelectionMode && 'cursor-pointer',
           isSelected && 'ring-2 ring-blue-500'
         )}
