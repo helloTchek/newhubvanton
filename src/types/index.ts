@@ -260,6 +260,15 @@ export interface SearchFilters {
   customerPhone?: string;
   sharedStatus?: 'all' | 'shared' | 'not_shared';
   tagIds?: string[];
+  damageFilters?: {
+    carBody?: 'any' | 'none' | number;
+    rim?: 'any' | 'none' | number;
+    glass?: 'any' | 'none' | number;
+    interior?: 'any' | 'none' | number;
+    tires?: 'any' | 'none' | number;
+    dashboard?: 'any' | 'none' | number;
+    declarations?: 'any' | 'none' | number;
+  };
   sortBy?: SortField;
   sortOrder?: SortOrder;
   page?: number;

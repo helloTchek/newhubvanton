@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag } from 'lucide-react';
+import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag, CarFront, Disc, WindIcon as Glass, Armchair, CircleDot, Gauge as Dashboard, FileText } from 'lucide-react';
 import { SearchFilters, VehicleStatus, InspectionType, Company, FilterType, Tag as TagType } from '../../types';
 import { tagService } from '../../services/tagService';
 import clsx from 'clsx';
@@ -39,7 +39,14 @@ const availableFilters: { id: string; label: string; icon: React.ComponentType<{
   { id: 'repairCost', label: 'Repair Cost', icon: DollarSign },
   { id: 'mileage', label: 'Mileage', icon: Gauge },
   { id: 'customerEmail', label: 'Customer Email', icon: Mail },
-  { id: 'customerPhone', label: 'Customer Phone', icon: Phone }
+  { id: 'customerPhone', label: 'Customer Phone', icon: Phone },
+  { id: 'carBody', label: 'Car Body', icon: CarFront },
+  { id: 'rim', label: 'Rim', icon: Disc },
+  { id: 'glass', label: 'Glass', icon: Glass },
+  { id: 'interior', label: 'Interior', icon: Armchair },
+  { id: 'tires', label: 'Tires', icon: CircleDot },
+  { id: 'dashboard', label: 'Dashboard', icon: Dashboard },
+  { id: 'declarations', label: 'Declarations', icon: FileText }
 ];
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -171,6 +178,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const hasMileageFilter = pendingFilters.mileageRange?.min !== undefined || pendingFilters.mileageRange?.max !== undefined;
   const hasDateRangeFilter = pendingFilters.dateRange?.start || pendingFilters.dateRange?.end;
 
+  const hasDamageFilters = filters.damageFilters && Object.values(filters.damageFilters).some(v => v !== undefined);
+
   const hasActiveFilters =
     filters.status !== 'all' ||
     (filters.statusIds && filters.statusIds.length > 0) ||
@@ -183,7 +192,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     (filters.mileageRange?.min !== undefined || filters.mileageRange?.max !== undefined) ||
     filters.userId !== 'all' ||
     filters.customerEmail ||
-    filters.customerPhone;
+    filters.customerPhone ||
+    hasDamageFilters;
 
   // Compare filters excluding query field (search is handled separately)
   const hasPendingChanges = (() => {
@@ -659,6 +669,75 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
         );
 
+      case 'carBody':
+      case 'rim':
+      case 'glass':
+      case 'interior':
+      case 'tires':
+      case 'dashboard':
+      case 'declarations':
+        const damageKey = filterId as 'carBody' | 'rim' | 'glass' | 'interior' | 'tires' | 'dashboard' | 'declarations';
+        const damageValue = pendingFilters.damageFilters?.[damageKey];
+
+        return (
+          <div key={filterId} className="sm:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2 capitalize">
+              {filterId === 'carBody' && <CarFront className="w-4 h-4 text-gray-400" />}
+              {filterId === 'rim' && <Disc className="w-4 h-4 text-gray-400" />}
+              {filterId === 'glass' && <Glass className="w-4 h-4 text-gray-400" />}
+              {filterId === 'interior' && <Armchair className="w-4 h-4 text-gray-400" />}
+              {filterId === 'tires' && <CircleDot className="w-4 h-4 text-gray-400" />}
+              {filterId === 'dashboard' && <Dashboard className="w-4 h-4 text-gray-400" />}
+              {filterId === 'declarations' && <FileText className="w-4 h-4 text-gray-400" />}
+              {filterId === 'carBody' ? 'Car Body' : filterId.charAt(0).toUpperCase() + filterId.slice(1)} Damage
+            </label>
+            <div className="flex gap-2">
+              <select
+                value={typeof damageValue === 'number' ? 'custom' : (damageValue || 'all')}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  updatePendingFilters({
+                    damageFilters: {
+                      ...pendingFilters.damageFilters,
+                      [damageKey]: value === 'all' ? undefined : value === 'custom' ? 0 : value
+                    }
+                  });
+                }}
+                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">All</option>
+                <option value="any">Has Damage</option>
+                <option value="none">No Damage</option>
+                <option value="custom">Custom Count</option>
+              </select>
+              {typeof damageValue === 'number' && (
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="Count"
+                  value={damageValue}
+                  onChange={(e) => {
+                    const count = Math.max(0, Number(e.target.value) || 0);
+                    updatePendingFilters({
+                      damageFilters: {
+                        ...pendingFilters.damageFilters,
+                        [damageKey]: count
+                      }
+                    });
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="w-24 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              )}
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -689,7 +768,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               hasMileageFilter,
               filters.companyId !== 'all',
               filters.customerEmail,
-              filters.customerPhone
+              filters.customerPhone,
+              filters.damageFilters?.carBody,
+              filters.damageFilters?.rim,
+              filters.damageFilters?.glass,
+              filters.damageFilters?.interior,
+              filters.damageFilters?.tires,
+              filters.damageFilters?.dashboard,
+              filters.damageFilters?.declarations
             ].filter(Boolean).length}
           </span>
         )}
@@ -758,8 +844,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                         'repairCost': 'repairCost',
                         'mileage': 'mileage',
                         'customerEmail': 'customerEmail',
-                        'customerPhone': 'customerEmail', // Phone uses same column visibility
-                        'dateRange': 'inspectionDate'
+                        'customerPhone': 'customerEmail',
+                        'dateRange': 'inspectionDate',
+                        'carBody': 'carBody',
+                        'rim': 'rim',
+                        'glass': 'glass',
+                        'interior': 'interior',
+                        'tires': 'tires',
+                        'dashboard': 'dashboard',
+                        'declarations': 'declarations'
                       };
 
                       const columnKey = filterToColumnMap[filter.id];

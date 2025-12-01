@@ -361,7 +361,47 @@ class VehicleService {
         };
       });
 
-      const vehicles = await Promise.all(vehiclesWithReports);
+      let vehicles = await Promise.all(vehiclesWithReports);
+
+      // Apply damage filters (client-side filtering since damage data is aggregated)
+      if (filters?.damageFilters) {
+        const sectionMap: Record<string, keyof typeof filters.damageFilters> = {
+          'car_body': 'carBody',
+          'rims': 'rim',
+          'glazing': 'glass',
+          'interior': 'interior',
+          'tires': 'tires',
+          'dashboard': 'dashboard',
+          'declarations': 'declarations'
+        };
+
+        vehicles = vehicles.filter(vehicle => {
+          if (!vehicle.damageInfo) return true;
+
+          for (const [filterKey, filterValue] of Object.entries(filters.damageFilters || {})) {
+            if (filterValue === undefined) continue;
+
+            const damageCount = (() => {
+              switch (filterKey) {
+                case 'carBody': return vehicle.damageInfo.damageCounts.carBody;
+                case 'rim': return vehicle.damageInfo.damageCounts.rims;
+                case 'glass': return vehicle.damageInfo.damageCounts.glazing;
+                case 'interior': return vehicle.damageInfo.damageCounts.interior;
+                case 'tires': return vehicle.damageInfo.damageCounts.tires;
+                case 'dashboard': return vehicle.damageInfo.damageCounts.dashboard;
+                case 'declarations': return vehicle.damageInfo.damageCounts.declarations;
+                default: return 0;
+              }
+            })();
+
+            if (filterValue === 'any' && damageCount === 0) return false;
+            if (filterValue === 'none' && damageCount > 0) return false;
+            if (typeof filterValue === 'number' && damageCount !== filterValue) return false;
+          }
+
+          return true;
+        });
+      }
 
       const pagination: PaginationMetadata = {
         currentPage: page,
