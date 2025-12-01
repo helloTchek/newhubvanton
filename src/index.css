@@ -21,4 +21,36 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Make table scrollbar always visible and stick to bottom */
+  #vehicle-table-scroll {
+    position: relative;
+  }
+
+  #vehicle-table-scroll::-webkit-scrollbar {
+    height: 16px;
+    position: sticky;
+    bottom: 0;
+  }
+
+  #vehicle-table-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  #vehicle-table-scroll::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 8px;
+    border: 3px solid #f1f5f9;
+  }
+
+  #vehicle-table-scroll::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+
+  /* Firefox scrollbar styling */
+  #vehicle-table-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: #94a3b8 #f1f5f9;
+  }
 }

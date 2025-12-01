@@ -1006,8 +1006,15 @@ export const VehicleList: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden pb-6">
-          <div className="overflow-x-auto overflow-y-visible sticky bottom-0 z-30">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+          <div
+            className="overflow-x-auto"
+            id="vehicle-table-scroll"
+            style={{
+              overflowY: 'visible',
+              scrollbarGutter: 'stable',
+              paddingBottom: '20px'
+            }}>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
