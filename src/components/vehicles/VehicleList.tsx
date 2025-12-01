@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
 import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
@@ -32,23 +32,6 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
   { value: 'to_review', label: 'To Review' }
 ];
 
-// Custom hook to subscribe to sidebar state
-const useSidebarCollapsed = () => {
-  return useSyncExternalStore(
-    (callback) => {
-      const handleStorageChange = () => callback();
-      window.addEventListener('storage', handleStorageChange);
-      window.addEventListener('sidebarToggle', handleStorageChange);
-      return () => {
-        window.removeEventListener('storage', handleStorageChange);
-        window.removeEventListener('sidebarToggle', handleStorageChange);
-      };
-    },
-    () => localStorage.getItem('sidebarCollapsed') === 'true',
-    () => false
-  );
-};
-
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
   const { addTab, activeTabId, getTabState, setTabState, tabs } = useTabs();
@@ -61,7 +44,6 @@ export const VehicleList: React.FC = () => {
   const previousTabIdRef = React.useRef<string | null>(null);
   const [isTabSwitching, setIsTabSwitching] = useState(false);
   const [filterPanelKey, setFilterPanelKey] = useState(0);
-  const sidebarCollapsed = useSidebarCollapsed();
   // Cache vehicles per tab to avoid reloading when switching tabs
   const vehicleCacheRef = React.useRef<Map<string, { vehicles: Vehicle[]; pagination: PaginationMetadata }>>(new Map());
   const [pagination, setPagination] = useState<PaginationMetadata>({
@@ -784,7 +766,7 @@ export const VehicleList: React.FC = () => {
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-24">
+    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
       {/* Compact Search & Filter Bar */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
@@ -1046,8 +1028,8 @@ export const VehicleList: React.FC = () => {
           </p>
         </div>
       ) : viewMode === 'grid' ? (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 p-4">
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}
@@ -1062,7 +1044,20 @@ export const VehicleList: React.FC = () => {
               />
             ))}
           </div>
-        </>
+
+          {/* Sticky pagination footer for grid view */}
+          {pagination.totalItems > 0 && (
+            <div className="sticky bottom-0 z-20 bg-white border-t border-gray-200 shadow-lg">
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+                showPageSizeSelector={true}
+                pageSizeOptions={[10, 20, 50, 100]}
+              />
+            </div>
+          )}
+        </div>
       ) : (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <div style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
@@ -1121,23 +1116,21 @@ export const VehicleList: React.FC = () => {
           >
             <div style={{ width: tableScrollRef.current?.scrollWidth || '100%', height: '1px' }} />
           </div>
+
+          {/* Sticky pagination footer for table view */}
+          {pagination.totalItems > 0 && (
+            <div className="sticky bottom-0 z-20 bg-white border-t border-gray-200 shadow-lg">
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+                showPageSizeSelector={true}
+                pageSizeOptions={[10, 20, 50, 100]}
+              />
+            </div>
+          )}
         </div>
       )}
-
-      <div className={clsx(
-        "fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 shadow-lg transition-all duration-300",
-        sidebarCollapsed ? "lg:left-16" : "lg:left-64"
-      )}>
-        {pagination.totalItems > 0 && (
-          <Pagination
-            pagination={pagination}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            showPageSizeSelector={true}
-            pageSizeOptions={[10, 20, 50, 100]}
-          />
-        )}
-      </div>
 
       <BulkChaseUpModal
         vehicleCount={selectedVehicleIds.length}
