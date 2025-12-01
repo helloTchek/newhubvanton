@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
@@ -32,6 +32,23 @@ const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
   { value: 'to_review', label: 'To Review' }
 ];
 
+// Custom hook to subscribe to sidebar state
+const useSidebarCollapsed = () => {
+  return useSyncExternalStore(
+    (callback) => {
+      const handleStorageChange = () => callback();
+      window.addEventListener('storage', handleStorageChange);
+      window.addEventListener('sidebarToggle', handleStorageChange);
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        window.removeEventListener('sidebarToggle', handleStorageChange);
+      };
+    },
+    () => localStorage.getItem('sidebarCollapsed') === 'true',
+    () => false
+  );
+};
+
 export const VehicleList: React.FC = () => {
   const { user } = useAuth();
   const { addTab, activeTabId, getTabState, setTabState, tabs } = useTabs();
@@ -44,6 +61,7 @@ export const VehicleList: React.FC = () => {
   const previousTabIdRef = React.useRef<string | null>(null);
   const [isTabSwitching, setIsTabSwitching] = useState(false);
   const [filterPanelKey, setFilterPanelKey] = useState(0);
+  const sidebarCollapsed = useSidebarCollapsed();
   // Cache vehicles per tab to avoid reloading when switching tabs
   const vehicleCacheRef = React.useRef<Map<string, { vehicles: Vehicle[]; pagination: PaginationMetadata }>>(new Map());
   const [pagination, setPagination] = useState<PaginationMetadata>({
@@ -766,7 +784,7 @@ export const VehicleList: React.FC = () => {
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-20 lg:pb-6">
+    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-24">
       {/* Compact Search & Filter Bar */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
@@ -1106,15 +1124,20 @@ export const VehicleList: React.FC = () => {
         </div>
       )}
 
-      {pagination.totalItems > 0 && (
-        <Pagination
-          pagination={pagination}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          showPageSizeSelector={true}
-          pageSizeOptions={[10, 20, 50, 100]}
-        />
-      )}
+      <div className={clsx(
+        "fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 shadow-lg transition-all duration-300",
+        sidebarCollapsed ? "lg:left-16" : "lg:left-64"
+      )}>
+        {pagination.totalItems > 0 && (
+          <Pagination
+            pagination={pagination}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            showPageSizeSelector={true}
+            pageSizeOptions={[10, 20, 50, 100]}
+          />
+        )}
+      </div>
 
       <BulkChaseUpModal
         vehicleCount={selectedVehicleIds.length}
