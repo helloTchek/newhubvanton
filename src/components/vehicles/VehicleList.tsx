@@ -67,7 +67,6 @@ export const VehicleList: React.FC = () => {
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
   const tableScrollRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Default values for view state
   const defaultVisibleColumns = {
@@ -767,10 +766,9 @@ export const VehicleList: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
-      <div className="flex-none p-2 sm:p-4 lg:p-6 space-y-2 sm:space-y-4 lg:space-y-6">
+    <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 pb-20 lg:pb-6">
       {/* Compact Search & Filter Bar */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 sm:p-3 lg:p-4">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           {/* Search */}
           <div className="flex-1 relative">
@@ -1016,10 +1014,9 @@ export const VehicleList: React.FC = () => {
           </div>
         </div>
       )}
-      </div>
 
-      {/* Vehicles Display - Scrollable Content */}
-      <div className="flex-1 overflow-auto px-2 sm:px-4 lg:px-6">
+
+      {/* Vehicles Display */}
       {vehicles.length === 0 ? (
         <div className="text-center py-12">
           <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -1032,7 +1029,7 @@ export const VehicleList: React.FC = () => {
         </div>
       ) : viewMode === 'grid' ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}
@@ -1049,8 +1046,8 @@ export const VehicleList: React.FC = () => {
           </div>
         </>
       ) : (
-        <div ref={containerRef} className="bg-white rounded-lg border border-gray-200 overflow-hidden mb-2">
-          <div className="overflow-y-auto" style={{ maxHeight: '100%' }}>
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
             <div
               ref={tableScrollRef}
               className="overflow-x-auto scrollbar-hide"
@@ -1118,7 +1115,6 @@ export const VehicleList: React.FC = () => {
           pageSizeOptions={[10, 20, 50, 100]}
         />
       )}
-      </div>
 
       <BulkChaseUpModal
         vehicleCount={selectedVehicleIds.length}

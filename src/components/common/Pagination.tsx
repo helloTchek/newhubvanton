@@ -64,8 +64,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4 py-2 sm:py-3 bg-white border-t border-gray-200">
-      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-700">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 px-3 sm:px-4 py-3 bg-white border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-700">
         <span className="text-center sm:text-left">
           <span className="hidden sm:inline">Showing </span>
           <span className="font-medium">{startItem}</span>-
