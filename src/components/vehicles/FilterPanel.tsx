@@ -9,6 +9,7 @@ interface FilterPanelProps {
   onFiltersChange: (filters: Partial<SearchFilters>) => void;
   companies: Company[];
   showCompanyFilter?: boolean;
+  visibleColumns?: Record<string, boolean>;
 }
 
 const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
@@ -45,7 +46,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFiltersChange,
   companies,
-  showCompanyFilter = false
+  showCompanyFilter = false,
+  visibleColumns = {}
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -746,7 +748,23 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     {availableFilters.map((filter) => {
                       const Icon = filter.icon;
                       const isActive = activeFilters.includes(filter.id);
-                      const isDisabled = filter.id === 'company' && !showCompanyFilter;
+
+                      // Map filter IDs to column keys
+                      const filterToColumnMap: Record<string, string> = {
+                        'inspectionType': 'inspectionType',
+                        'status': 'status',
+                        'tags': 'tags',
+                        'company': 'company',
+                        'repairCost': 'repairCost',
+                        'mileage': 'mileage',
+                        'customerEmail': 'customerEmail',
+                        'customerPhone': 'customerEmail', // Phone uses same column visibility
+                        'dateRange': 'inspectionDate'
+                      };
+
+                      const columnKey = filterToColumnMap[filter.id];
+                      const isColumnVisible = !columnKey || visibleColumns[columnKey] !== false;
+                      const isDisabled = (filter.id === 'company' && !showCompanyFilter) || !isColumnVisible;
 
                       if (isDisabled) return null;
 

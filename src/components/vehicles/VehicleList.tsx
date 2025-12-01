@@ -753,6 +753,7 @@ export const VehicleList: React.FC = () => {
                 onFiltersChange={updateFilters}
                 companies={companies}
                 showCompanyFilter={user?.companyId === 'all'}
+                visibleColumns={viewMode === 'list' ? visibleColumns : visibleCardFields}
               />
             )}
 
