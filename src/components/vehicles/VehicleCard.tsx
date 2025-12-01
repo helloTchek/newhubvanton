@@ -485,11 +485,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   e.stopPropagation();
                   setIsInspectionDateSelectorOpen(true);
                 }}
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors group"
+                className="flex items-center gap-2 text-sm hover:text-blue-600 transition-colors group"
                 title="View inspection history"
               >
                 <Calendar className="w-4 h-4 flex-shrink-0 group-hover:text-blue-600" />
-                <span className="group-hover:underline">{formatDate(vehicle.inspectionDate)}</span>
+                <span className={clsx(
+                  "group-hover:underline",
+                  vehicle.inspectionDate ? "text-gray-600" : "text-gray-400 italic"
+                )}>{formatDate(vehicle.inspectionDate)}</span>
               </button>
             )}
 

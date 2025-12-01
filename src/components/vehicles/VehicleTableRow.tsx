@@ -304,13 +304,16 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
 
       case 'inspectionDate':
         return (
-          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <td key={columnId} className="px-6 py-4 whitespace-nowrap text-sm">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsInspectionDateSelectorOpen(true);
               }}
-              className="hover:text-blue-600 hover:underline transition-colors"
+              className={clsx(
+                "hover:text-blue-600 hover:underline transition-colors",
+                vehicle.inspectionDate ? "text-gray-900" : "text-gray-400 italic"
+              )}
               title="View inspection history"
             >
               {formatDate(vehicle.inspectionDate)}
