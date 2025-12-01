@@ -158,7 +158,7 @@ export const TabBar: React.FC = () => {
 
   return (
     <>
-      <div className="hidden md:flex bg-gray-100 border-b border-gray-300 items-center px-2 overflow-x-auto scrollbar-hide">
+      <div className="hidden md:flex bg-gray-100 border-t border-gray-300 items-center px-2 overflow-x-auto scrollbar-hide fixed bottom-0 left-0 right-0 z-40">
         <div className="flex items-center gap-0.5 min-w-0 flex-1">
           {tabs.map((tab) => (
             <div
@@ -174,14 +174,14 @@ export const TabBar: React.FC = () => {
               className={clsx(
                 'group flex items-center gap-2 px-4 py-2.5 cursor-move transition-all min-w-0 max-w-[220px] relative',
                 activeTabId === tab.id
-                  ? 'bg-white text-gray-900 shadow-sm rounded-t-lg'
-                  : 'bg-transparent text-gray-700 hover:bg-white/50 rounded-t-lg',
+                  ? 'bg-white text-gray-900 shadow-sm rounded-b-lg'
+                  : 'bg-transparent text-gray-700 hover:bg-white/50 rounded-b-lg',
                 draggedTabId === tab.id && 'opacity-50',
                 dragOverTabId === tab.id && dropPosition === 'left' && 'border-l-2 border-blue-500',
                 dragOverTabId === tab.id && dropPosition === 'right' && 'border-r-2 border-blue-500'
               )}
               style={{
-                marginBottom: '-1px',
+                marginTop: '-1px',
               }}
             >
               {tab.iconType && (

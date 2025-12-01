@@ -74,14 +74,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Header />
       <Sidebar />
       <div className={clsx(
-        "pt-14 sm:pt-16 transition-all duration-300",
+        "pt-14 sm:pt-16 pb-12 transition-all duration-300",
         sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
       )}>
-        <TabBar />
         <main className="min-h-screen">
           {children}
         </main>
       </div>
+      <TabBar />
     </div>
   );
 };
