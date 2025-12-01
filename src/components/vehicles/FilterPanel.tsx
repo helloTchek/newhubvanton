@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag } from 'lucide-react';
-import { SearchFilters, VehicleStatus, InspectionType, Company, Tag as TagType } from '../../types';
+import { Filter, X, Calendar, Building2, Mail, Phone, FileCheck, Settings, DollarSign, Gauge, CheckCircle2, CircleDashed, Tag } from 'lucide-react';
+import { SearchFilters, VehicleStatus, InspectionType, Company, FilterType, Tag as TagType } from '../../types';
 import { tagService } from '../../services/tagService';
 import clsx from 'clsx';
 
@@ -48,7 +48,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   showCompanyFilter = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isConfiguring, setIsConfiguring] = useState(false);
   const filterButtonRef = useRef<HTMLDivElement>(null);
+  const [activeFilters, setActiveFilters] = useState<string[]>(['status']);
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [showInspectionTypeDropdown, setShowInspectionTypeDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
@@ -63,6 +65,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   // Sync pending filters with actual filters when they change (e.g., tab switching)
   useLayoutEffect(() => {
     setPendingFilters(filters);
+    // Also reset expanded state when filters change externally to ensure clean UI
     setIsExpanded(false);
   }, [filters]);
 
@@ -73,7 +76,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (filterButtonRef.current && !filterButtonRef.current.contains(event.target as Node)) {
-        if (isExpanded) {
+        if (isExpanded && !isConfiguring) {
           setIsExpanded(false);
         }
       }
@@ -99,7 +102,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isExpanded, showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, pendingFilters.inspectionType, pendingFilters.status]);
+  }, [isExpanded, isConfiguring, showInspectionTypeDropdown, showStatusDropdown, tempInspectionTypeIds, tempStatusIds, pendingFilters.inspectionType, pendingFilters.status]);
 
   const loadTags = async () => {
     try {
@@ -110,6 +113,57 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     }
   };
 
+  useEffect(() => {
+    setActiveFilters(prev => {
+      const newFilters = [...prev];
+      let changed = false;
+
+      // Always ensure status is in the list
+      if (!newFilters.includes('status')) {
+        newFilters.unshift('status');
+        changed = true;
+      }
+
+      // Add inspectionType if it's being used in filters
+      if ((pendingFilters.inspectionType !== 'all' || (pendingFilters.inspectionTypeIds && pendingFilters.inspectionTypeIds.length > 0)) && !newFilters.includes('inspectionType')) {
+        const statusIndex = newFilters.indexOf('status');
+        newFilters.splice(statusIndex + 1, 0, 'inspectionType');
+        changed = true;
+      }
+
+      if ((pendingFilters.mileageRange?.min !== undefined || pendingFilters.mileageRange?.max !== undefined) && !newFilters.includes('mileage')) {
+        newFilters.push('mileage');
+        changed = true;
+      }
+
+      if ((pendingFilters.repairCostRange?.min !== undefined || pendingFilters.repairCostRange?.max !== undefined) && !newFilters.includes('repairCost')) {
+        newFilters.push('repairCost');
+        changed = true;
+      }
+
+      if ((pendingFilters.dateRange?.start || pendingFilters.dateRange?.end) && !newFilters.includes('dateRange')) {
+        newFilters.push('dateRange');
+        changed = true;
+      }
+
+      if (pendingFilters.companyId && pendingFilters.companyId !== 'all' && !newFilters.includes('company')) {
+        newFilters.push('company');
+        changed = true;
+      }
+
+      if (pendingFilters.customerEmail && !newFilters.includes('customerEmail')) {
+        newFilters.push('customerEmail');
+        changed = true;
+      }
+
+      if (pendingFilters.customerPhone && !newFilters.includes('customerPhone')) {
+        newFilters.push('customerPhone');
+        changed = true;
+      }
+
+      return changed ? newFilters : prev;
+    });
+  }, [pendingFilters]);
 
   const hasRepairCostFilter = pendingFilters.repairCostRange?.min !== undefined || pendingFilters.repairCostRange?.max !== undefined;
   const hasMileageFilter = pendingFilters.mileageRange?.min !== undefined || pendingFilters.mileageRange?.max !== undefined;
@@ -146,6 +200,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     const { query, ...filterUpdates } = pendingFilters;
     onFiltersChange(filterUpdates);
     setIsExpanded(false);
+    setIsConfiguring(false);
   };
 
   const resetFilters = () => {
@@ -170,6 +225,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     setPendingFilters(prev => ({ ...prev, ...clearedFilters }));
   };
 
+  const toggleFilter = (filterId: string) => {
+    setActiveFilters(prev =>
+      prev.includes(filterId)
+        ? prev.filter(id => id !== filterId)
+        : [...prev, filterId]
+    );
+  };
 
   const renderFilter = (filterId: string) => {
     switch (filterId) {
@@ -636,7 +698,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         <>
           <div
             className="fixed inset-0 z-10"
-            onClick={() => setIsExpanded(false)}
+            onClick={() => {
+              setIsExpanded(false);
+              setIsConfiguring(false);
+            }}
           />
           <div
             className="fixed md:w-[900px] w-full left-0 md:left-auto md:right-6 bg-white md:rounded-lg shadow-xl border-t md:border border-gray-200 z-50 bottom-0 md:bottom-auto max-h-[85vh] md:max-h-none overflow-y-auto"
@@ -659,45 +724,98 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     </button>
                   )}
                 </div>
+                <button
+                  onClick={() => setIsConfiguring(!isConfiguring)}
+                  className={clsx(
+                    "flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors",
+                    isConfiguring
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:bg-gray-100"
+                  )}
+                >
+                  <Settings className="w-3 h-3" />
+                  <span>Configure</span>
+                </button>
               </div>
 
+              {/* Configure Mode */}
+              {isConfiguring && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-xs font-medium text-gray-700 mb-2">Select filters to display:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {availableFilters.map((filter) => {
+                      const Icon = filter.icon;
+                      const isActive = activeFilters.includes(filter.id);
+                      const isDisabled = filter.id === 'company' && !showCompanyFilter;
+
+                      if (isDisabled) return null;
+
+                      return (
+                        <button
+                          key={filter.id}
+                          onClick={() => toggleFilter(filter.id)}
+                          className={clsx(
+                            'flex items-center gap-2 px-2 py-1 rounded-md border transition-colors text-xs',
+                            isActive
+                              ? 'bg-blue-50 border-blue-200 text-blue-700'
+                              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          )}
+                        >
+                          <Icon className="w-3 h-3" />
+                          <span>{filter.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Filter Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-h-[520px] overflow-y-auto pr-2">
-                {availableFilters
-                  .filter(filter => !(filter.id === 'company' && !showCompanyFilter))
-                  .map(filter => renderFilter(filter.id))}
-              </div>
+              {!isConfiguring && activeFilters.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-h-[520px] overflow-y-auto pr-2">
+                  {activeFilters.map(filterId => renderFilter(filterId))}
+                </div>
+              )}
+
+              {!isConfiguring && activeFilters.length === 0 && (
+                <div className="text-center py-8 text-gray-500 text-sm">
+                  <Filter className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p>No filters configured</p>
+                  <p className="text-xs mt-1">Click "Configure" to add filters</p>
+                </div>
+              )}
 
               {/* Action Buttons */}
-              <div className="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <button
-                  onClick={resetFilters}
-                  disabled={!hasPendingChanges}
-                  className={clsx(
-                    "px-4 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
-                    hasPendingChanges
-                      ? "text-gray-700 hover:bg-gray-100"
-                      : "text-gray-400 cursor-not-allowed"
-                  )}
-                  title="Discard changes and revert to applied filters"
-                >
-                  Discard Changes
-                </button>
-                <button
-                  onClick={applyFilters}
-                  disabled={!hasPendingChanges}
-                  className={clsx(
-                    "px-6 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
-                    hasPendingChanges
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  )}
-                  title="Apply filters and reload vehicle list"
-                >
-                  Apply Filters
-                </button>
-              </div>
+              {!isConfiguring && activeFilters.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <button
+                    onClick={resetFilters}
+                    disabled={!hasPendingChanges}
+                    className={clsx(
+                      "px-4 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
+                      hasPendingChanges
+                        ? "text-gray-700 hover:bg-gray-100"
+                        : "text-gray-400 cursor-not-allowed"
+                    )}
+                    title="Discard changes and revert to applied filters"
+                  >
+                    Discard Changes
+                  </button>
+                  <button
+                    onClick={applyFilters}
+                    disabled={!hasPendingChanges}
+                    className={clsx(
+                      "px-6 py-3 sm:py-2 text-sm font-medium rounded-lg transition-colors",
+                      hasPendingChanges
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    )}
+                    title="Apply filters and reload vehicle list"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>
