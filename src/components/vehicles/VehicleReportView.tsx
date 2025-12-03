@@ -548,113 +548,83 @@ export const VehicleReportView: React.FC = () => {
             ))}
           </nav>
           
-          {/* Action Buttons - only show on estimations tab */}
+          {/* Actions Dropdown Menu - only show on estimations tab */}
           {activeTab === 'estimations' && (
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
-              {(report.vehicle.status === 'inspected' || report.vehicle.status === 'to_review') && (
-                <button
-                  onClick={handleShareClick}
-                  className="bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
-                >
-                  <Share2 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Share Report</span>
-                  <span className="sm:hidden">Share</span>
-                </button>
+            <div className="relative" ref={actionsMenuRef}>
+              <button
+                onClick={() => setIsActionsMenuOpen(!isActionsMenuOpen)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <MoreVertical className="w-5 h-5 text-gray-600" />
+              </button>
+              {isActionsMenuOpen && (
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  {(report.vehicle.status === 'inspected' || report.vehicle.status === 'to_review') && (
+                    <>
+                      <button
+                        onClick={handleShareClick}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                      >
+                        <Share2 className="h-4 w-4 text-blue-600" />
+                        <span>Share Updated Report</span>
+                      </button>
+                      <div className="border-t border-gray-100 my-1"></div>
+                    </>
+                  )}
+                  <button
+                    onClick={() => handleDownloadReport(true)}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Download with repair costs</span>
+                  </button>
+                  <button
+                    onClick={() => handleDownloadReport(false)}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Download without repair costs</span>
+                  </button>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  <button
+                    onClick={() => handleOpenReport(true)}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span>Open with repair costs</span>
+                  </button>
+                  <button
+                    onClick={() => handleOpenReport(false)}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span>Open without repair costs</span>
+                  </button>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  <button
+                    onClick={handleExportData}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <FileSpreadsheet className="h-4 w-4" />
+                    <span>Export Data</span>
+                  </button>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  <button
+                    onClick={handleRequestBodyShopQuote}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <Wrench className="h-4 w-4" />
+                    <span>Request a body shop quote</span>
+                  </button>
+                  <button
+                    onClick={handleSubmitBuybackRequest}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <DollarSign className="h-4 w-4" />
+                    <span>Submit a buyback request</span>
+                  </button>
+                </div>
               )}
-              <button
-                onClick={handleDamageReviewClick}
-                className="bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
-              >
-                <FileSearch className="w-4 h-4" />
-                <span className="hidden sm:inline">Review Damages</span>
-                <span className="sm:hidden">Review</span>
-              </button>
-              <button
-                onClick={handleValidateAllClick}
-                className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
-              >
-                <CheckSquare className="w-4 h-4" />
-                <span className="hidden sm:inline">Validate All</span>
-                <span className="sm:hidden">Validate</span>
-              </button>
-
-              {/* Actions Dropdown Menu */}
-              <div className="relative" ref={actionsMenuRef}>
-                <button
-                  onClick={() => setIsActionsMenuOpen(!isActionsMenuOpen)}
-                  className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center font-medium text-sm"
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-                {isActionsMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {(report.vehicle.status === 'inspected' || report.vehicle.status === 'to_review') && (
-                      <>
-                        <button
-                          onClick={handleShareClick}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
-                        >
-                          <Share2 className="h-4 w-4 text-blue-600" />
-                          <span>Share Updated Report</span>
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                      </>
-                    )}
-                    <button
-                      onClick={() => handleDownloadReport(true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>Download with repair costs</span>
-                    </button>
-                    <button
-                      onClick={() => handleDownloadReport(false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>Download without repair costs</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={() => handleOpenReport(true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      <span>Open with repair costs</span>
-                    </button>
-                    <button
-                      onClick={() => handleOpenReport(false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      <span>Open without repair costs</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleExportData}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <FileSpreadsheet className="h-4 w-4" />
-                      <span>Export Data</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleRequestBodyShopQuote}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <Wrench className="h-4 w-4" />
-                      <span>Request a body shop quote</span>
-                    </button>
-                    <button
-                      onClick={handleSubmitBuybackRequest}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <DollarSign className="h-4 w-4" />
-                      <span>Submit a buyback request</span>
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
           )}
         </div>
