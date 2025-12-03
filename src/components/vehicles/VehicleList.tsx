@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText, ChevronDown } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -65,8 +65,10 @@ export const VehicleList: React.FC = () => {
   const [vehicleToShare, setVehicleToShare] = useState<Vehicle | null>(null);
   const [shareStatus, setShareStatus] = useState<'never_shared' | 'up_to_date' | 'needs_sharing'>('needs_sharing');
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
+  const [showBulkActionsMenu, setShowBulkActionsMenu] = useState(false);
   const tableScrollRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
+  const bulkActionsMenuRef = useRef<HTMLDivElement>(null);
 
   // Default values for view state
   const defaultVisibleColumns = {
@@ -325,6 +327,22 @@ export const VehicleList: React.FC = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (bulkActionsMenuRef.current && !bulkActionsMenuRef.current.contains(event.target as Node)) {
+        setShowBulkActionsMenu(false);
+      }
+    };
+
+    if (showBulkActionsMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showBulkActionsMenu]);
 
   useLayoutEffect(() => {
     if (activeTabId && preferencesLoaded) {
@@ -1116,83 +1134,111 @@ export const VehicleList: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => handleBulkShareReport()}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-              >
-                <Share2 className="w-4 h-4" />
-                <span className="hidden sm:inline">Share Reports</span>
-                <span className="sm:hidden">Share</span>
-              </button>
+              {/* Actions Dropdown */}
+              <div className="relative" ref={bulkActionsMenuRef}>
+                <button
+                  onClick={() => setShowBulkActionsMenu(!showBulkActionsMenu)}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  <span>Actions</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
 
-              <button
-                onClick={() => handleBulkDownload(true)}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-              >
-                <Download className="w-4 h-4" />
-                <span className="hidden sm:inline">Download with costs</span>
-                <span className="sm:hidden">Download+</span>
-              </button>
+                {showBulkActionsMenu && (
+                  <div className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-30 py-1">
+                    <button
+                      onClick={() => {
+                        handleBulkShareReport();
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span>Share Updated Report</span>
+                    </button>
 
-              <button
-                onClick={() => handleBulkDownload(false)}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-              >
-                <Download className="w-4 h-4" />
-                <span className="hidden sm:inline">Download w/o costs</span>
-                <span className="sm:hidden">Download-</span>
-              </button>
+                    <button
+                      onClick={() => {
+                        handleBulkDownload(true);
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download with repair costs</span>
+                    </button>
 
-              <button
-                onClick={() => handleBulkOpen(true)}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="hidden sm:inline">Open with costs</span>
-                <span className="sm:hidden">Open+</span>
-              </button>
+                    <button
+                      onClick={() => {
+                        handleBulkDownload(false);
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download without repair costs</span>
+                    </button>
 
-              <button
-                onClick={() => handleBulkOpen(false)}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="hidden sm:inline">Open w/o costs</span>
-                <span className="sm:hidden">Open-</span>
-              </button>
+                    <button
+                      onClick={() => {
+                        handleBulkOpen(true);
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Open with repair costs</span>
+                    </button>
 
-              <button
-                onClick={() => handleBulkExportData()}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
-              >
-                <FileText className="w-4 h-4" />
-                <span className="hidden sm:inline">Export Data</span>
-                <span className="sm:hidden">Export</span>
-              </button>
+                    <button
+                      onClick={() => {
+                        handleBulkOpen(false);
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Open without repair costs</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        handleBulkExportData();
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>Export Data</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsBulkChaseUpModalOpen(true);
+                        setShowBulkActionsMenu(false);
+                      }}
+                      disabled={!canChaseUpSelection()}
+                      className={clsx(
+                        "w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
+                        canChaseUpSelection()
+                          ? "text-gray-700 hover:bg-gray-50"
+                          : "text-gray-400 cursor-not-allowed"
+                      )}
+                      title={!canChaseUpSelection() ? "Some selected vehicles are not eligible for chase up" : "Send bulk chase up"}
+                    >
+                      <Bell className="w-4 h-4" />
+                      <span>Bulk Chase Up</span>
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <button
                 onClick={() => setIsBulkTagModalOpen(true)}
                 className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
                 <TagIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">Apply Tag</span>
-                <span className="sm:hidden">Tag</span>
-              </button>
-
-              <button
-                onClick={() => setIsBulkChaseUpModalOpen(true)}
-                disabled={!canChaseUpSelection()}
-                className={clsx(
-                  "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm font-medium whitespace-nowrap",
-                  canChaseUpSelection()
-                    ? "bg-orange-600 text-white hover:bg-orange-700"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                )}
-                title={!canChaseUpSelection() ? "Some selected vehicles are not eligible for chase up" : "Send bulk chase up"}
-              >
-                <Bell className="w-4 h-4" />
-                <span className="hidden sm:inline">Bulk Chase Up</span>
-                <span className="sm:hidden">Chase Up</span>
+                <span>Apply Tag</span>
               </button>
 
               <button
