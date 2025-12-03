@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText, ChevronDown } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText, ChevronDown, Wrench, DollarSign } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -706,6 +706,85 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const handleBulkRequestBodyShopQuote = async () => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+    const vehiclesWithReports = selectedVehicles.filter(v => v.reportId);
+
+    if (vehiclesWithReports.length === 0) {
+      toast.error('None of the selected vehicles have reports available');
+      return;
+    }
+
+    try {
+      for (const vehicle of vehiclesWithReports) {
+        if (vehicle.reportId) {
+          await internalEventsService.createEvent({
+            eventType: 'quote_requested',
+            reportId: vehicle.reportId,
+            vehicleId: vehicle.id,
+            eventData: {
+              registration: vehicle.registration,
+              requestedAt: new Date().toISOString(),
+              quoteType: 'body_shop'
+            }
+          });
+        }
+      }
+
+      toast.success(`Body shop quote requested for ${vehiclesWithReports.length} vehicle${vehiclesWithReports.length !== 1 ? 's' : ''}`);
+      setSelectedVehicleIds([]);
+      setIsSelectionMode(false);
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to request body shop quotes');
+    }
+  };
+
+  const handleBulkSubmitBuybackRequest = async () => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+    const vehiclesWithReports = selectedVehicles.filter(v => v.reportId);
+
+    if (vehiclesWithReports.length === 0) {
+      toast.error('None of the selected vehicles have reports available');
+      return;
+    }
+
+    try {
+      for (const vehicle of vehiclesWithReports) {
+        if (vehicle.reportId) {
+          await internalEventsService.createEvent({
+            eventType: 'buyback_requested',
+            reportId: vehicle.reportId,
+            vehicleId: vehicle.id,
+            eventData: {
+              registration: vehicle.registration,
+              requestedAt: new Date().toISOString(),
+              repairCost: vehicle.repairCost,
+              value: vehicle.value
+            }
+          });
+        }
+      }
+
+      toast.success(`Buyback request submitted for ${vehiclesWithReports.length} vehicle${vehiclesWithReports.length !== 1 ? 's' : ''}`);
+      setSelectedVehicleIds([]);
+      setIsSelectionMode(false);
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to submit buyback requests');
+    }
+  };
+
   const handleDragStart = (columnId: string) => {
     setDraggedColumn(columnId);
   };
@@ -1228,6 +1307,30 @@ export const VehicleList: React.FC = () => {
                     >
                       <Bell className="w-4 h-4" />
                       <span>Bulk Chase Up</span>
+                    </button>
+
+                    <div className="border-t border-gray-200 my-1"></div>
+
+                    <button
+                      onClick={() => {
+                        handleBulkRequestBodyShopQuote();
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Wrench className="w-4 h-4" />
+                      <span>Request a body shop quote</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        handleBulkSubmitBuybackRequest();
+                        setShowBulkActionsMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <DollarSign className="w-4 h-4" />
+                      <span>Submit a buyback request</span>
                     </button>
                   </div>
                 )}
