@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -550,6 +550,144 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const handleBulkShareReport = async () => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+    const vehiclesWithReports = selectedVehicles.filter(v => v.reportId);
+
+    if (vehiclesWithReports.length === 0) {
+      toast.error('None of the selected vehicles have reports available');
+      return;
+    }
+
+    try {
+      for (const vehicle of vehiclesWithReports) {
+        if (vehicle.reportId) {
+          const sharedAt = new Date().toISOString();
+          await internalEventsService.createEvent({
+            eventType: 'report_shared_internal',
+            reportId: vehicle.reportId,
+            vehicleId: vehicle.id,
+            eventData: {
+              registration: vehicle.registration,
+              sharedAt,
+            }
+          });
+
+          await supabase
+            .from('inspection_reports')
+            .update({ last_shared_at: sharedAt })
+            .eq('id', vehicle.reportId);
+        }
+      }
+
+      toast.success(`${vehiclesWithReports.length} report${vehiclesWithReports.length !== 1 ? 's' : ''} shared successfully`);
+      setSelectedVehicleIds([]);
+      setIsSelectionMode(false);
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to share reports');
+    }
+  };
+
+  const handleBulkDownload = async (withCosts: boolean) => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+    const vehiclesWithReports = selectedVehicles.filter(v => v.reportId);
+
+    if (vehiclesWithReports.length === 0) {
+      toast.error('None of the selected vehicles have reports available');
+      return;
+    }
+
+    toast.success(`Downloading ${vehiclesWithReports.length} report${vehiclesWithReports.length !== 1 ? 's' : ''} ${withCosts ? 'with' : 'without'} repair costs`);
+
+    // Simulate download - in production, this would trigger actual PDF downloads
+    for (const vehicle of vehiclesWithReports) {
+      console.log(`Download report for ${vehicle.registration} ${withCosts ? 'with' : 'without'} costs`);
+    }
+  };
+
+  const handleBulkOpen = async (withCosts: boolean) => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+    const vehiclesWithReports = selectedVehicles.filter(v => v.reportId);
+
+    if (vehiclesWithReports.length === 0) {
+      toast.error('None of the selected vehicles have reports available');
+      return;
+    }
+
+    if (vehiclesWithReports.length > 5) {
+      const confirmed = window.confirm(`You are about to open ${vehiclesWithReports.length} reports in new tabs. Continue?`);
+      if (!confirmed) return;
+    }
+
+    vehiclesWithReports.forEach(vehicle => {
+      const url = `/vehicles/${vehicle.id}/report?costs=${withCosts}`;
+      window.open(url, '_blank');
+    });
+
+    toast.success(`Opened ${vehiclesWithReports.length} report${vehiclesWithReports.length !== 1 ? 's' : ''} ${withCosts ? 'with' : 'without'} repair costs`);
+  };
+
+  const handleBulkExportData = async () => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    const selectedVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
+
+    try {
+      // Create CSV data
+      const headers = ['Registration', 'VIN', 'Make', 'Model', 'Status', 'Inspection Date', 'Mileage', 'Repair Cost', 'Value'];
+      const rows = selectedVehicles.map(v => [
+        v.registration,
+        v.vin || '',
+        v.make,
+        v.model,
+        v.status,
+        new Date(v.inspectionDate).toLocaleDateString(),
+        v.mileage?.toString() || '',
+        v.repairCost?.toString() || '',
+        v.value?.toString() || ''
+      ]);
+
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+
+      // Download CSV
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `vehicles_export_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast.success(`Exported ${selectedVehicles.length} vehicle${selectedVehicles.length !== 1 ? 's' : ''} to CSV`);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to export data');
+    }
+  };
+
   const handleDragStart = (columnId: string) => {
     setDraggedColumn(columnId);
   };
@@ -978,6 +1116,60 @@ export const VehicleList: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => handleBulkShareReport()}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                <Share2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Share Reports</span>
+                <span className="sm:hidden">Share</span>
+              </button>
+
+              <button
+                onClick={() => handleBulkDownload(true)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Download with costs</span>
+                <span className="sm:hidden">Download+</span>
+              </button>
+
+              <button
+                onClick={() => handleBulkDownload(false)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Download w/o costs</span>
+                <span className="sm:hidden">Download-</span>
+              </button>
+
+              <button
+                onClick={() => handleBulkOpen(true)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="hidden sm:inline">Open with costs</span>
+                <span className="sm:hidden">Open+</span>
+              </button>
+
+              <button
+                onClick={() => handleBulkOpen(false)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="hidden sm:inline">Open w/o costs</span>
+                <span className="sm:hidden">Open-</span>
+              </button>
+
+              <button
+                onClick={() => handleBulkExportData()}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+              >
+                <FileText className="w-4 h-4" />
+                <span className="hidden sm:inline">Export Data</span>
+                <span className="sm:hidden">Export</span>
+              </button>
+
               <button
                 onClick={() => setIsBulkTagModalOpen(true)}
                 className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
