@@ -14,7 +14,11 @@ import {
   FileSearch,
   Share2,
   Wrench,
-  DollarSign
+  DollarSign,
+  MoreVertical,
+  Download,
+  ExternalLink,
+  FileSpreadsheet
 } from 'lucide-react';
 import { VehicleInspectionReport, LoadingState } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -41,6 +45,25 @@ export const VehicleReportView: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mainSidebarCollapsed, setMainSidebarCollapsed] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
+  const actionsMenuRef = React.useRef<HTMLDivElement>(null);
+
+  // Close actions menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (actionsMenuRef.current && !actionsMenuRef.current.contains(event.target as Node)) {
+        setIsActionsMenuOpen(false);
+      }
+    };
+
+    if (isActionsMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isActionsMenuOpen]);
 
   // Listen for main sidebar state changes
   useEffect(() => {
@@ -143,6 +166,7 @@ export const VehicleReportView: React.FC = () => {
   };
 
   const handleShareClick = () => {
+    setIsActionsMenuOpen(false);
     if (report?.id) {
       setIsShareModalOpen(true);
     } else {
@@ -173,6 +197,8 @@ export const VehicleReportView: React.FC = () => {
   };
 
   const handleRequestBodyShopQuote = async () => {
+    setIsActionsMenuOpen(false);
+
     if (!report?.id || !vehicleId) {
       toast.error('No report available');
       return;
@@ -198,6 +224,8 @@ export const VehicleReportView: React.FC = () => {
   };
 
   const handleSubmitBuybackRequest = async () => {
+    setIsActionsMenuOpen(false);
+
     if (!report?.id || !vehicleId) {
       toast.error('No report available');
       return;
@@ -221,6 +249,22 @@ export const VehicleReportView: React.FC = () => {
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : 'Failed to submit buyback request');
     }
+  };
+
+  const handleDownloadReport = (withCosts: boolean) => {
+    setIsActionsMenuOpen(false);
+    console.log(`Download report ${withCosts ? 'with' : 'without'} costs for vehicle:`, vehicleId);
+  };
+
+  const handleOpenReport = (withCosts: boolean) => {
+    setIsActionsMenuOpen(false);
+    const reportUrl = `/vehicle/${vehicleId}/report?costs=${withCosts}`;
+    window.open(reportUrl, '_blank');
+  };
+
+  const handleExportData = () => {
+    setIsActionsMenuOpen(false);
+    console.log('Export data for vehicle:', vehicleId);
   };
 
   const toggleSidebar = () => {
@@ -533,22 +577,84 @@ export const VehicleReportView: React.FC = () => {
                 <span className="hidden sm:inline">Validate All</span>
                 <span className="sm:hidden">Validate</span>
               </button>
-              <button
-                onClick={handleRequestBodyShopQuote}
-                className="bg-teal-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
-              >
-                <Wrench className="w-4 h-4" />
-                <span className="hidden sm:inline">Request Body Shop Quote</span>
-                <span className="sm:hidden">Quote</span>
-              </button>
-              <button
-                onClick={handleSubmitBuybackRequest}
-                className="bg-emerald-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
-              >
-                <DollarSign className="w-4 h-4" />
-                <span className="hidden sm:inline">Submit Buyback Request</span>
-                <span className="sm:hidden">Buyback</span>
-              </button>
+
+              {/* Actions Dropdown Menu */}
+              <div className="relative" ref={actionsMenuRef}>
+                <button
+                  onClick={() => setIsActionsMenuOpen(!isActionsMenuOpen)}
+                  className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center font-medium text-sm"
+                >
+                  <MoreVertical className="w-5 h-5" />
+                </button>
+                {isActionsMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    {(report.vehicle.status === 'inspected' || report.vehicle.status === 'to_review') && (
+                      <>
+                        <button
+                          onClick={handleShareClick}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                        >
+                          <Share2 className="h-4 w-4 text-blue-600" />
+                          <span>Share Updated Report</span>
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                      </>
+                    )}
+                    <button
+                      onClick={() => handleDownloadReport(true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span>Download with repair costs</span>
+                    </button>
+                    <button
+                      onClick={() => handleDownloadReport(false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span>Download without repair costs</span>
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={() => handleOpenReport(true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      <span>Open with repair costs</span>
+                    </button>
+                    <button
+                      onClick={() => handleOpenReport(false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      <span>Open without repair costs</span>
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleExportData}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <FileSpreadsheet className="h-4 w-4" />
+                      <span>Export Data</span>
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleRequestBodyShopQuote}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <Wrench className="h-4 w-4" />
+                      <span>Request a body shop quote</span>
+                    </button>
+                    <button
+                      onClick={handleSubmitBuybackRequest}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <DollarSign className="h-4 w-4" />
+                      <span>Submit a buyback request</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
