@@ -12,7 +12,9 @@ import {
   ChevronRight,
   CheckSquare,
   FileSearch,
-  Share2
+  Share2,
+  Wrench,
+  DollarSign
 } from 'lucide-react';
 import { VehicleInspectionReport, LoadingState } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -22,6 +24,7 @@ import { InspectionOverviewGrid } from './InspectionOverviewGrid';
 import { SectionDetailView } from './SectionDetailView';
 import { ShareReportModal } from './ShareReportModal';
 import { shareService } from '../../services/shareService';
+import { internalEventsService } from '../../services/internalEventsService';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
@@ -166,6 +169,57 @@ export const VehicleReportView: React.FC = () => {
       const errorMessage = error instanceof Error ? error.message : 'Failed to share report';
       toast.error(errorMessage);
       throw error;
+    }
+  };
+
+  const handleRequestBodyShopQuote = async () => {
+    if (!report?.id || !vehicleId) {
+      toast.error('No report available');
+      return;
+    }
+
+    try {
+      await internalEventsService.createEvent({
+        eventType: 'quote_requested',
+        reportId: report.id,
+        vehicleId: vehicleId,
+        eventData: {
+          registration: report.vehicle.registration,
+          requestedAt: new Date().toISOString(),
+          quoteType: 'body_shop'
+        }
+      });
+
+      toast.success('Body shop quote requested successfully');
+      await loadReport(vehicleId);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to request body shop quote');
+    }
+  };
+
+  const handleSubmitBuybackRequest = async () => {
+    if (!report?.id || !vehicleId) {
+      toast.error('No report available');
+      return;
+    }
+
+    try {
+      await internalEventsService.createEvent({
+        eventType: 'buyback_requested',
+        reportId: report.id,
+        vehicleId: vehicleId,
+        eventData: {
+          registration: report.vehicle.registration,
+          requestedAt: new Date().toISOString(),
+          repairCost: report.vehicle.repairCost,
+          value: report.vehicle.value
+        }
+      });
+
+      toast.success('Buyback request submitted successfully');
+      await loadReport(vehicleId);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to submit buyback request');
     }
   };
 
@@ -478,6 +532,22 @@ export const VehicleReportView: React.FC = () => {
                 <CheckSquare className="w-4 h-4" />
                 <span className="hidden sm:inline">Validate All</span>
                 <span className="sm:hidden">Validate</span>
+              </button>
+              <button
+                onClick={handleRequestBodyShopQuote}
+                className="bg-teal-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
+              >
+                <Wrench className="w-4 h-4" />
+                <span className="hidden sm:inline">Request Body Shop Quote</span>
+                <span className="sm:hidden">Quote</span>
+              </button>
+              <button
+                onClick={handleSubmitBuybackRequest}
+                className="bg-emerald-600 text-white px-4 sm:px-6 py-2 sm:py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 font-medium text-sm"
+              >
+                <DollarSign className="w-4 h-4" />
+                <span className="hidden sm:inline">Submit Buyback Request</span>
+                <span className="sm:hidden">Buyback</span>
               </button>
             </div>
           )}

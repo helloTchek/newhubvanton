@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight, FileCheck } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight, FileCheck, Wrench } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -9,6 +9,8 @@ import { AIInspectionBadge } from './AIInspectionBadge';
 import { getInspectionTypeLabel, getInspectionTypeColor } from '../../utils/inspectionType';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import { internalEventsService } from '../../services/internalEventsService';
+import toast from 'react-hot-toast';
 
 const WindshieldIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -201,6 +203,63 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     console.log('Export data for vehicle:', vehicle.id);
   };
 
+  const handleRequestBodyShopQuote = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionsMenuOpen(false);
+
+    if (!vehicle.reportId) {
+      toast.error('No report available for this vehicle');
+      return;
+    }
+
+    try {
+      await internalEventsService.createEvent({
+        eventType: 'quote_requested',
+        reportId: vehicle.reportId,
+        vehicleId: vehicle.id,
+        eventData: {
+          registration: vehicle.registration,
+          requestedAt: new Date().toISOString(),
+          quoteType: 'body_shop'
+        }
+      });
+
+      toast.success('Body shop quote requested successfully');
+      if (onUpdate) onUpdate();
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to request body shop quote');
+    }
+  };
+
+  const handleSubmitBuybackRequest = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionsMenuOpen(false);
+
+    if (!vehicle.reportId) {
+      toast.error('No report available for this vehicle');
+      return;
+    }
+
+    try {
+      await internalEventsService.createEvent({
+        eventType: 'buyback_requested',
+        reportId: vehicle.reportId,
+        vehicleId: vehicle.id,
+        eventData: {
+          registration: vehicle.registration,
+          requestedAt: new Date().toISOString(),
+          repairCost: vehicle.repairCost,
+          value: vehicle.value
+        }
+      });
+
+      toast.success('Buyback request submitted successfully');
+      if (onUpdate) onUpdate();
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to submit buyback request');
+    }
+  };
+
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -315,6 +374,21 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 >
                   <FileSpreadsheet className="w-4 h-4" />
                   <span>Export Data</span>
+                </button>
+                <div className="border-t border-gray-100 my-1"></div>
+                <button
+                  onClick={handleRequestBodyShopQuote}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <Wrench className="w-4 h-4" />
+                  <span>Request a body shop quote</span>
+                </button>
+                <button
+                  onClick={handleSubmitBuybackRequest}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <DollarSign className="w-4 h-4" />
+                  <span>Submit a buyback request</span>
                 </button>
               </div>
             )}
