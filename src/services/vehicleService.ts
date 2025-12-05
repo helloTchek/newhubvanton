@@ -649,13 +649,32 @@ class VehicleService {
 
   async archiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
     try {
-      const { error } = await supabase
+      // First, get the current status of all vehicles
+      const { data: vehicles, error: fetchError } = await supabase
         .from('vehicles')
-        .update({ status: 'archived' })
+        .select('id, status')
         .in('id', vehicleIds);
 
-      if (error) {
-        throw error;
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      // Update each vehicle to save current status and set to archived
+      const updates = (vehicles || []).map(vehicle =>
+        supabase
+          .from('vehicles')
+          .update({
+            status: 'archived',
+            status_before_archive: vehicle.status
+          })
+          .eq('id', vehicle.id)
+      );
+
+      const results = await Promise.all(updates);
+      const hasError = results.some(result => result.error);
+
+      if (hasError) {
+        throw new Error('Failed to archive some vehicles');
       }
 
       return {
@@ -670,13 +689,32 @@ class VehicleService {
 
   async unarchiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
     try {
-      const { error } = await supabase
+      // First, get the previous status of all vehicles
+      const { data: vehicles, error: fetchError } = await supabase
         .from('vehicles')
-        .update({ status: 'inspected' })
+        .select('id, status_before_archive')
         .in('id', vehicleIds);
 
-      if (error) {
-        throw error;
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      // Update each vehicle to restore previous status
+      const updates = (vehicles || []).map(vehicle =>
+        supabase
+          .from('vehicles')
+          .update({
+            status: vehicle.status_before_archive || 'inspected',
+            status_before_archive: null
+          })
+          .eq('id', vehicle.id)
+      );
+
+      const results = await Promise.all(updates);
+      const hasError = results.some(result => result.error);
+
+      if (hasError) {
+        throw new Error('Failed to unarchive some vehicles');
       }
 
       return {

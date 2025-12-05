@@ -567,6 +567,16 @@ export const VehicleList: React.FC = () => {
     }
   };
 
+  const handleUnarchiveClick = async (vehicleId: string) => {
+    try {
+      await vehicleService.unarchiveVehicles([vehicleId]);
+      toast.success('Vehicle unarchived successfully');
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to unarchive vehicle');
+    }
+  };
+
   const handleBulkTagApplied = async (tagId: string) => {
     if (selectedVehicleIds.length === 0 || !tagId) {
       toast.error('No vehicles or tag selected');
@@ -1406,6 +1416,7 @@ export const VehicleList: React.FC = () => {
                 onClick={() => handleVehicleClick(vehicle)}
                 onChaseUp={handleChaseUp}
                 onShareReport={handleShareReport}
+                onUnarchive={handleUnarchiveClick}
                 isSelectionMode={isSelectionMode}
                 isSelected={selectedVehicleIds.includes(vehicle.id)}
                 onSelectToggle={handleSelectToggle}
@@ -1465,6 +1476,7 @@ export const VehicleList: React.FC = () => {
                     onClick={() => handleVehicleClick(vehicle)}
                     onShareReport={handleShareReport}
                     onChaseUp={handleChaseUpClick}
+                    onUnarchive={handleUnarchiveClick}
                     isSelectionMode={isSelectionMode}
                     isSelected={selectedVehicleIds.includes(vehicle.id)}
                     onSelectToggle={handleSelectToggle}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight, FileCheck, Wrench } from 'lucide-react';
+import { Calendar, MapPin, User, DollarSign, Bell, Share2, AlertTriangle, CarFront, FileText, Disc, MoreVertical, Download, FileSpreadsheet, ExternalLink, ChevronLeft, ChevronRight, FileCheck, Wrench, ArchiveRestore } from 'lucide-react';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
 import { ChaseUpModal } from './ChaseUpModal';
@@ -34,6 +34,7 @@ interface VehicleCardProps {
   onClick?: () => void;
   onChaseUp?: (vehicleId: string, method: 'email' | 'sms', message?: string) => Promise<void>;
   onShareReport?: (vehicle: Vehicle) => void;
+  onUnarchive?: (vehicleId: string) => void;
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
@@ -74,6 +75,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   onClick,
   onChaseUp,
   onShareReport,
+  onUnarchive,
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
@@ -145,6 +147,11 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   const hasInspection = !!vehicle.reportId || !!vehicle.inspectionDate;
 
   const handleCardClick = () => {
+    // Prevent clicks on archived vehicles
+    if (vehicle.status === 'archived') {
+      return;
+    }
+
     if (isSelectionMode && onSelectToggle) {
       onSelectToggle(vehicle.id);
     } else if (hasInspection && onClick) {
@@ -201,6 +208,14 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     e.stopPropagation();
     setIsActionsMenuOpen(false);
     console.log('Export data for vehicle:', vehicle.id);
+  };
+
+  const handleUnarchive = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionsMenuOpen(false);
+    if (onUnarchive) {
+      onUnarchive(vehicle.id);
+    }
   };
 
   const handleRequestBodyShopQuote = async (e: React.MouseEvent) => {
@@ -275,9 +290,10 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
       <div
         className={clsx(
           'bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-200 relative',
-          hasInspection && onClick && 'cursor-pointer hover:shadow-md hover:border-blue-200',
-          !hasInspection && 'cursor-not-allowed opacity-75',
-          isSelectionMode && 'cursor-pointer',
+          vehicle.status === 'archived' && 'opacity-60 cursor-not-allowed',
+          vehicle.status !== 'archived' && hasInspection && onClick && 'cursor-pointer hover:shadow-md hover:border-blue-200',
+          vehicle.status !== 'archived' && !hasInspection && 'cursor-not-allowed opacity-75',
+          vehicle.status !== 'archived' && isSelectionMode && 'cursor-pointer',
           isSelected && 'ring-2 ring-blue-500'
         )}
         onClick={handleCardClick}
@@ -297,7 +313,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
 
         {/* Actions Menu Button - Top Right */}
-        {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review')) && (
+        {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review') || vehicle.status === 'archived') && (
           <div className="absolute top-3 left-3 z-10" ref={actionsMenuRef}>
             <button
               onClick={(e) => {
@@ -310,71 +326,85 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </button>
             {isActionsMenuOpen && (
               <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
-                {shouldShowChaseUp && onChaseUp && (
-                  <>
+                {vehicle.status === 'archived' ? (
+                  onUnarchive && (
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsActionsMenuOpen(false);
-                        setIsChaseUpModalOpen(true);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
+                      onClick={handleUnarchive}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-green-50 transition-colors font-medium"
                     >
-                      <Bell className="w-4 h-4 text-orange-600" />
-                      <span>Chase Up Customer</span>
+                      <ArchiveRestore className="w-4 h-4 text-green-600" />
+                      <span>Unarchive Vehicle</span>
+                    </button>
+                  )
+                ) : (
+                  <>
+                    {shouldShowChaseUp && onChaseUp && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsActionsMenuOpen(false);
+                            setIsChaseUpModalOpen(true);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
+                        >
+                          <Bell className="w-4 h-4 text-orange-600" />
+                          <span>Chase Up Customer</span>
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                      </>
+                    )}
+                    {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
+                      <>
+                        <button
+                          onClick={handleShareFromMenu}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                        >
+                          <Share2 className="w-4 h-4 text-blue-600" />
+                          <span>Share Updated Report</span>
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                      </>
+                    )}
+                    <button
+                      onClick={(e) => handleDownloadReport(e, true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download with repair costs</span>
+                    </button>
+                    <button
+                      onClick={(e) => handleDownloadReport(e, false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download without repair costs</span>
                     </button>
                     <div className="border-t border-gray-100 my-1"></div>
-                  </>
-                )}
-                {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
-                  <>
                     <button
-                      onClick={handleShareFromMenu}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                      onClick={(e) => handleOpenUrlReport(e, true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     >
-                      <Share2 className="w-4 h-4 text-blue-600" />
-                      <span>Share Updated Report</span>
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Open with repair costs</span>
+                    </button>
+                    <button
+                      onClick={(e) => handleOpenUrlReport(e, false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Open without repair costs</span>
                     </button>
                     <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleExportData}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" />
+                      <span>Export Data</span>
+                    </button>
                   </>
                 )}
-                <button
-                  onClick={(e) => handleDownloadReport(e, true)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download with repair costs</span>
-                </button>
-                <button
-                  onClick={(e) => handleDownloadReport(e, false)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download without repair costs</span>
-                </button>
-                <div className="border-t border-gray-100 my-1"></div>
-                <button
-                  onClick={(e) => handleOpenUrlReport(e, true)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Open with repair costs</span>
-                </button>
-                <button
-                  onClick={(e) => handleOpenUrlReport(e, false)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Open without repair costs</span>
-                </button>
-                <div className="border-t border-gray-100 my-1"></div>
-                <button
-                  onClick={handleExportData}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <FileSpreadsheet className="w-4 h-4" />
-                  <span>Export Data</span>
-                </button>
                 <div className="border-t border-gray-100 my-1"></div>
                 <button
                   onClick={handleRequestBodyShopQuote}

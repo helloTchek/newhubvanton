@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink, FileCheck } from 'lucide-react';
+import { ChevronRight, Bell, CheckCircle, AlertCircle, Download, Share2, FileSpreadsheet, MoreVertical, CarFront, Disc, AlertTriangle, FileText, ScrollText, ExternalLink, FileCheck, ArchiveRestore } from 'lucide-react';
 import { AIInspectionBadge } from './AIInspectionBadge';
 import { Vehicle, VehicleStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
@@ -31,6 +31,7 @@ interface VehicleTableRowProps {
   onClick?: () => void;
   onShareReport?: (vehicle: Vehicle) => void;
   onChaseUp?: (vehicleId: string) => void;
+  onUnarchive?: (vehicleId: string) => void;
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
@@ -72,6 +73,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   onClick,
   onShareReport,
   onChaseUp,
+  onUnarchive,
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
@@ -140,6 +142,11 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   );
 
   const handleRowClick = () => {
+    // Prevent clicks on archived vehicles
+    if (vehicle.status === 'archived') {
+      return;
+    }
+
     if (isSelectionMode && onSelectToggle) {
       onSelectToggle(vehicle.id);
     } else if (hasInspection && onClick) {
@@ -191,6 +198,14 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   const handleExportData = (e: React.MouseEvent) => {
     e.stopPropagation();
     console.log('Export data for vehicle:', vehicle.id);
+    setShowActionsMenu(false);
+  };
+
+  const handleUnarchive = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onUnarchive) {
+      onUnarchive(vehicle.id);
+    }
     setShowActionsMenu(false);
   };
 
@@ -563,9 +578,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     <tr
       className={clsx(
         'group transition-colors',
-        hasInspection && 'hover:bg-gray-50',
-        !hasInspection && 'cursor-not-allowed opacity-60',
-        (isSelectionMode || (hasInspection && onClick)) && 'cursor-pointer',
+        vehicle.status === 'archived' && 'opacity-60 cursor-not-allowed',
+        vehicle.status !== 'archived' && hasInspection && 'hover:bg-gray-50',
+        vehicle.status !== 'archived' && !hasInspection && 'cursor-not-allowed opacity-60',
+        vehicle.status !== 'archived' && (isSelectionMode || (hasInspection && onClick)) && 'cursor-pointer',
         isSelected && 'bg-blue-50'
       )}
       onClick={handleRowClick}
@@ -604,78 +620,93 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
             >
               <div className="py-1" role="menu">
-                {onChaseUp && (
-                  vehicle.status === 'link_sent' ||
-                  vehicle.status === 'chased_up' ||
-                  vehicle.status === 'inspection_in_progress'
-                ) && (
-                  <>
+                {vehicle.status === 'archived' ? (
+                  onUnarchive && (
                     <button
-                      onClick={handleChaseUpClick}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
+                      onClick={handleUnarchive}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50 transition-colors font-medium"
                       role="menuitem"
                     >
-                      <Bell className="h-4 w-4 text-orange-600" />
-                      Chase Up Customer
+                      <ArchiveRestore className="h-4 w-4 text-green-600" />
+                      Unarchive Vehicle
                     </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                  </>
-                )}
-                {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
+                  )
+                ) : (
                   <>
+                    {onChaseUp && (
+                      vehicle.status === 'link_sent' ||
+                      vehicle.status === 'chased_up' ||
+                      vehicle.status === 'inspection_in_progress'
+                    ) && (
+                      <>
+                        <button
+                          onClick={handleChaseUpClick}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
+                          role="menuitem"
+                        >
+                          <Bell className="h-4 w-4 text-orange-600" />
+                          Chase Up Customer
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                      </>
+                    )}
+                    {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
+                      <>
+                        <button
+                          onClick={handleShareReport}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                          role="menuitem"
+                        >
+                          <Share2 className="h-4 w-4 text-blue-600" />
+                          Share Updated Report
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                      </>
+                    )}
                     <button
-                      onClick={handleShareReport}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                      onClick={(e) => handleDownloadReport(e, true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                       role="menuitem"
                     >
-                      <Share2 className="h-4 w-4 text-blue-600" />
-                      Share Updated Report
+                      <Download className="h-4 w-4" />
+                      Download with repair costs
+                    </button>
+                    <button
+                      onClick={(e) => handleDownloadReport(e, false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      role="menuitem"
+                    >
+                      <Download className="h-4 w-4" />
+                      Download without repair costs
                     </button>
                     <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={(e) => handleOpenUrlReport(e, true)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      role="menuitem"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Open with repair costs
+                    </button>
+                    <button
+                      onClick={(e) => handleOpenUrlReport(e, false)}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      role="menuitem"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Open without repair costs
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleExportData}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      role="menuitem"
+                    >
+                      <FileSpreadsheet className="h-4 w-4" />
+                      Export Data
+                    </button>
                   </>
                 )}
-                <button
-                  onClick={(e) => handleDownloadReport(e, true)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
-                >
-                  <Download className="h-4 w-4" />
-                  Download with repair costs
-                </button>
-                <button
-                  onClick={(e) => handleDownloadReport(e, false)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
-                >
-                  <Download className="h-4 w-4" />
-                  Download without repair costs
-                </button>
-                <div className="border-t border-gray-100 my-1"></div>
-                <button
-                  onClick={(e) => handleOpenUrlReport(e, true)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Open with repair costs
-                </button>
-                <button
-                  onClick={(e) => handleOpenUrlReport(e, false)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Open without repair costs
-                </button>
-                <div className="border-t border-gray-100 my-1"></div>
-                <button
-                  onClick={handleExportData}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                  role="menuitem"
-                >
-                  <FileSpreadsheet className="h-4 w-4" />
-                  Export Data
-                </button>
               </div>
             </div>
           )}
