@@ -1090,10 +1090,10 @@ export const VehicleList: React.FC = () => {
               {viewMode === 'grid' && showCardFieldSelector && (
                 <>
                   <div
-                    className="fixed inset-0 z-10"
+                    className="fixed inset-0 z-50"
                     onClick={() => setShowCardFieldSelector(false)}
                   />
-                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
+                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-[100] max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Fields</p>
                       <div className="space-y-2">
@@ -1137,10 +1137,10 @@ export const VehicleList: React.FC = () => {
               {viewMode === 'list' && showColumnSelector && (
                 <>
                   <div
-                    className="fixed inset-0 z-10"
+                    className="fixed inset-0 z-50"
                     onClick={() => setShowColumnSelector(false)}
                   />
-                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20 max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
+                  <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-[100] max-h-96 overflow-y-auto left-0 sm:left-auto sm:right-0">
                     <div className="p-3">
                       <p className="text-xs font-medium text-gray-500 uppercase mb-2">Visible Columns</p>
                       <div className="space-y-2">
@@ -1242,7 +1242,7 @@ export const VehicleList: React.FC = () => {
                 </button>
 
                 {showBulkActionsMenu && (
-                  <div className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-30 py-1">
+                  <div className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-[100] py-1">
                     <button
                       onClick={() => {
                         handleBulkShareReport();
