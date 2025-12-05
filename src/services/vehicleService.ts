@@ -649,37 +649,20 @@ class VehicleService {
 
   async archiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
     try {
-      // First, get the current status of all vehicles
-      const { data: vehicles, error: fetchError } = await supabase
-        .from('vehicles')
-        .select('id, status')
-        .in('id', vehicleIds);
+      // Use Postgres function to update with current status saved
+      const { error } = await supabase.rpc('archive_vehicles', {
+        vehicle_ids: vehicleIds
+      });
 
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      // Update each vehicle to save current status and set to archived
-      const updates = (vehicles || []).map(vehicle =>
-        supabase
-          .from('vehicles')
-          .update({
-            status: 'archived',
-            status_before_archive: vehicle.status
-          })
-          .eq('id', vehicle.id)
-      );
-
-      const results = await Promise.all(updates);
-      const hasError = results.some(result => result.error);
-
-      if (hasError) {
-        throw new Error('Failed to archive some vehicles');
+      if (error) {
+        console.error('Archive vehicles RPC error:', error);
+        throw error;
       }
 
       return {
         success: true,
-        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} archived successfully`
+        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} archived successfully`,
+        data: undefined
       };
     } catch (error) {
       console.error('Failed to archive vehicles:', error);
@@ -689,37 +672,20 @@ class VehicleService {
 
   async unarchiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
     try {
-      // First, get the previous status of all vehicles
-      const { data: vehicles, error: fetchError } = await supabase
-        .from('vehicles')
-        .select('id, status_before_archive')
-        .in('id', vehicleIds);
+      // Use Postgres function to restore previous status
+      const { error } = await supabase.rpc('unarchive_vehicles', {
+        vehicle_ids: vehicleIds
+      });
 
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      // Update each vehicle to restore previous status
-      const updates = (vehicles || []).map(vehicle =>
-        supabase
-          .from('vehicles')
-          .update({
-            status: vehicle.status_before_archive || 'inspected',
-            status_before_archive: null
-          })
-          .eq('id', vehicle.id)
-      );
-
-      const results = await Promise.all(updates);
-      const hasError = results.some(result => result.error);
-
-      if (hasError) {
-        throw new Error('Failed to unarchive some vehicles');
+      if (error) {
+        console.error('Unarchive vehicles RPC error:', error);
+        throw error;
       }
 
       return {
         success: true,
-        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} unarchived successfully`
+        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} unarchived successfully`,
+        data: undefined
       };
     } catch (error) {
       console.error('Failed to unarchive vehicles:', error);
