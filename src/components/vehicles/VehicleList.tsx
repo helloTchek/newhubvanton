@@ -1453,7 +1453,7 @@ export const VehicleList: React.FC = () => {
                     const isCentered = ['carBody', 'rim', 'glass', 'interior', 'tires', 'dashboard', 'declarations'].includes(columnId);
                     return renderColumnHeader(columnId, isCentered ? 'center' : 'left');
                   })}
-                  <th className="sticky right-0 z-20 bg-gray-50 w-16 border-l border-gray-200">
+                  <th className="sticky right-0 z-30 bg-gray-50 w-16 border-l border-gray-200">
                   </th>
                 </tr>
               </thead>

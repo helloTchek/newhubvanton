@@ -568,7 +568,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       )}
       {columnOrder.map(columnId => renderCell(columnId))}
       <td className={clsx(
-        "sticky right-0 z-10 px-3 py-4 whitespace-nowrap text-center border-l border-gray-200",
+        "sticky right-0 z-30 px-3 py-4 whitespace-nowrap text-center border-l border-gray-200",
         isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
       )}>
         <div className="relative" ref={actionsMenuRef}>
@@ -581,7 +581,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </button>
 
           {showActionsMenu && (
-            <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[60]">
+            <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[100]">
               <div className="py-1" role="menu">
                 {onChaseUp && (
                   vehicle.status === 'link_sent' ||
