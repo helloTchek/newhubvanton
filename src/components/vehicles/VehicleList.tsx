@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
-import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText, ChevronDown, Wrench, DollarSign } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Plus, CheckSquare, X, Bell, Archive, ArchiveRestore, ArrowUpDown, Columns3, ArrowUp, ArrowDown, GripVertical, Tag as TagIcon, Share2, Download, ExternalLink, FileText, ChevronDown, Wrench, DollarSign } from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { Vehicle, SearchFilters, LoadingState, VehicleStatus, Company, SortField, PaginationMetadata } from '../../types';
 import { vehicleService } from '../../services/vehicleService';
@@ -540,12 +540,30 @@ export const VehicleList: React.FC = () => {
     }
 
     try {
-      toast.success(`${selectedVehicleIds.length} vehicles archived successfully`);
+      await vehicleService.archiveVehicles(selectedVehicleIds);
+      toast.success(`${selectedVehicleIds.length} vehicle${selectedVehicleIds.length > 1 ? 's' : ''} archived successfully`);
       setSelectedVehicleIds([]);
       setIsSelectionMode(false);
       await loadVehicles(true);
     } catch (error: unknown) {
-      toast.error(error.message || 'Failed to archive vehicles');
+      toast.error(error instanceof Error ? error.message : 'Failed to archive vehicles');
+    }
+  };
+
+  const handleBulkUnarchive = async () => {
+    if (selectedVehicleIds.length === 0) {
+      toast.error('No vehicles selected');
+      return;
+    }
+
+    try {
+      await vehicleService.unarchiveVehicles(selectedVehicleIds);
+      toast.success(`${selectedVehicleIds.length} vehicle${selectedVehicleIds.length > 1 ? 's' : ''} unarchived successfully`);
+      setSelectedVehicleIds([]);
+      setIsSelectionMode(false);
+      await loadVehicles(true);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to unarchive vehicles');
     }
   };
 
@@ -1344,13 +1362,23 @@ export const VehicleList: React.FC = () => {
                 <span>Apply Tag</span>
               </button>
 
-              <button
-                onClick={handleBulkArchive}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
-              >
-                <Archive className="w-4 h-4" />
-                <span>Archive</span>
-              </button>
+              {filters.status === 'archived' || (filters.statusIds?.length === 1 && filters.statusIds[0] === 'archived') ? (
+                <button
+                  onClick={handleBulkUnarchive}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                >
+                  <ArchiveRestore className="w-4 h-4" />
+                  <span>Unarchive</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleBulkArchive}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                >
+                  <Archive className="w-4 h-4" />
+                  <span>Archive</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

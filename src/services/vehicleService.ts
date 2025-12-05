@@ -646,6 +646,48 @@ class VehicleService {
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  async archiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
+    try {
+      const { error } = await supabase
+        .from('vehicles')
+        .update({ status: 'archived' })
+        .in('id', vehicleIds);
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        success: true,
+        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} archived successfully`
+      };
+    } catch (error) {
+      console.error('Failed to archive vehicles:', error);
+      throw new ApiError('Failed to archive vehicles', 'ARCHIVE_VEHICLES_ERROR');
+    }
+  }
+
+  async unarchiveVehicles(vehicleIds: string[]): Promise<ApiResponse<void>> {
+    try {
+      const { error } = await supabase
+        .from('vehicles')
+        .update({ status: 'inspected' })
+        .in('id', vehicleIds);
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        success: true,
+        message: `${vehicleIds.length} vehicle${vehicleIds.length > 1 ? 's' : ''} unarchived successfully`
+      };
+    } catch (error) {
+      console.error('Failed to unarchive vehicles:', error);
+      throw new ApiError('Failed to unarchive vehicles', 'UNARCHIVE_VEHICLES_ERROR');
+    }
+  }
 }
 
 export const vehicleService = new VehicleService();
