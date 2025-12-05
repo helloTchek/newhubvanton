@@ -109,7 +109,9 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState(false);
   const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState(false);
   const [isInspectionDateSelectorOpen, setIsInspectionDateSelectorOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; right: number } | null>(null);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
+  const actionsButtonRef = useRef<HTMLButtonElement>(null);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -153,6 +155,13 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
 
   const handleActionsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (actionsButtonRef.current) {
+      const rect = actionsButtonRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
     setShowActionsMenu(!showActionsMenu);
   };
 
@@ -200,12 +209,20 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       }
     };
 
+    const handleScroll = () => {
+      setShowActionsMenu(false);
+    };
+
     if (showActionsMenu) {
       document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('scroll', handleScroll, true);
+      window.addEventListener('resize', handleScroll);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll, true);
+      window.removeEventListener('resize', handleScroll);
     };
   }, [showActionsMenu]);
 
@@ -573,6 +590,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       )}>
         <div className="relative" ref={actionsMenuRef}>
           <button
+            ref={actionsButtonRef}
             onClick={handleActionsClick}
             className="p-2 bg-white border border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all shadow-sm hover:shadow"
             aria-label="Actions"
@@ -580,8 +598,11 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
             <MoreVertical className="h-5 w-5 text-gray-700" />
           </button>
 
-          {showActionsMenu && (
-            <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[100]">
+          {showActionsMenu && menuPosition && (
+            <div
+              className="fixed w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[100]"
+              style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
+            >
               <div className="py-1" role="menu">
                 {onChaseUp && (
                   vehicle.status === 'link_sent' ||

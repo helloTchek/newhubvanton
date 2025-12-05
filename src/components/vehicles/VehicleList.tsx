@@ -1480,7 +1480,7 @@ export const VehicleList: React.FC = () => {
           {/* Sticky horizontal scrollbar */}
           <div
             ref={scrollbarRef}
-            className="sticky bottom-0 z-20 overflow-x-auto bg-gray-50 border-t border-gray-200"
+            className="sticky bottom-0 z-10 overflow-x-auto bg-gray-50 border-t border-gray-200"
             style={{ height: '16px' }}
           >
             <div style={{ width: tableScrollRef.current?.scrollWidth || '100%', height: '1px' }} />
