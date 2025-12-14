@@ -625,7 +625,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           {isMenuOpen && menuPosition && (
             <>
               <div
-                className="fixed inset-0 z-[9998] cursor-default"
+                className="fixed inset-0 z-[9999] cursor-default"
                 style={{ userSelect: 'none', pointerEvents: 'auto' }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -638,7 +638,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               />
               <div
                 ref={actionsMenuRef}
-                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[10001]"
+                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[10000]"
                 style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
               >
                 <div className="py-1" role="menu">

@@ -327,7 +327,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             {isActionsMenuOpen && (
               <>
                 <div
-                  className="fixed inset-0 z-40 cursor-default"
+                  className="fixed inset-0 z-[9999] cursor-default"
                   style={{ userSelect: 'none', pointerEvents: 'auto' }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -338,7 +338,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     e.stopPropagation();
                   }}
                 />
-                <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
+                <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
                     <button
