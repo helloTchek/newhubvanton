@@ -608,14 +608,15 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
       )}
       {columnOrder.map(columnId => renderCell(columnId))}
       <td className={clsx(
-        "sticky right-0 z-30 px-3 py-4 whitespace-nowrap text-center border-l border-gray-200",
+        "sticky right-0 px-3 py-4 whitespace-nowrap text-center border-l border-gray-200",
+        isMenuOpen ? 'z-[10000]' : 'z-30',
         isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
       )}>
         <div className="relative" ref={actionsMenuRef}>
           <button
             ref={actionsButtonRef}
             onClick={handleActionsClick}
-            className="p-2 bg-white border border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all shadow-sm hover:shadow"
+            className="p-2 bg-white border border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all shadow-sm hover:shadow relative z-10"
             aria-label="Actions"
           >
             <MoreVertical className="h-5 w-5 text-gray-700" />
