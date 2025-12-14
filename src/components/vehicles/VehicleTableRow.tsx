@@ -633,7 +633,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               />
               <div
                 ref={actionsMenuRef}
-                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[9999]"
+                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[10001]"
                 style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
               >
                 <div className="py-1" role="menu">
