@@ -616,6 +616,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
 
           {showActionsMenu && menuPosition && (
             <div
+              ref={actionsMenuRef}
               className="fixed w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[100]"
               style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
             >
