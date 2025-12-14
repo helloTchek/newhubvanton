@@ -351,34 +351,28 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   )
                 ) : (
                   <>
-                    {shouldShowChaseUp && onChaseUp && (
-                      <>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsActionsMenuOpen(false);
-                            setIsChaseUpModalOpen(true);
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
-                        >
-                          <Bell className="w-4 h-4 text-orange-600" />
-                          <span>Chase Up Customer</span>
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                      </>
-                    )}
-                    {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
-                      <>
-                        <button
-                          onClick={handleShareFromMenu}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
-                        >
-                          <Share2 className="w-4 h-4 text-blue-600" />
-                          <span>Share Updated Report</span>
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                      </>
-                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsActionsMenuOpen(false);
+                        setIsChaseUpModalOpen(true);
+                      }}
+                      disabled={!shouldShowChaseUp || !onChaseUp}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    >
+                      <Bell className="w-4 h-4 text-orange-600" />
+                      <span>Chase Up Customer</span>
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleShareFromMenu}
+                      disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    >
+                      <Share2 className="w-4 h-4 text-blue-600" />
+                      <span>Share Updated Report</span>
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
                     <button
                       onClick={(e) => handleDownloadReport(e, true)}
                       className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"

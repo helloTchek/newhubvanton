@@ -655,36 +655,30 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                   )
                 ) : (
                   <>
-                    {onChaseUp && (
-                      vehicle.status === 'link_sent' ||
-                      vehicle.status === 'chased_up' ||
-                      vehicle.status === 'inspection_in_progress'
-                    ) && (
-                      <>
-                        <button
-                          onClick={handleChaseUpClick}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium"
-                          role="menuitem"
-                        >
-                          <Bell className="h-4 w-4 text-orange-600" />
-                          Chase Up Customer
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                      </>
-                    )}
-                    {onShareReport && (vehicle.status === 'inspected' || vehicle.status === 'to_review') && (
-                      <>
-                        <button
-                          onClick={handleShareReport}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
-                          role="menuitem"
-                        >
-                          <Share2 className="h-4 w-4 text-blue-600" />
-                          Share Updated Report
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                      </>
-                    )}
+                    <button
+                      onClick={handleChaseUpClick}
+                      disabled={!onChaseUp || !(
+                        vehicle.status === 'link_sent' ||
+                        vehicle.status === 'chased_up' ||
+                        vehicle.status === 'inspection_in_progress'
+                      )}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                      role="menuitem"
+                    >
+                      <Bell className="h-4 w-4 text-orange-600" />
+                      Chase Up Customer
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button
+                      onClick={handleShareReport}
+                      disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                      role="menuitem"
+                    >
+                      <Share2 className="h-4 w-4 text-blue-600" />
+                      Share Updated Report
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
                     <button
                       onClick={(e) => handleDownloadReport(e, true)}
                       className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
