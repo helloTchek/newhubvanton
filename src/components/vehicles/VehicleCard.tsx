@@ -433,7 +433,18 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   src={images[currentImageIndex]}
                   alt={`${vehicle.make} ${vehicle.model}`}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback?.classList.contains('image-fallback')) {
+                      fallback.style.display = 'flex';
+                    }
+                  }}
                 />
+                <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
+                  <Bell className="w-12 h-12 text-gray-400" />
+                </div>
                 <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (

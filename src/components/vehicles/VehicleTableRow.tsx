@@ -252,12 +252,20 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                 className="h-12 w-20 rounded-lg object-cover"
                 src={vehicle.imageUrl}
                 alt={`${vehicle.make} ${vehicle.model}`}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const fallback = target.nextElementSibling as HTMLElement;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
               />
-            ) : (
-              <div className="h-12 w-20 rounded-lg bg-gray-100 flex items-center justify-center">
-                <Bell className="w-5 h-5 text-gray-400" />
-              </div>
-            )}
+            ) : null}
+            <div
+              className="h-12 w-20 rounded-lg bg-gray-100 items-center justify-center"
+              style={{ display: shouldShowImage ? 'none' : 'flex' }}
+            >
+              <Bell className="w-5 h-5 text-gray-400" />
+            </div>
           </td>
         );
 
