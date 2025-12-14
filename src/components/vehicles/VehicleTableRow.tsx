@@ -609,7 +609,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           {showActionsMenu && menuPosition && (
             <>
               <div
-                className="fixed inset-0 z-[9998]"
+                className="fixed inset-0 z-[9998] bg-black/10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowActionsMenu(false);
