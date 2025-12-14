@@ -173,12 +173,9 @@ export const Header: React.FC = () => {
                   </div>
                 )}
                 <div className="text-left hidden md:block">
-                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.companyName || 'All Companies'}</p>
                   <div className="text-xs text-gray-500">
-                    <p className="capitalize">{user?.role}</p>
-                    {user?.companyName && (
-                      <p className="truncate max-w-32">{user?.companyName}</p>
-                    )}
+                    <p className="truncate max-w-32">{user?.email}</p>
                   </div>
                 </div>
               </Menu.Button>
