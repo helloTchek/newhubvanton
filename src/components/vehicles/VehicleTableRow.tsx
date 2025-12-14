@@ -218,24 +218,16 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (actionsMenuRef.current && !actionsMenuRef.current.contains(event.target as Node)) {
-        setShowActionsMenu(false);
-      }
-    };
-
     const handleScroll = () => {
       setShowActionsMenu(false);
     };
 
     if (showActionsMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
       window.addEventListener('scroll', handleScroll, true);
       window.addEventListener('resize', handleScroll);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('resize', handleScroll);
     };
@@ -615,12 +607,17 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           </button>
 
           {showActionsMenu && menuPosition && (
-            <div
-              ref={actionsMenuRef}
-              className="fixed w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[100]"
-              style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
-            >
-              <div className="py-1" role="menu">
+            <>
+              <div
+                className="fixed inset-0 z-[9998]"
+                onClick={() => setShowActionsMenu(false)}
+              />
+              <div
+                ref={actionsMenuRef}
+                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[9999]"
+                style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
+              >
+                <div className="py-1" role="menu">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
                     <button
@@ -710,6 +707,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
                 )}
               </div>
             </div>
+            </>
           )}
         </div>
       </td>
