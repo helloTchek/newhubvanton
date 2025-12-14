@@ -610,7 +610,10 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
             <>
               <div
                 className="fixed inset-0 z-[9998]"
-                onClick={() => setShowActionsMenu(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowActionsMenu(false);
+                }}
               />
               <div
                 ref={actionsMenuRef}
