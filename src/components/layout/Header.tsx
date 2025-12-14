@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Car, LogOut, User, Bell, Settings, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { t } = useTranslation();
 
@@ -207,16 +208,16 @@ export const Header: React.FC = () => {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
-                          href="#"
+                        <button
+                          onClick={() => navigate('/company-selection')}
                           className={clsx(
                             active ? 'bg-gray-100' : '',
-                            'flex items-center gap-2 px-4 py-2 text-sm text-gray-700'
+                            'flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700'
                           )}
                         >
                           <Settings className="w-4 h-4" />
-                          Company Settings
-                        </a>
+                          Change Company
+                        </button>
                       )}
                     </Menu.Item>
                     <Menu.Item>
