@@ -325,7 +325,20 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               <MoreVertical className="w-5 h-5 text-gray-700" />
             </button>
             {isActionsMenuOpen && (
-              <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
+              <>
+                <div
+                  className="fixed inset-0 z-40 cursor-default"
+                  style={{ userSelect: 'none', pointerEvents: 'auto' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsActionsMenuOpen(false);
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                />
+                <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
                     <button
@@ -421,6 +434,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   <span>Submit a buyback request</span>
                 </button>
               </div>
+              </>
             )}
           </div>
         )}

@@ -625,10 +625,15 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
           {isMenuOpen && menuPosition && (
             <>
               <div
-                className="fixed inset-0 z-[9998]"
+                className="fixed inset-0 z-[9998] cursor-default"
+                style={{ userSelect: 'none', pointerEvents: 'auto' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onMenuToggle?.(false);
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                 }}
               />
               <div
