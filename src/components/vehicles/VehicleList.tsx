@@ -66,6 +66,7 @@ export const VehicleList: React.FC = () => {
   const [shareStatus, setShareStatus] = useState<'never_shared' | 'up_to_date' | 'needs_sharing'>('needs_sharing');
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
   const [showBulkActionsMenu, setShowBulkActionsMenu] = useState(false);
+  const [openMenuVehicleId, setOpenMenuVehicleId] = useState<string | null>(null);
   const tableScrollRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
   const bulkActionsMenuRef = useRef<HTMLDivElement>(null);
@@ -1482,6 +1483,8 @@ export const VehicleList: React.FC = () => {
                     onSelectToggle={handleSelectToggle}
                     columnOrder={columnOrder}
                     visibleColumns={visibleColumns}
+                    isMenuOpen={openMenuVehicleId === vehicle.id}
+                    onMenuToggle={(isOpen) => setOpenMenuVehicleId(isOpen ? vehicle.id : null)}
                   />
                 ))}
               </tbody>

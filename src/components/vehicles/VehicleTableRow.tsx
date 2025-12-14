@@ -35,6 +35,8 @@ interface VehicleTableRowProps {
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
+  isMenuOpen?: boolean;
+  onMenuToggle?: (isOpen: boolean) => void;
   columnOrder?: string[];
   visibleColumns?: {
     image: boolean;
@@ -77,6 +79,8 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
+  isMenuOpen = false,
+  onMenuToggle,
   columnOrder = [
     'image', 'registration', 'vin', 'makeModel', 'company', 'customerEmail', 'status', 'inspectionDate', 'inspectionId', 'inspectionType', 'aiInspectionBadge',
     'mileage', 'value', 'repairCost', 'tags', 'carBody', 'rim', 'glass',
@@ -107,7 +111,6 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     declarations: true
   }
 }) => {
-  const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [downloadSubmenuOpen, setDownloadSubmenuOpen] = useState(false);
   const [openUrlSubmenuOpen, setOpenUrlSubmenuOpen] = useState(false);
   const [isInspectionDateSelectorOpen, setIsInspectionDateSelectorOpen] = useState(false);
@@ -162,20 +165,20 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
 
   const handleActionsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (actionsButtonRef.current) {
+    if (!isMenuOpen && actionsButtonRef.current) {
       const rect = actionsButtonRef.current.getBoundingClientRect();
       setMenuPosition({
         top: rect.bottom + 8,
         right: window.innerWidth - rect.right
       });
     }
-    setShowActionsMenu(!showActionsMenu);
+    onMenuToggle?.(!isMenuOpen);
   };
 
   const handleDownloadReport = (e: React.MouseEvent, withCosts: boolean) => {
     e.stopPropagation();
     console.log('Download report for vehicle:', vehicle.id, 'with costs:', withCosts);
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
     setDownloadSubmenuOpen(false);
   };
 
@@ -184,7 +187,7 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     if (onShareReport) {
       onShareReport(vehicle);
     }
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
   };
 
   const handleChaseUpClick = (e: React.MouseEvent) => {
@@ -192,13 +195,13 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     if (onChaseUp) {
       onChaseUp(vehicle.id);
     }
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
   };
 
   const handleExportData = (e: React.MouseEvent) => {
     e.stopPropagation();
     console.log('Export data for vehicle:', vehicle.id);
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
   };
 
   const handleUnarchive = (e: React.MouseEvent) => {
@@ -206,32 +209,36 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
     if (onUnarchive) {
       onUnarchive(vehicle.id);
     }
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
   };
 
   const handleOpenUrlReport = (e: React.MouseEvent, withCosts: boolean) => {
     e.stopPropagation();
     const reportUrl = `/vehicle/${vehicle.id}/report?costs=${withCosts}`;
     window.open(reportUrl, '_blank');
-    setShowActionsMenu(false);
+    onMenuToggle?.(false);
     setOpenUrlSubmenuOpen(false);
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowActionsMenu(false);
+      onMenuToggle?.(false);
     };
 
-    if (showActionsMenu) {
+    if (isMenuOpen) {
       window.addEventListener('scroll', handleScroll, true);
       window.addEventListener('resize', handleScroll);
+    } else {
+      // Close submenus when main menu closes
+      setDownloadSubmenuOpen(false);
+      setOpenUrlSubmenuOpen(false);
     }
 
     return () => {
       window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [showActionsMenu]);
+  }, [isMenuOpen, onMenuToggle]);
 
   const renderCell = (columnId: string) => {
     if (!visibleColumns[columnId as keyof typeof visibleColumns]) return null;
@@ -606,13 +613,13 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
             <MoreVertical className="h-5 w-5 text-gray-700" />
           </button>
 
-          {showActionsMenu && menuPosition && (
+          {isMenuOpen && menuPosition && (
             <>
               <div
-                className="fixed inset-0 z-[9998] bg-black/10"
+                className="fixed inset-0 z-[9998]"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowActionsMenu(false);
+                  onMenuToggle?.(false);
                 }}
               />
               <div
