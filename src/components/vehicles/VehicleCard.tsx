@@ -314,7 +314,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Actions Menu Button - Top Right */}
         {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review') || vehicle.status === 'archived') && (
-          <div className="absolute top-3 left-3 z-10" ref={actionsMenuRef}>
+          <div className="absolute top-3 right-3 z-10" ref={actionsMenuRef}>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -338,7 +338,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     e.stopPropagation();
                   }}
                 />
-                <div className="absolute left-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]">
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
                     <button
@@ -453,7 +453,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
                   <Bell className="w-12 h-12 text-gray-400" />
                 </div>
-                <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+                <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -516,7 +516,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                   </div>
                   <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
                 </div>
-                <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+                <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
