@@ -91,7 +91,7 @@ export const CompanySelection: React.FC = () => {
           <p className="text-red-600 mb-4">{loading.error}</p>
           <button
             onClick={loadCompanies}
-            className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Try Again
           </button>
@@ -132,16 +132,16 @@ export const CompanySelection: React.FC = () => {
                 className={clsx(
                   'bg-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
                   selectedCompany === 'all'
-                    ? 'border-teal-500 bg-teal-50'
-                    : 'border-gray-200 hover:border-teal-300'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300'
                 )}
                 onClick={() => handleCompanySelect('all')}
               >
                 <div className="flex items-start gap-4">
                   {/* Company Logo */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-blue-600" />
                     </div>
                   </div>
 
@@ -158,12 +158,12 @@ export const CompanySelection: React.FC = () => {
                       </div>
                       <ArrowRight className={clsx(
                         'w-5 h-5 transition-colors flex-shrink-0 ml-2',
-                        selectedCompany === 'all' ? 'text-teal-600' : 'text-gray-400'
+                        selectedCompany === 'all' ? 'text-blue-600' : 'text-gray-400'
                       )} />
                     </div>
 
                     <div className="flex items-center">
-                      <div className="bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
+                      <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
                         {totalVehicles} vehicles
                       </div>
                     </div>
@@ -171,8 +171,8 @@ export const CompanySelection: React.FC = () => {
                 </div>
 
                 {selectedCompany === 'all' && (
-                  <div className="mt-4 pt-4 border-t border-teal-200">
-                    <div className="flex items-center justify-center gap-2 text-teal-600">
+                  <div className="mt-4 pt-4 border-t border-blue-200">
+                    <div className="flex items-center justify-center gap-2 text-blue-600">
                       <LoadingSpinner size="sm" />
                       <span className="text-sm font-medium">Selecting company...</span>
                     </div>
@@ -204,7 +204,7 @@ export const CompanySelection: React.FC = () => {
               placeholder="Search companies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white shadow-sm"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
             />
           </div>
         </div>
@@ -230,8 +230,8 @@ export const CompanySelection: React.FC = () => {
                 className={clsx(
                   'bg-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
                   selectedCompany === company.id
-                    ? 'border-teal-500 bg-teal-50'
-                    : 'border-gray-200 hover:border-teal-300'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300'
                 )}
                 onClick={() => handleCompanySelect(company.id)}
               >
@@ -245,8 +245,8 @@ export const CompanySelection: React.FC = () => {
                         className="w-12 h-12 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-teal-600" />
+                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-6 h-6 text-blue-600" />
                       </div>
                     )}
                   </div>
@@ -266,12 +266,12 @@ export const CompanySelection: React.FC = () => {
                       </div>
                       <ArrowRight className={clsx(
                         'w-5 h-5 transition-colors flex-shrink-0 ml-2',
-                        selectedCompany === company.id ? 'text-teal-600' : 'text-gray-400'
+                        selectedCompany === company.id ? 'text-blue-600' : 'text-gray-400'
                       )} />
                     </div>
 
                     <div className="flex items-center">
-                      <div className="bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
+                      <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
                         {company.vehicleCount} vehicles
                       </div>
                     </div>
@@ -279,8 +279,8 @@ export const CompanySelection: React.FC = () => {
                 </div>
 
                 {selectedCompany === company.id && (
-                  <div className="mt-4 pt-4 border-t border-teal-200">
-                    <div className="flex items-center justify-center gap-2 text-teal-600">
+                  <div className="mt-4 pt-4 border-t border-blue-200">
+                    <div className="flex items-center justify-center gap-2 text-blue-600">
                       <LoadingSpinner size="sm" />
                       <span className="text-sm font-medium">Selecting company...</span>
                     </div>
