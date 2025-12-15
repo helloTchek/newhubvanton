@@ -13,54 +13,54 @@ const statusConfig = {
   // Vehicle statuses
   link_sent: {
     label: 'Created',
-    color: 'bg-blue-100 text-blue-800',
-    dot: 'bg-blue-400'
+    color: 'bg-blue-50 text-blue-700',
+    dot: 'bg-[#0062FF]'
   },
   chased_up: {
     label: 'ChaseUp',
-    color: 'bg-orange-100 text-orange-800',
-    dot: 'bg-orange-400'
+    color: 'bg-orange-50 text-orange-700',
+    dot: 'bg-[#F59E0B]'
   },
   inspection_in_progress: {
     label: 'In Progress',
-    color: 'bg-yellow-100 text-yellow-800',
-    dot: 'bg-yellow-400'
+    color: 'bg-orange-50 text-orange-700',
+    dot: 'bg-[#F59E0B]'
   },
   inspected: {
     label: 'Inspected',
-    color: 'bg-green-100 text-green-800',
-    dot: 'bg-green-400'
+    color: 'bg-green-50 text-green-700',
+    dot: 'bg-[#22C55E]'
   },
   to_review: {
     label: 'To Review',
-    color: 'bg-purple-100 text-purple-800',
-    dot: 'bg-purple-400'
+    color: 'bg-red-50 text-red-700',
+    dot: 'bg-[#EF4444]'
   },
   archived: {
     label: 'Archived',
-    color: 'bg-gray-100 text-gray-800',
-    dot: 'bg-gray-400'
+    color: 'bg-gray-100 text-gray-600',
+    dot: 'bg-[#9CA3AF]'
   },
   // Inspection statuses
   passed: {
     label: 'Passed',
-    color: 'bg-green-100 text-green-800',
-    dot: 'bg-green-400'
+    color: 'bg-green-50 text-green-700',
+    dot: 'bg-[#22C55E]'
   },
   minor_issues: {
     label: 'Minor Issues',
-    color: 'bg-yellow-100 text-yellow-800',
-    dot: 'bg-yellow-400'
+    color: 'bg-orange-50 text-orange-700',
+    dot: 'bg-[#F59E0B]'
   },
   major_issues: {
     label: 'Major Issues',
-    color: 'bg-red-100 text-red-800',
-    dot: 'bg-red-400'
+    color: 'bg-red-50 text-red-700',
+    dot: 'bg-[#EF4444]'
   },
   failed: {
     label: 'Failed',
-    color: 'bg-red-100 text-red-800',
-    dot: 'bg-red-500'
+    color: 'bg-red-50 text-red-700',
+    dot: 'bg-[#EF4444]'
   }
 };
 
