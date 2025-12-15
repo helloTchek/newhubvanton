@@ -159,7 +159,7 @@ export const TabBar: React.FC = () => {
   return (
     <>
       <div className="hidden md:flex bg-gray-100 border-b border-gray-300 items-center px-2 overflow-x-auto scrollbar-hide">
-        <div className="flex items-center gap-0.5 min-w-0 flex-1">
+        <div className="flex items-center gap-0.5 min-w-0">
           {tabs.map((tab) => (
             <div
               key={tab.id}
@@ -231,16 +231,16 @@ export const TabBar: React.FC = () => {
               )}
             </div>
           ))}
-        </div>
 
-        <button
-          onClick={handleNewTab}
-          className="flex-shrink-0 p-2 ml-1 text-gray-600 hover:bg-white/70 rounded-lg transition-colors"
-          aria-label="New tab"
-          title="New tab"
-        >
-          <Plus className="w-4 h-4" />
-        </button>
+          <button
+            onClick={handleNewTab}
+            className="flex-shrink-0 p-2 ml-1 text-gray-600 hover:bg-white/70 rounded-lg transition-colors"
+            aria-label="New tab"
+            title="New tab"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {contextMenu && (
