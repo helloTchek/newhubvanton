@@ -198,19 +198,19 @@ export const Sidebar: React.FC = () => {
                   isCollapsed ? "p-2" : "w-full p-3"
                 )}
                 style={{
-                  backgroundColor: theme?.primaryColor || '#10B981',
-                  '--tw-ring-color': theme?.primaryColor || '#10B981'
+                  backgroundColor: theme?.primaryColor || '#0062FF',
+                  '--tw-ring-color': theme?.primaryColor || '#0062FF'
                 } as React.CSSProperties}
                 onMouseEnter={(e) => {
                   const target = e.currentTarget;
-                  const rgb = parseInt(theme?.primaryColor?.slice(1) || '10B981', 16);
+                  const rgb = parseInt(theme?.primaryColor?.slice(1) || '0062FF', 16);
                   const r = (rgb >> 16) & 0xff;
                   const g = (rgb >> 8) & 0xff;
                   const b = rgb & 0xff;
                   target.style.backgroundColor = `rgb(${Math.max(0, r - 20)}, ${Math.max(0, g - 20)}, ${Math.max(0, b - 20)})`;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = theme?.primaryColor || '#10B981';
+                  e.currentTarget.style.backgroundColor = theme?.primaryColor || '#0062FF';
                 }}
                 title={isCollapsed ? t('navigation.newInspection') : undefined}
               >
