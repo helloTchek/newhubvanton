@@ -124,40 +124,11 @@ export const CompanySelection: React.FC = () => {
           </p>
         </div>
 
-        {/* Search */}
-        <div className="max-w-md mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search companies..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white shadow-sm"
-            />
-          </div>
-        </div>
-
-        {/* Companies Grid */}
-        {filteredCompanies.length === 0 ? (
-          <div className="text-center py-12">
-            <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No companies found</p>
-            {searchQuery && (
-              <p className="text-sm text-gray-500 mt-1">
-                Try adjusting your search criteria
-              </p>
-            )}
-          </div>
-        ) : (
-          <div className="space-y-8">
-
-            {/* Individual Company Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* All Companies Card for Admin/Manager */}
-            {canSeeAllCompanies && (
+        {/* GlobalAuto Rentals Card for Admin/Manager */}
+        {canSeeAllCompanies && (
+          <>
+            <div className="max-w-md mx-auto mb-8">
               <div
-                key="all"
                 className={clsx(
                   'bg-white rounded-xl shadow-sm border-2 p-6 cursor-pointer transition-all duration-200 hover:shadow-lg',
                   selectedCompany === 'all'
@@ -208,8 +179,51 @@ export const CompanySelection: React.FC = () => {
                   </div>
                 )}
               </div>
-            )}
+            </div>
 
+            {/* Divider */}
+            <div className="relative mb-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-gradient-to-br from-slate-50 to-gray-100 text-gray-500 font-medium">
+                  Or select a specific company
+                </span>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Search */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search companies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white shadow-sm"
+            />
+          </div>
+        </div>
+
+        {/* Companies Grid */}
+        {filteredCompanies.length === 0 ? (
+          <div className="text-center py-12">
+            <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">No companies found</p>
+            {searchQuery && (
+              <p className="text-sm text-gray-500 mt-1">
+                Try adjusting your search criteria
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {/* Individual Company Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCompanies.map((company) => (
               <div
                 key={company.id}
