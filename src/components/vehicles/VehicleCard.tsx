@@ -103,7 +103,9 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
   const [isInspectionDateSelectorOpen, setIsInspectionDateSelectorOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
+  const actionsButtonRef = useRef<HTMLButtonElement>(null);
 
   const images = vehicle.images && vehicle.images.length > 0 ? vehicle.images : [vehicle.imageUrl];
   const hasMultipleImages = images.length > 1;
@@ -316,8 +318,16 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review') || vehicle.status === 'archived') && (
           <div className="absolute top-3 right-3 z-10" ref={actionsMenuRef}>
             <button
+              ref={actionsButtonRef}
               onClick={(e) => {
                 e.stopPropagation();
+                if (!isActionsMenuOpen && actionsButtonRef.current) {
+                  const rect = actionsButtonRef.current.getBoundingClientRect();
+                  setMenuPosition({
+                    top: rect.bottom + 8,
+                    left: rect.right - 256
+                  });
+                }
                 setIsActionsMenuOpen(!isActionsMenuOpen);
               }}
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors border border-gray-200"
@@ -338,7 +348,10 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     e.stopPropagation();
                   }}
                 />
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]">
+                <div
+                  className="fixed w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]"
+                  style={menuPosition ? { top: `${menuPosition.top}px`, left: `${menuPosition.left}px` } : {}}
+                >
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
                     <button
