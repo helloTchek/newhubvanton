@@ -35,6 +35,7 @@ interface VehicleCardProps {
   onChaseUp?: (vehicleId: string, method: 'email' | 'sms', message?: string) => Promise<void>;
   onShareReport?: (vehicle: Vehicle) => void;
   onUnarchive?: (vehicleId: string) => void;
+  onUpdate?: () => void;
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onSelectToggle?: (vehicleId: string) => void;
@@ -76,6 +77,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
   onChaseUp,
   onShareReport,
   onUnarchive,
+  onUpdate,
   isSelectionMode = false,
   isSelected = false,
   onSelectToggle,
@@ -324,7 +326,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             >
               <MoreVertical className="w-5 h-5 text-gray-700" />
             </button>
-            {isActionsMenuOpen && (
+{isActionsMenuOpen && (
               <>
                 <div
                   className="fixed inset-0 z-[9999] cursor-default"
@@ -338,95 +340,117 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     e.stopPropagation();
                   }}
                 />
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-[10000]">
+                <div className="absolute right-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[10000] animate-in fade-in slide-in-from-top-2 duration-200">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
-                    <button
-                      onClick={handleUnarchive}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-green-50 transition-colors font-medium"
-                    >
-                      <ArchiveRestore className="w-4 h-4 text-green-600" />
-                      <span>Unarchive Vehicle</span>
-                    </button>
+                    <div className="p-2">
+                      <button
+                        onClick={handleUnarchive}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 font-medium group"
+                      >
+                        <div className="p-2 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors">
+                          <ArchiveRestore className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-green-700">Unarchive Vehicle</span>
+                      </button>
+                    </div>
                   )
                 ) : (
                   <>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsActionsMenuOpen(false);
-                        setIsChaseUpModalOpen(true);
-                      }}
-                      disabled={!shouldShowChaseUp || !onChaseUp}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                    >
-                      <Bell className="w-4 h-4 text-orange-600" />
-                      <span>Chase Up Customer</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleShareFromMenu}
-                      disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                    >
-                      <Share2 className="w-4 h-4 text-blue-600" />
-                      <span>Share Updated Report</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={(e) => handleDownloadReport(e, true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Download with repair costs</span>
-                    </button>
-                    <button
-                      onClick={(e) => handleDownloadReport(e, false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Download without repair costs</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={(e) => handleOpenUrlReport(e, true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Open with repair costs</span>
-                    </button>
-                    <button
-                      onClick={(e) => handleOpenUrlReport(e, false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Open without repair costs</span>
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleExportData}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <FileSpreadsheet className="w-4 h-4" />
-                      <span>Export Data</span>
-                    </button>
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsActionsMenuOpen(false);
+                          setIsChaseUpModalOpen(true);
+                        }}
+                        disabled={!shouldShowChaseUp || !onChaseUp}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 rounded-xl transition-all duration-200 font-medium group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                      >
+                        <div className="p-2 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100 group-disabled:bg-gray-50 group-disabled:text-gray-400 transition-colors">
+                          <Bell className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-orange-700 group-disabled:text-gray-400">Chase Up Customer</span>
+                      </button>
+
+                      <button
+                        onClick={handleShareFromMenu}
+                        disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 font-medium group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                      >
+                        <div className="p-2 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 group-disabled:bg-gray-50 group-disabled:text-gray-400 transition-colors">
+                          <Share2 className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-blue-700 group-disabled:text-gray-400">Share Updated Report</span>
+                      </button>
+                    </div>
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={(e) => handleDownloadReport(e, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                      >
+                        <Download className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Download with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleDownloadReport(e, false)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                      >
+                        <Download className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Download without repair costs</span>
+                      </button>
+                    </div>
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                      >
+                        <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Open with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, false)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                      >
+                        <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Open without repair costs</span>
+                      </button>
+
+                      <button
+                        onClick={handleExportData}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                      >
+                        <FileSpreadsheet className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Export Data</span>
+                      </button>
+                    </div>
                   </>
                 )}
-                <div className="border-t border-gray-100 my-1"></div>
-                <button
-                  onClick={handleRequestBodyShopQuote}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <Wrench className="w-4 h-4" />
-                  <span>Request a body shop quote</span>
-                </button>
-                <button
-                  onClick={handleSubmitBuybackRequest}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <DollarSign className="w-4 h-4" />
-                  <span>Submit a buyback request</span>
-                </button>
+
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+
+                <div className="p-2 space-y-0.5">
+                  <button
+                    onClick={handleRequestBodyShopQuote}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                  >
+                    <Wrench className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                    <span>Request a body shop quote</span>
+                  </button>
+                  <button
+                    onClick={handleSubmitBuybackRequest}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                  >
+                    <DollarSign className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                    <span>Submit a buyback request</span>
+                  </button>
+                </div>
               </div>
               </>
             )}

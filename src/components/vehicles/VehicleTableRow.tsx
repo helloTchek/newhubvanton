@@ -638,93 +638,109 @@ export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({
               />
               <div
                 ref={actionsMenuRef}
-                className="fixed w-64 rounded-md shadow-2xl bg-white border border-gray-200 z-[10000]"
+                className="fixed w-72 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden z-[10000] animate-in fade-in slide-in-from-top-2 duration-200"
                 style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
               >
-                <div className="py-1" role="menu">
                 {vehicle.status === 'archived' ? (
                   onUnarchive && (
-                    <button
-                      onClick={handleUnarchive}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50 transition-colors font-medium"
-                      role="menuitem"
-                    >
-                      <ArchiveRestore className="h-4 w-4 text-green-600" />
-                      Unarchive Vehicle
-                    </button>
+                    <div className="p-2">
+                      <button
+                        onClick={handleUnarchive}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 font-medium group"
+                        role="menuitem"
+                      >
+                        <div className="p-2 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors">
+                          <ArchiveRestore className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-green-700">Unarchive Vehicle</span>
+                      </button>
+                    </div>
                   )
                 ) : (
                   <>
-                    <button
-                      onClick={handleChaseUpClick}
-                      disabled={!onChaseUp || !(
-                        vehicle.status === 'link_sent' ||
-                        vehicle.status === 'chased_up' ||
-                        vehicle.status === 'inspection_in_progress'
-                      )}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                      role="menuitem"
-                    >
-                      <Bell className="h-4 w-4 text-orange-600" />
-                      Chase Up Customer
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleShareReport}
-                      disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                      role="menuitem"
-                    >
-                      <Share2 className="h-4 w-4 text-blue-600" />
-                      Share Updated Report
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={(e) => handleDownloadReport(e, true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <Download className="h-4 w-4" />
-                      Download with repair costs
-                    </button>
-                    <button
-                      onClick={(e) => handleDownloadReport(e, false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <Download className="h-4 w-4" />
-                      Download without repair costs
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={(e) => handleOpenUrlReport(e, true)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      Open with repair costs
-                    </button>
-                    <button
-                      onClick={(e) => handleOpenUrlReport(e, false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      Open without repair costs
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleExportData}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      role="menuitem"
-                    >
-                      <FileSpreadsheet className="h-4 w-4" />
-                      Export Data
-                    </button>
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={handleChaseUpClick}
+                        disabled={!onChaseUp || !(
+                          vehicle.status === 'link_sent' ||
+                          vehicle.status === 'chased_up' ||
+                          vehicle.status === 'inspection_in_progress'
+                        )}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 rounded-xl transition-all duration-200 font-medium group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                        role="menuitem"
+                      >
+                        <div className="p-2 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100 group-disabled:bg-gray-50 group-disabled:text-gray-400 transition-colors">
+                          <Bell className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-orange-700 group-disabled:text-gray-400">Chase Up Customer</span>
+                      </button>
+
+                      <button
+                        onClick={handleShareReport}
+                        disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 font-medium group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                        role="menuitem"
+                      >
+                        <div className="p-2 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 group-disabled:bg-gray-50 group-disabled:text-gray-400 transition-colors">
+                          <Share2 className="w-4 h-4" />
+                        </div>
+                        <span className="text-gray-800 group-hover:text-blue-700 group-disabled:text-gray-400">Share Updated Report</span>
+                      </button>
+                    </div>
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={(e) => handleDownloadReport(e, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                        role="menuitem"
+                      >
+                        <Download className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Download with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleDownloadReport(e, false)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                        role="menuitem"
+                      >
+                        <Download className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Download without repair costs</span>
+                      </button>
+                    </div>
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+
+                    <div className="p-2 space-y-0.5">
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, true)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                        role="menuitem"
+                      >
+                        <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Open with repair costs</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleOpenUrlReport(e, false)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                        role="menuitem"
+                      >
+                        <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Open without repair costs</span>
+                      </button>
+
+                      <button
+                        onClick={handleExportData}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+                        role="menuitem"
+                      >
+                        <FileSpreadsheet className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        <span>Export Data</span>
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
-            </div>
             </>
           )}
         </div>
