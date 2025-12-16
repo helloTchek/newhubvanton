@@ -58,7 +58,7 @@ export const Header: React.FC = () => {
 
   return (
     <header className="border-b border-gray-200 shadow-sm fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: theme?.backgroundPrimaryColor || '#FFFFFF' }}>
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div className="px-4">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Left side - Logo and Report Title */}
           <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
