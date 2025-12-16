@@ -79,8 +79,8 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md" style={{ borderColor: '#E3E5EA' }}>
         <div className="flex items-center justify-center gap-3 mb-8">
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
             <Car className="w-6 h-6 text-white" />

@@ -75,8 +75,8 @@ export const LoginForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md" style={{ borderColor: '#E3E5EA' }}>
         <div className="flex flex-col items-center justify-center mb-8">
           <img
             src="/logo_tchek-web.png"
@@ -175,7 +175,7 @@ export const LoginForm: React.FC = () => {
 
       {showForgotPassword && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative" style={{ borderColor: '#E3E5EA' }}>
             <button
               onClick={() => {
                 setShowForgotPassword(false);
