@@ -456,152 +456,174 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
           </div>
         )}
-        {/* Vehicle Image or Placeholder */}
-        {visibleFields.image && (
-          <>
-            {shouldShowImage ? (
-              <div className="aspect-video relative overflow-hidden rounded-t-xl group">
-                <img
-                  src={images[currentImageIndex]}
-                  alt={`${vehicle.make} ${vehicle.model}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    const fallback = target.nextElementSibling as HTMLElement;
-                    if (fallback?.classList.contains('image-fallback')) {
-                      fallback.style.display = 'flex';
-                    }
-                  }}
-                />
-                <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
-                  <Bell className="w-12 h-12 text-gray-400" />
-                </div>
-                <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
-                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
-                  {vehicle.sharedReport && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                      <Share2 className="w-3 h-3" />
-                      <span>{t('share.sharedBadge')}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* AI Inspection Badge - Bottom Left */}
-                {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
-                  <div className="absolute bottom-3 left-3">
-                    <AIInspectionBadge info={vehicle.aiInspectionInfo} />
-                  </div>
-                )}
-
-                {hasMultipleImages && (
-                  <>
-                    <button
-                      onClick={handlePreviousImage}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                      aria-label="Previous image"
-                    >
-                      <ChevronLeft className="w-5 h-5 text-gray-800" />
-                    </button>
-                    <button
-                      onClick={handleNextImage}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                      aria-label="Next image"
-                    >
-                      <ChevronRight className="w-5 h-5 text-gray-800" />
-                    </button>
-
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                      {images.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(index);
-                          }}
-                          className={clsx(
-                            'w-2 h-2 rounded-full transition-all',
-                            index === currentImageIndex
-                              ? 'bg-white w-6'
-                              : 'bg-white/60 hover:bg-white/80'
-                          )}
-                          aria-label={`Go to image ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <Bell className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <p className="text-sm font-medium text-gray-600">Awaiting Inspection</p>
-                </div>
-                <div className="absolute top-3 left-3 flex flex-col gap-2 items-start">
-                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
-                  {vehicle.sharedReport && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                      <Share2 className="w-3 h-3" />
-                      <span>{t('share.sharedBadge')}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* AI Inspection Badge - Bottom Left */}
-                {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
-                  <div className="absolute bottom-3 left-3">
-                    <AIInspectionBadge info={vehicle.aiInspectionInfo} />
-                  </div>
-                )}
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Vehicle Info */}
-        <div className="p-4">
-          {/* Vertical vehicle information */}
-          <div className="space-y-1 mb-3">
+        <div className="p-5">
+          {/* Header: License Plate + VIN + Make/Model */}
+          <div className="mb-4">
             {visibleFields.registration && (
-              <h3 className="text-lg font-bold text-gray-900">{vehicle.registration}</h3>
-            )}
-
-            {visibleFields.vin && vehicle.vin && (
-              <p className="text-xs font-mono text-gray-600">{vehicle.vin}</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{vehicle.registration}</h3>
             )}
 
             {visibleFields.makeModel && (
-              <p className="text-base font-semibold text-gray-900">
+              <p className="text-sm text-gray-600">
                 {vehicle.make} {vehicle.model}
+                {visibleFields.age && ` - ${vehicle.year}`}
+                {visibleFields.mileage && ` - ${vehicle.mileage.toLocaleString()} km`}
               </p>
-            )}
-
-            {visibleFields.age && (
-              <p className="text-sm text-gray-600">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
-            )}
-
-            {visibleFields.mileage && (
-              <p className="text-sm text-gray-600">{vehicle.mileage.toLocaleString()} km</p>
             )}
           </div>
 
-          {/* Tags Section with Manager */}
-          {visibleFields.tags && (
-            <div className="flex flex-wrap items-center gap-1.5 mb-2" onClick={(e) => e.stopPropagation()}>
-              {vehicle.tags && vehicle.tags.length > 0 && (
-                vehicle.tags.map(tag => (
-                  <div
-                    key={tag.id}
-                    className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                    style={{ backgroundColor: tag.color }}
-                  >
-                    {tag.name}
+          {/* Two Column Layout: Image | Status & Info */}
+          <div className="flex gap-4 mb-4">
+            {/* Left: Vehicle Image */}
+            {visibleFields.image && (
+              <div className="flex-shrink-0 w-56">
+                {shouldShowImage ? (
+                  <div className="aspect-video relative overflow-hidden rounded-lg group">
+                    <img
+                      src={images[currentImageIndex]}
+                      alt={`${vehicle.make} ${vehicle.model}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback?.classList.contains('image-fallback')) {
+                          fallback.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
+                      <Bell className="w-8 h-8 text-gray-400" />
+                    </div>
+
+                    {hasMultipleImages && (
+                      <>
+                        <button
+                          onClick={handlePreviousImage}
+                          className="absolute left-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                          aria-label="Previous image"
+                        >
+                          <ChevronLeft className="w-4 h-4 text-gray-800" />
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                          aria-label="Next image"
+                        >
+                          <ChevronRight className="w-4 h-4 text-gray-800" />
+                        </button>
+
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                          {images.map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCurrentImageIndex(index);
+                              }}
+                              className={clsx(
+                                'w-1.5 h-1.5 rounded-full transition-all',
+                                index === currentImageIndex
+                                  ? 'bg-white w-4'
+                                  : 'bg-white/60 hover:bg-white/80'
+                              )}
+                              aria-label={`Go to image ${index + 1}`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
-                ))
+                ) : (
+                  <div className="aspect-video relative bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
+                        <Bell className="w-6 h-6 text-gray-400" />
+                      </div>
+                      <p className="text-xs font-medium text-gray-600">Awaiting</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Right: Status, AI Quality, and Owner Info */}
+            <div className="flex-1 space-y-3">
+              {/* Status Section */}
+              <div>
+                <p className="text-xs font-medium text-gray-500 mb-1.5">Status</p>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
+                  {vehicle.sharedReport && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                      <Share2 className="w-3 h-3" />
+                      <span>{t('share.sharedBadge')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* AI Quality Section */}
+              {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1.5">Action/Owner</p>
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p>Image quality: <span className="font-medium">{vehicle.aiInspectionInfo.imageQuality || 'good'}</span></p>
+                    <p className="text-xs text-gray-500">checked by AI</p>
+                    {vehicle.aiInspectionInfo.needsManualReview && (
+                      <p className="text-xs text-orange-600 font-medium">to review</p>
+                    )}
+                  </div>
+                </div>
               )}
+
+              {/* Stats */}
+              <div className="text-sm text-gray-700 space-y-0.5">
+                {vehicle.damageInfo && (
+                  <>
+                    <p>Photos {vehicle.damageInfo.totalPhotos || '2/12'}</p>
+                    <p>Damages {vehicle.damageInfo.totalDamages || vehicle.damageInfo.damageCounts.carBody + vehicle.damageInfo.damageCounts.rims + vehicle.damageInfo.damageCounts.glazing + vehicle.damageInfo.damageCounts.interior + vehicle.damageInfo.damageCounts.tires + vehicle.damageInfo.damageCounts.dashboard + vehicle.damageInfo.damageCounts.declarations || '7'}/7</p>
+                    <p>Info {vehicle.damageInfo.totalInfo || '14/14'}</p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom: Timestamps */}
+          {visibleFields.inspectionDate && (
+            <div className="text-xs text-gray-500 space-y-0.5 pt-3 border-t border-gray-100">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsInspectionDateSelectorOpen(true);
+                }}
+                className="hover:text-blue-600 transition-colors"
+                title="View inspection history"
+              >
+                Last update: {vehicle.inspectionDate ? formatDate(vehicle.inspectionDate).replace(/,.*/, '').replace(/\s+\d{4}/, '') + ' ' + formatDate(vehicle.inspectionDate).match(/\d{2}:\d{2}/)?.[0] : 'N/A'}
+              </button>
+              <p>Created: {vehicle.createdAt ? new Date(vehicle.createdAt).toLocaleDateString('en-US', { year: '2-digit', month: '2-digit', day: '2-digit' }).replace(/\//g, '.') : 'XX.XX.XX'}</p>
+            </div>
+          )}
+
+          {/* VIN - Lower Priority */}
+          {visibleFields.vin && vehicle.vin && (
+            <p className="text-xs font-mono text-gray-400 mt-2">{vehicle.vin}</p>
+          )}
+
+          {/* Tags Section */}
+          {visibleFields.tags && vehicle.tags && vehicle.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 mt-3 pt-3 border-t border-gray-100" onClick={(e) => e.stopPropagation()}>
+              {vehicle.tags.map(tag => (
+                <div
+                  key={tag.id}
+                  className="px-2 py-1 rounded-full text-xs font-medium text-white"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </div>
+              ))}
               <TagManager
                 vehicleId={vehicle.id}
                 currentTags={vehicle.tags || []}
@@ -610,135 +632,13 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           )}
 
-          {/* Additional Info Grid */}
-          <div className="space-y-2">
-            {visibleFields.company && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <MapPin className="w-4 h-4 flex-shrink-0" />
-                <span>{vehicle.companyName}</span>
-              </div>
-            )}
-
-            {visibleFields.customerEmail && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <User className="w-4 h-4 flex-shrink-0" />
-                <span>{vehicle.customerEmail}</span>
-              </div>
-            )}
-
-            {visibleFields.inspectionDate && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsInspectionDateSelectorOpen(true);
-                }}
-                className="flex items-center gap-2 text-sm hover:text-blue-600 transition-colors group"
-                title="View inspection history"
-              >
-                <Calendar className="w-4 h-4 flex-shrink-0 group-hover:text-blue-600" />
-                <span className={clsx(
-                  "group-hover:underline",
-                  vehicle.inspectionDate ? "text-gray-600" : "text-gray-400 italic"
-                )}>{formatDate(vehicle.inspectionDate)}</span>
-              </button>
-            )}
-
-            {visibleFields.inspectionId && vehicle.reportId && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FileText className="w-4 h-4 flex-shrink-0" />
-                <span>{vehicle.reportId}</span>
-              </div>
-            )}
-
-            {visibleFields.externalId && vehicle.externalId && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FileText className="w-4 h-4 flex-shrink-0" />
-                <span>{vehicle.externalId}</span>
-              </div>
-            )}
-
-            {visibleFields.inspectionType && vehicle.inspectionType && (
-              <div className="flex items-center gap-2 text-sm">
-                <FileCheck className="w-4 h-4 flex-shrink-0 text-gray-500" />
-                <span className={clsx(
-                  'px-2 py-0.5 rounded-full text-xs font-medium',
-                  getInspectionTypeColor(vehicle.inspectionType)
-                )}>
-                  {getInspectionTypeLabel(vehicle.inspectionType)}
-                </span>
-              </div>
-            )}
-
-            {visibleFields.repairCost && vehicle.estimatedCost > 0 && (
-              <div className="flex items-center gap-2 text-sm">
-                <DollarSign className="w-4 h-4 flex-shrink-0 text-red-500" />
-                <span className="text-red-600 font-medium">
-                  {formatCurrency(vehicle.estimatedCost)}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Damage Results */}
-          {visibleFields.damageResults && vehicle.damageInfo && (
-            <div className="mt-3 pt-3 border-t border-gray-100">
-              <div className="grid grid-cols-4 gap-x-2 gap-y-1.5">
-                <div className="flex items-center gap-1" title="Car Body">
-                  <CarFront className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.carBody > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.carBody}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Rims">
-                  <Disc className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.rims > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.rims}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Glass">
-                  <WindshieldIcon className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.glazing > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.glazing}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Interior">
-                  <CarSeatIcon className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.interior > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.interior}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Tires">
-                  <Disc className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.tires > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.tires}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Dashboard">
-                  <AlertTriangle className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.dashboard > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.dashboard}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1" title="Declarations">
-                  <FileText className={`w-4 h-4 ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-500' : 'text-gray-300'}`} />
-                  <span className={`text-xs font-medium ${vehicle.damageInfo.damageCounts.declarations > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {vehicle.damageInfo.damageCounts.declarations}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-
-          {/* Value */}
-          {visibleFields.value && !shouldShowChaseUp && (
-            <div className="mt-3 pt-3 border-t border-gray-100">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Estimated Value</span>
-                <span className="text-lg font-semibold text-green-600">
-                  {formatCurrency(vehicle.estimatedValue)}
-                </span>
-              </div>
+          {visibleFields.tags && (!vehicle.tags || vehicle.tags.length === 0) && (
+            <div className="mt-3 pt-3 border-t border-gray-100" onClick={(e) => e.stopPropagation()}>
+              <TagManager
+                vehicleId={vehicle.id}
+                currentTags={vehicle.tags || []}
+                onTagsUpdated={() => window.location.reload()}
+              />
             </div>
           )}
         </div>
