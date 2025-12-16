@@ -456,11 +456,29 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
           </div>
         )}
+
+        {/* Vehicle Header Info - Above Image */}
+        <div className="px-4 pt-4 pb-2">
+          {visibleFields.registration && (
+            <h3 className="text-lg font-bold text-gray-900">{vehicle.registration}</h3>
+          )}
+
+          {visibleFields.vin && vehicle.vin && (
+            <p className="text-xs font-mono text-gray-600 mt-1">{vehicle.vin}</p>
+          )}
+
+          {visibleFields.makeModel && (
+            <p className="text-base font-semibold text-gray-700 mt-0.5">
+              {vehicle.make} {vehicle.model}
+            </p>
+          )}
+        </div>
+
         {/* Vehicle Image or Placeholder */}
         {visibleFields.image && (
           <>
             {shouldShowImage ? (
-              <div className="aspect-video relative overflow-hidden rounded-t-xl group">
+              <div className="aspect-video relative overflow-hidden group">
                 <img
                   src={images[currentImageIndex]}
                   alt={`${vehicle.make} ${vehicle.model}`}
@@ -533,7 +551,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                 )}
               </div>
             ) : (
-              <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden rounded-t-xl">
+              <div className="aspect-video relative bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                     <Bell className="w-8 h-8 text-gray-400" />
@@ -563,22 +581,8 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Vehicle Info */}
         <div className="p-4">
-          {/* Vertical vehicle information */}
+          {/* Additional vehicle information */}
           <div className="space-y-1 mb-3">
-            {visibleFields.registration && (
-              <h3 className="text-lg font-bold text-gray-900">{vehicle.registration}</h3>
-            )}
-
-            {visibleFields.vin && vehicle.vin && (
-              <p className="text-xs font-mono text-gray-600">{vehicle.vin}</p>
-            )}
-
-            {visibleFields.makeModel && (
-              <p className="text-base font-semibold text-gray-900">
-                {vehicle.make} {vehicle.model}
-              </p>
-            )}
-
             {visibleFields.age && (
               <p className="text-sm text-gray-600">{vehicle.year} ({new Date().getFullYear() - vehicle.year} years old)</p>
             )}
