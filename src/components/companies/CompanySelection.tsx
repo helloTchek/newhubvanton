@@ -78,7 +78,7 @@ export const CompanySelection: React.FC = () => {
 
   if (loading.isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 flex items-center justify-center">
         <LoadingSpinner size="lg" text="Loading companies..." />
       </div>
     );
@@ -86,7 +86,7 @@ export const CompanySelection: React.FC = () => {
 
   if (loading.error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <p className="text-red-600 mb-4">{loading.error}</p>
           <button
@@ -101,7 +101,7 @@ export const CompanySelection: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto py-12">
         {/* Language Switcher */}
         <div className="flex justify-end mb-6">
@@ -187,7 +187,7 @@ export const CompanySelection: React.FC = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gradient-to-br from-slate-50 to-gray-100 text-gray-500 font-medium">
+                <span className="px-4 bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 text-gray-500 font-medium">
                   Or select a specific company
                 </span>
               </div>
