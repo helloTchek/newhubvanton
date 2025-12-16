@@ -27,7 +27,6 @@ export interface AIInspectionInfo {
   imageQuality: ImageQuality;
   aiStatus: AIInspectionStatus;
   manualReviewType: ManualReviewType;
-  needsManualReview?: boolean;
 }
 
 export interface Vehicle {
@@ -58,7 +57,6 @@ export interface Vehicle {
   aiInspectionInfo?: AIInspectionInfo;
   sharedReport?: SharedReportInfo;
   tags?: Tag[];
-  createdAt?: string;
 }
 
 export interface SharedReportInfo {
@@ -105,9 +103,6 @@ export interface VehicleDamageInfo {
     rearLeft: boolean;
     rearRight: boolean;
   };
-  totalPhotos?: string;
-  totalDamages?: number;
-  totalInfo?: string;
 }
 
 export interface VehicleInspectionReport {
