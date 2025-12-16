@@ -456,148 +456,143 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
             )}
           </div>
         )}
-        <div className="p-5">
-          {/* Header: License Plate + Make/Model/Year */}
+        <div className="p-4">
+          {/* Header: License Plate */}
           <div className="mb-3">
             {visibleFields.registration && (
-              <h3 className="text-xl font-bold text-gray-900 mb-0.5">{vehicle.registration}</h3>
+              <h3 className="text-lg font-bold text-gray-900">{vehicle.registration}</h3>
             )}
 
             {visibleFields.makeModel && (
               <p className="text-sm text-gray-500">
-                {vehicle.make} {vehicle.model}
-                {visibleFields.age && ` - ${vehicle.year}`}
+                {vehicle.make} {vehicle.model} {visibleFields.age && `- ${vehicle.year}`}
               </p>
             )}
           </div>
 
-          {/* Two Column Layout: Image | Status & Info */}
-          <div className="flex gap-3 mb-3">
-            {/* Left: Vehicle Image */}
-            {visibleFields.image && (
-              <div className="flex-shrink-0 w-[235px]">
-                {shouldShowImage ? (
-                  <div className="aspect-video relative overflow-hidden rounded-md group bg-gray-50">
-                    <img
-                      src={images[currentImageIndex]}
-                      alt={`${vehicle.make} ${vehicle.model}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const fallback = target.nextElementSibling as HTMLElement;
-                        if (fallback?.classList.contains('image-fallback')) {
-                          fallback.style.display = 'flex';
-                        }
-                      }}
-                    />
-                    <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
-                      <Bell className="w-8 h-8 text-gray-400" />
-                    </div>
-
-                    {hasMultipleImages && (
-                      <>
-                        <button
-                          onClick={handlePreviousImage}
-                          className="absolute left-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                          aria-label="Previous image"
-                        >
-                          <ChevronLeft className="w-4 h-4 text-gray-800" />
-                        </button>
-                        <button
-                          onClick={handleNextImage}
-                          className="absolute right-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                          aria-label="Next image"
-                        >
-                          <ChevronRight className="w-4 h-4 text-gray-800" />
-                        </button>
-
-                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                          {images.map((_, index) => (
-                            <button
-                              key={index}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setCurrentImageIndex(index);
-                              }}
-                              className={clsx(
-                                'w-1.5 h-1.5 rounded-full transition-all',
-                                index === currentImageIndex
-                                  ? 'bg-white w-4'
-                                  : 'bg-white/60 hover:bg-white/80'
-                              )}
-                              aria-label={`Go to image ${index + 1}`}
-                            />
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <div className="aspect-video relative bg-gray-100 flex items-center justify-center overflow-hidden rounded-md">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
-                        <Bell className="w-6 h-6 text-gray-400" />
-                      </div>
-                      <p className="text-xs font-medium text-gray-600">Awaiting</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Right: Status, AI Quality, and Stats */}
-            <div className="flex-1 min-w-0">
-              {/* Status Section */}
-              <div className="mb-3">
-                <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
-                  {vehicle.sharedReport && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                      <Share2 className="w-3 h-3" />
-                      <span>{t('share.sharedBadge')}</span>
-                    </div>
-                  )}
+          {/* Vehicle Image */}
+          {visibleFields.image && shouldShowImage && (
+            <div className="mb-3">
+              <div className="aspect-video relative overflow-hidden rounded-md group bg-gray-50">
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`${vehicle.make} ${vehicle.model}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback?.classList.contains('image-fallback')) {
+                      fallback.style.display = 'flex';
+                    }
+                  }}
+                />
+                <div className="image-fallback absolute inset-0 bg-gray-100 items-center justify-center" style={{ display: 'none' }}>
+                  <Bell className="w-8 h-8 text-gray-400" />
                 </div>
-              </div>
 
-              {/* AI Quality Section */}
-              {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
-                <div className="mb-3">
-                  <p className="text-xs font-medium text-gray-500 mb-1">Action/Owner</p>
-                  <div className="space-y-0.5 text-sm text-gray-700">
-                    <p className="leading-tight">Image quality: <span className="font-medium">{vehicle.aiInspectionInfo.imageQuality || 'good'}</span></p>
-                    <p className="text-xs text-gray-500 leading-tight">checked by AI</p>
-                    {vehicle.aiInspectionInfo.needsManualReview && (
-                      <p className="text-xs text-orange-600 font-medium leading-tight">to review</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Stats */}
-              <div className="text-sm text-gray-700 leading-relaxed">
-                {vehicle.damageInfo && (
+                {hasMultipleImages && (
                   <>
-                    <p>Photos {vehicle.damageInfo.totalPhotos || '2/12'}</p>
-                    <p>Damages {vehicle.damageInfo.totalDamages || vehicle.damageInfo.damageCounts.carBody + vehicle.damageInfo.damageCounts.rims + vehicle.damageInfo.damageCounts.glazing + vehicle.damageInfo.damageCounts.interior + vehicle.damageInfo.damageCounts.tires + vehicle.damageInfo.damageCounts.dashboard + vehicle.damageInfo.damageCounts.declarations || '7'}/7</p>
-                    <p>Info {vehicle.damageInfo.totalInfo || '14/14'}</p>
+                    <button
+                      onClick={handlePreviousImage}
+                      className="absolute left-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-4 h-4 text-gray-800" />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 shadow-lg transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-4 h-4 text-gray-800" />
+                    </button>
+
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                      {images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(index);
+                          }}
+                          className={clsx(
+                            'w-1.5 h-1.5 rounded-full transition-all',
+                            index === currentImageIndex
+                              ? 'bg-white w-4'
+                              : 'bg-white/60 hover:bg-white/80'
+                          )}
+                          aria-label={`Go to image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
             </div>
+          )}
+
+          {visibleFields.image && !shouldShowImage && (
+            <div className="mb-3">
+              <div className="aspect-video relative bg-gray-100 flex items-center justify-center overflow-hidden rounded-md">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
+                    <Bell className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className="text-xs font-medium text-gray-600">Awaiting</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Status Section */}
+          <div className="mb-3">
+            <p className="text-xs font-medium text-gray-500 mb-1.5">Status</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
+              {vehicle.sharedReport && (
+                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  <Share2 className="w-3 h-3" />
+                  <span>{t('share.sharedBadge')}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* AI Quality Section */}
+          {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
+            <div className="mb-3">
+              <p className="text-xs font-medium text-gray-500 mb-1.5">Action/Owner</p>
+              <div className="text-sm text-gray-700">
+                <p>Image quality: <span className="font-medium">{vehicle.aiInspectionInfo.imageQuality || 'good'}</span></p>
+                <p className="text-xs text-gray-500">checked by AI</p>
+                {vehicle.aiInspectionInfo.needsManualReview && (
+                  <p className="text-xs text-orange-600 font-medium">to review</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Stats */}
+          <div className="text-sm text-gray-700 space-y-0.5 mb-3">
+            {vehicle.damageInfo && (
+              <>
+                <p>Photos {vehicle.damageInfo.totalPhotos || '2/12'}</p>
+                <p>Damages {vehicle.damageInfo.totalDamages || vehicle.damageInfo.damageCounts.carBody + vehicle.damageInfo.damageCounts.rims + vehicle.damageInfo.damageCounts.glazing + vehicle.damageInfo.damageCounts.interior + vehicle.damageInfo.damageCounts.tires + vehicle.damageInfo.damageCounts.dashboard + vehicle.damageInfo.damageCounts.declarations || '7'}/7</p>
+                <p>Info {vehicle.damageInfo.totalInfo || '14/14'}</p>
+              </>
+            )}
           </div>
 
           {/* Bottom: Timestamps */}
           {visibleFields.inspectionDate && (
-            <div className="text-xs text-gray-500 space-y-0 pt-3 border-t border-gray-200">
+            <div className="text-xs text-gray-500 pt-3 border-t border-gray-200">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsInspectionDateSelectorOpen(true);
                 }}
-                className="hover:text-blue-600 transition-colors block"
+                className="hover:text-blue-600 transition-colors block mb-0.5"
                 title="View inspection history"
               >
                 Last update: {vehicle.inspectionDate ? formatDate(vehicle.inspectionDate).replace(/,.*/, '').replace(/\s+\d{4}/, '') + ' ' + formatDate(vehicle.inspectionDate).match(/\d{2}:\d{2}/)?.[0] : 'N/A'}
