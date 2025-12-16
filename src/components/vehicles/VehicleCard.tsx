@@ -457,28 +457,27 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
         )}
         <div className="p-5">
-          {/* Header: License Plate + VIN + Make/Model */}
-          <div className="mb-4">
+          {/* Header: License Plate + Make/Model/Year */}
+          <div className="mb-3">
             {visibleFields.registration && (
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{vehicle.registration}</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-0.5">{vehicle.registration}</h3>
             )}
 
             {visibleFields.makeModel && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-500">
                 {vehicle.make} {vehicle.model}
                 {visibleFields.age && ` - ${vehicle.year}`}
-                {visibleFields.mileage && ` - ${vehicle.mileage.toLocaleString()} km`}
               </p>
             )}
           </div>
 
           {/* Two Column Layout: Image | Status & Info */}
-          <div className="flex gap-4 mb-4">
+          <div className="flex gap-3 mb-3">
             {/* Left: Vehicle Image */}
             {visibleFields.image && (
-              <div className="flex-shrink-0 w-56">
+              <div className="flex-shrink-0 w-[235px]">
                 {shouldShowImage ? (
-                  <div className="aspect-video relative overflow-hidden rounded-lg group">
+                  <div className="aspect-video relative overflow-hidden rounded-md group bg-gray-50">
                     <img
                       src={images[currentImageIndex]}
                       alt={`${vehicle.make} ${vehicle.model}`}
@@ -535,7 +534,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
                     )}
                   </div>
                 ) : (
-                  <div className="aspect-video relative bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
+                  <div className="aspect-video relative bg-gray-100 flex items-center justify-center overflow-hidden rounded-md">
                     <div className="text-center">
                       <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
                         <Bell className="w-6 h-6 text-gray-400" />
@@ -547,12 +546,12 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
               </div>
             )}
 
-            {/* Right: Status, AI Quality, and Owner Info */}
-            <div className="flex-1 space-y-3">
+            {/* Right: Status, AI Quality, and Stats */}
+            <div className="flex-1 min-w-0">
               {/* Status Section */}
-              <div>
-                <p className="text-xs font-medium text-gray-500 mb-1.5">Status</p>
-                <div className="flex items-center gap-2">
+              <div className="mb-3">
+                <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
+                <div className="flex items-center gap-2 flex-wrap">
                   <StatusBadge status={vehicle.status} statusUpdatedAt={vehicle.statusUpdatedAt} />
                   {vehicle.sharedReport && (
                     <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
@@ -565,20 +564,20 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
               {/* AI Quality Section */}
               {visibleFields.aiInspectionBadge && vehicle.aiInspectionInfo && (
-                <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1.5">Action/Owner</p>
-                  <div className="space-y-1 text-sm text-gray-700">
-                    <p>Image quality: <span className="font-medium">{vehicle.aiInspectionInfo.imageQuality || 'good'}</span></p>
-                    <p className="text-xs text-gray-500">checked by AI</p>
+                <div className="mb-3">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Action/Owner</p>
+                  <div className="space-y-0.5 text-sm text-gray-700">
+                    <p className="leading-tight">Image quality: <span className="font-medium">{vehicle.aiInspectionInfo.imageQuality || 'good'}</span></p>
+                    <p className="text-xs text-gray-500 leading-tight">checked by AI</p>
                     {vehicle.aiInspectionInfo.needsManualReview && (
-                      <p className="text-xs text-orange-600 font-medium">to review</p>
+                      <p className="text-xs text-orange-600 font-medium leading-tight">to review</p>
                     )}
                   </div>
                 </div>
               )}
 
               {/* Stats */}
-              <div className="text-sm text-gray-700 space-y-0.5">
+              <div className="text-sm text-gray-700 leading-relaxed">
                 {vehicle.damageInfo && (
                   <>
                     <p>Photos {vehicle.damageInfo.totalPhotos || '2/12'}</p>
@@ -592,24 +591,19 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Bottom: Timestamps */}
           {visibleFields.inspectionDate && (
-            <div className="text-xs text-gray-500 space-y-0.5 pt-3 border-t border-gray-100">
+            <div className="text-xs text-gray-500 space-y-0 pt-3 border-t border-gray-200">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsInspectionDateSelectorOpen(true);
                 }}
-                className="hover:text-blue-600 transition-colors"
+                className="hover:text-blue-600 transition-colors block"
                 title="View inspection history"
               >
                 Last update: {vehicle.inspectionDate ? formatDate(vehicle.inspectionDate).replace(/,.*/, '').replace(/\s+\d{4}/, '') + ' ' + formatDate(vehicle.inspectionDate).match(/\d{2}:\d{2}/)?.[0] : 'N/A'}
               </button>
               <p>Created: {vehicle.createdAt ? new Date(vehicle.createdAt).toLocaleDateString('en-US', { year: '2-digit', month: '2-digit', day: '2-digit' }).replace(/\//g, '.') : 'XX.XX.XX'}</p>
             </div>
-          )}
-
-          {/* VIN - Lower Priority */}
-          {visibleFields.vin && vehicle.vin && (
-            <p className="text-xs font-mono text-gray-400 mt-2">{vehicle.vin}</p>
           )}
 
           {/* Tags Section */}
