@@ -11,30 +11,25 @@ interface StatusBadgeProps {
 
 const statusConfig = {
   // Vehicle statuses
-  link_sent: {
+  created: {
     label: 'Created',
     color: 'bg-blue-50 text-blue-700',
     dot: 'bg-[#0062FF]'
   },
-  chased_up: {
-    label: 'ChaseUp',
-    color: 'bg-orange-50 text-orange-700',
-    dot: 'bg-[#F59E0B]'
-  },
-  inspection_in_progress: {
+  in_progress: {
     label: 'In Progress',
     color: 'bg-orange-50 text-orange-700',
     dot: 'bg-[#F59E0B]'
   },
-  inspected: {
-    label: 'Inspected',
+  in_review: {
+    label: 'In Review',
+    color: 'bg-purple-50 text-purple-700',
+    dot: 'bg-[#9333EA]'
+  },
+  completed: {
+    label: 'Completed',
     color: 'bg-green-50 text-green-700',
     dot: 'bg-[#22C55E]'
-  },
-  to_review: {
-    label: 'To Review',
-    color: 'bg-red-50 text-red-700',
-    dot: 'bg-[#EF4444]'
   },
   archived: {
     label: 'Archived',

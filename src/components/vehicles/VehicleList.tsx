@@ -27,9 +27,10 @@ import clsx from 'clsx';
 
 const statusOptions: { value: VehicleStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'All Status' },
-  { value: 'inspection_in_progress', label: 'In Progress' },
-  { value: 'inspected', label: 'Inspected' },
-  { value: 'to_review', label: 'To Review' }
+  { value: 'created', label: 'Created' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'in_review', label: 'In Review' },
+  { value: 'completed', label: 'Completed' }
 ];
 
 export const VehicleList: React.FC = () => {

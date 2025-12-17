@@ -65,9 +65,8 @@ interface VehicleTableRowProps {
 }
 
 const statusesWithoutImages: VehicleStatus[] = [
-  'link_sent',
-  'chased_up',
-  'inspection_in_progress'
+  'created',
+  'in_progress'
 ];
 
 export const VehicleTableRow: React.FC<VehicleTableRowProps> = ({

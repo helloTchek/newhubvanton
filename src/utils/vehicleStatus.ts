@@ -15,11 +15,11 @@ export function getVehicleStatusInfo(
   isFastTrackDisabled: boolean,
   manualReviewCompleted: boolean
 ): VehicleStatusInfo {
-  if (baseStatus === 'inspected') {
+  if (baseStatus === 'completed') {
     if (isFastTrackDisabled && !manualReviewCompleted) {
       return {
-        status: 'inspected',
-        displayStatus: 'Inspected',
+        status: 'completed',
+        displayStatus: 'Completed',
         badge: {
           text: 'Review Pending',
           color: 'yellow'
@@ -29,17 +29,17 @@ export function getVehicleStatusInfo(
     }
 
     return {
-      status: 'inspected',
-      displayStatus: 'Inspected',
+      status: 'completed',
+      displayStatus: 'Completed',
       badge: null,
       needsReview: false
     };
   }
 
-  if (!isFastTrackDisabled && baseStatus === 'inspected' && !manualReviewCompleted) {
+  if (baseStatus === 'in_review') {
     return {
-      status: 'to_review',
-      displayStatus: 'To Review',
+      status: 'in_review',
+      displayStatus: 'In Review',
       badge: {
         text: 'Pending Manual Review',
         color: 'orange'
@@ -58,11 +58,10 @@ export function getVehicleStatusInfo(
 
 function getStatusLabel(status: VehicleStatus): string {
   const labels: Record<VehicleStatus, string> = {
-    link_sent: 'Created',
-    chased_up: 'ChaseUp',
-    inspection_in_progress: 'In Progress',
-    inspected: 'Inspected',
-    to_review: 'To Review',
+    created: 'Created',
+    in_progress: 'In Progress',
+    in_review: 'In Review',
+    completed: 'Completed',
     archived: 'Archived'
   };
 

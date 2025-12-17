@@ -60,15 +60,13 @@ interface VehicleCardProps {
 }
 
 const statusesWithoutImages: VehicleStatus[] = [
-  'link_sent',
-  'chased_up',
-  'inspection_in_progress'
+  'created',
+  'in_progress'
 ];
 
 const statusesWithChaseUp: VehicleStatus[] = [
-  'link_sent',
-  'chased_up',
-  'inspection_in_progress'
+  'created',
+  'in_progress'
 ];
 
 export const VehicleCard: React.FC<VehicleCardProps> = ({
@@ -315,7 +313,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
 
         {/* Actions Menu Button - Top Right */}
-        {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'inspected' || vehicle.status === 'to_review') || vehicle.status === 'archived') && (
+        {!isSelectionMode && (shouldShowChaseUp || (vehicle.status === 'completed' || vehicle.status === 'in_review') || vehicle.status === 'archived') && (
           <div className="absolute top-3 right-3 z-10" ref={actionsMenuRef}>
             <button
               onClick={(e) => {
@@ -375,7 +373,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 
                       <button
                         onClick={handleShareFromMenu}
-                        disabled={!onShareReport || !(vehicle.status === 'inspected' || vehicle.status === 'to_review')}
+                        disabled={!onShareReport || !(vehicle.status === 'completed' || vehicle.status === 'in_review')}
                         className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 font-medium group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                       >
                         <div className="p-2 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 group-disabled:bg-gray-50 group-disabled:text-gray-400 transition-colors">

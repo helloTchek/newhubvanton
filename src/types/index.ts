@@ -185,11 +185,10 @@ export interface CompanyConfiguration {
 
 // Enums
 export type VehicleStatus =
-  | 'link_sent'
-  | 'chased_up'
-  | 'inspection_in_progress'
-  | 'inspected'
-  | 'to_review'
+  | 'created'
+  | 'in_progress'
+  | 'in_review'
+  | 'completed'
   | 'archived';
 export type InspectionType = 'api' | 'manual_upload' | 'remote_inspection' | 'onsite_inspection';
 export type InspectionStatus = 'passed' | 'minor_issues' | 'major_issues' | 'failed';
